@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智慧郵件分發器 Smart Email Dispatcher | Google Apps Script 自動化工具</title>
+    <meta name="description" content="一個免費、開源的 Gmail 自動分流系統。透過 Google Apps Script 自動將詢價與客戶信件轉寄給對應部門，並發送每日與每週摘要報告。">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --bg-color: #f8fafc;
+            --text-color: #334155;
+            --card-bg: #ffffff;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #1e293b;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #64748b;
+        }
+
+        /* Feature Cards */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        /* Code Section */
+        .code-section {
+            background: #1e1e1e; /* Match prism tomorrow theme */
+            border-radius: var(--border-radius);
+            position: relative;
+            margin-bottom: 50px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: #2d2d2d;
+            border-bottom: 1px solid #404040;
+        }
+
+        .code-title {
+            color: #e5e7eb;
+            font-family: monospace;
+            font-weight: bold;
+        }
+
+        .copy-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+
+        .copy-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .copy-btn.copied {
+            background-color: #10b981;
+        }
+
+        pre {
+            margin: 0 !important;
+            padding: 20px !important;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        /* Guide Section */
+        .guide-section {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .step {
+            margin-bottom: 30px;
+            padding-left: 20px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .step h3 {
+            margin-top: 0;
+            color: #1e293b;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 60px;
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid #e2e8f0;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        footer a:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+        
+        .footer-logo {
+             margin-bottom: 15px;
+             font-weight: bold;
+             font-size: 1.1em;
+             color: #333;
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            .container { padding: 20px; }
+            .guide-section { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1><i class="fa-solid fa-robot"></i> 智慧郵件分發器</h1>
+            <p class="subtitle">Smart Email Dispatcher (Google Apps Script)</p>
+            <p>一個輕量級、完全免費的 Gmail 自動化方案。<br>自動將詢價信件轉寄給對應部門，並發送每日與每週摘要報告。</p>
+        </header>
+
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-filter"></i></div>
+                <h3>關鍵字分流</h3>
+                <p>設定關鍵字（如：詢價、合作、報修），系統自動將信件轉寄給負責的業務或客服。</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-chart-line"></i></div>
+                <h3>定期報表 (日/週)</h3>
+                <p>每日寄送摘要給執行者，每週寄送總結報告給主管，確保資訊同步不漏接。</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-user-shield"></i></div>
+                <h3>隱私與安全</h3>
+                <p>程式碼在您自己的 Google 帳號下運行，資料不經過第三方伺服器，安全無虞。</p>
+            </div>
+        </section>
+
+        <section class="code-section">
+            <div class="code-header">
+                <span class="code-title">Code.gs</span>
+                <button class="copy-btn" onclick="copyCode()">
+                    <i class="fa-regular fa-copy"></i> 複製程式碼
+                </button>
+            </div>
+            <pre><code class="language-javascript" id="script-code">/**
+ * ------------------------------------------------------------------
+ * 🛠️ 設定區域 (USER CONFIGURATION)
+ * 請在此處修改您的設定，無須更動下方核心程式碼。
+ * ------------------------------------------------------------------
+ */
+const USER_CONFIG = {
+  // 1. 報告接收設定
+  // 每日報告接收者 (通常是負責操作的人)
+  DAILY_REPORT_EMAIL: "admin@yourdomain.com",
+  
+  // 週報接收者 (可以是多個信箱，用逗號隔開，例如主管或團隊群組)
+  WEEKLY_REPORT_RECIPIENTS: "admin@yourdomain.com, manager@yourdomain.com",
+  
+  // 寄件顯示名稱
+  SENDER_NAME: "Email Bot",
+
+  // 2. 團隊分流規則 (格式： "接收信箱": ["關鍵字1", "關鍵字2"...])
+  // 程式會掃描郵件的主旨與內文，若符合關鍵字，即轉寄給該信箱。
+  ROUTING_RULES: {
+    "sales@yourdomain.com": [
+      "inquiry", "quote", "price", "rfq", "order", "purchase", "buying", 
+      "報價", "詢價", "採購", "訂購", "費用"
+    ],
+    "support@yourdomain.com": [
+      "help", "issue", "bug", "error", "problem", "fail", "support", 
+      "問題", "錯誤", "支援", "無法使用", "故障"
+    ],
+    "marketing@yourdomain.com": [
+      "collab", "partnership", "media", "press", "sponsor", 
+      "合作", "媒體", "行銷", "贊助", "廣告"
+    ]
+  },
+
+  // 3. 一般詢價識別關鍵字 (用於初步篩選是否為重要郵件)
+  // 若信件包含這些字，但沒對應到上方規則，會被標記為「未知詢價」並寄給管理員
+  GENERAL_KEYWORDS: [
+    "interested in", "looking for", "catalogue", "demo", 
+    "有興趣", "產品目錄", "需求", "請教"
+  ],
+
+  // 4. 排除設定 (黑名單)
+  // 若主旨或寄件人包含這些字，將直接忽略不處理
+  EXCLUDE_KEYWORDS: [
+    "unsubscribe", "newsletter", "promotion", "no-reply", "noreply", 
+    "取消訂閱", "電子報", "廣告", "系統通知", "驗證碼", "帳單"
+  ],
+
+  // 5. 標籤設定 (會在 Gmail 中自動建立)
+  LABEL_PREFIX: "🤖 自動分流 - ",
+  UNKNOWN_LABEL: "⚠️ 未分類詢價"
+};
+
+/**
+ * ------------------------------------------------------------------
+ * 🚀 核心程式碼區域 (CORE LOGIC)
+ * 通常不需要修改以下內容
+ * ------------------------------------------------------------------
+ */
+
+// 📌 共用工具函式
+function formatDate(date) {
+  if (!date || !(date instanceof Date)) return "Invalid Date";
+  const year = date.getFullYear();
+  const month = ('0' + (date.getMonth() + 1)).slice(-2);
+  const day = ('0' + date.getDate()).slice(-2);
+  return `${year}/${month}/${day}`;
+}
+
+function getPastDateString(daysAgo) {
+  const date = new Date();
+  date.setDate(date.getDate() - daysAgo);
+  const year = date.getFullYear();
+  const month = ('0' + (date.getMonth() + 1)).slice(-2);
+  const day = ('0' + date.getDate()).slice(-2);
+  return `${year}/${month}/${day}`;
+}
+
+function getOrCreateLabel(labelName) {
+  let label = GmailApp.getUserLabelByName(labelName);
+  if (!label) {
+    label = GmailApp.createLabel(labelName);
+  }
+  return label;
+}
+
+// ✅ 判斷是否為目標郵件 (Inquiry)
+function analyzeEmail(message) {
+  try {
+    const body = message.getPlainBody().toLowerCase();
+    const subject = message.getSubject().toLowerCase();
+    const from = message.getFrom().toLowerCase();
+
+    // 1. 檢查排除名單
+    const isExcluded = USER_CONFIG.EXCLUDE_KEYWORDS.some(kw => 
+      subject.includes(kw.toLowerCase()) || from.includes(kw.toLowerCase())
+    );
+    if (isExcluded) return { status: 'EXCLUDED' };
+
+    // 2. 檢查分流規則
+    for (const [email, keywords] of Object.entries(USER_CONFIG.ROUTING_RULES)) {
+      const matchedKeyword = keywords.find(kw => {
+        const keywordLower = kw.toLowerCase();
+        if (/^[a-z]+$/.test(keywordLower) && keywordLower.length <= 4) {
+             const regex = new RegExp(`\\b${keywordLower}\\b`, 'i');
+             return regex.test(body) || regex.test(subject);
+        }
+        return body.includes(keywordLower) || subject.includes(keywordLower);
+      });
+
+      if (matchedKeyword) {
+        return { status: 'MATCHED', targetEmail: email, keyword: matchedKeyword };
+      }
+    }
+
+    // 3. 檢查一般詢價關鍵字
+    const generalMatch = USER_CONFIG.GENERAL_KEYWORDS.find(kw => 
+      body.includes(kw.toLowerCase()) || subject.includes(kw.toLowerCase())
+    );
+    
+    if (generalMatch) {
+      return { status: 'UNKNOWN', keyword: generalMatch };
+    }
+
+    return { status: 'IGNORE' };
+
+  } catch (err) {
+    Logger.log("[analyzeEmail] Error: " + err);
+    return { status: 'ERROR', error: err };
+  }
+}
+
+// ✅ 主執行函式：轉寄郵件
+function autoDispatchEmails() {
+  const threads = GmailApp.search(`in:inbox after:${getPastDateString(1)} is:unread`);
+  const userProperties = PropertiesService.getUserProperties();
+  let dispatchLog = JSON.parse(userProperties.getProperty('dispatchLog') || '[]');
+
+  for (const thread of threads) {
+    const messages = thread.getMessages();
+    const latestMessage = messages[messages.length - 1];
+    const subject = latestMessage.getSubject();
+    const from = latestMessage.getFrom();
+    
+    const allRecipients = latestMessage.getTo() + (latestMessage.getCc() || "");
+    const isDirectlySent = Object.keys(USER_CONFIG.ROUTING_RULES).some(email => allRecipients.includes(email));
+    
+    if (isDirectlySent) {
+      thread.markRead();
+      continue;
+    }
+
+    const analysis = analyzeEmail(latestMessage);
+
+    if (analysis.status === 'MATCHED' || analysis.status === 'UNKNOWN') {
+      let forwardTo = analysis.status === 'MATCHED' ? analysis.targetEmail : USER_CONFIG.DAILY_REPORT_EMAIL;
+      let labelName = analysis.status === 'MATCHED' 
+                      ? `${USER_CONFIG.LABEL_PREFIX}${forwardTo.split('@')[0]}` 
+                      : USER_CONFIG.UNKNOWN_LABEL;
+      
+      const color = analysis.status === 'MATCHED' ? '#007bff' : '#ffc107';
+      const typeText = analysis.status === 'MATCHED' ? 'Auto-Dispatched' : '⚠️ Unclassified';
+      
+      const htmlBody = latestMessage.getBody();
+      const noticeHtml = `
+        <div style="font-family: Arial, sans-serif; border-left: 5px solid ${color}; background-color: #f8f9fa; padding: 15px; margin-bottom: 15px;">
+          <strong><span style="color: ${color};">[${typeText}]</span> System Notice:</strong><br>
+          This email was routed based on keyword: "<strong>${analysis.keyword}</strong>".<br>
+          Original Sender: ${from}
+        </div>
+        <hr>
+        ${htmlBody}
+      `;
+
+      try {
+        GmailApp.sendEmail(forwardTo, `Fwd: ${subject}`, latestMessage.getPlainBody(), {
+          from: USER_CONFIG.DAILY_REPORT_EMAIL,
+          name: USER_CONFIG.SENDER_NAME,
+          replyTo: from,
+          htmlBody: noticeHtml
+        });
+
+        thread.addLabel(getOrCreateLabel(labelName));
+        thread.markRead();
+        Logger.log(`✅ Forwarded "${subject}" to ${forwardTo}`);
+
+        dispatchLog.push({
+          subject, from, forwardTo,
+          keyword: analysis.keyword,
+          status: analysis.status,
+          timestamp: new Date().toISOString()
+        });
+
+      } catch (e) {
+        Logger.log(`❌ Failed to forward "${subject}": ${e}`);
+      }
+    }
+  }
+  
+  if (dispatchLog.length > 500) dispatchLog = dispatchLog.slice(-500);
+  userProperties.setProperty('dispatchLog', JSON.stringify(dispatchLog));
+}
+
+// ✅ 報告函式：每日摘要
+function sendDailyReport() {
+  const userProperties = PropertiesService.getUserProperties();
+  const logs = JSON.parse(userProperties.getProperty('dispatchLog') || '[]');
+  const now = new Date();
+  const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+
+  const recentLogs = logs.filter(log => new Date(log.timestamp) >= oneDayAgo);
+  if (recentLogs.length === 0) return;
+
+  sendReportEmail(
+    USER_CONFIG.DAILY_REPORT_EMAIL, 
+    `📊 Daily Dispatch Report (${formatDate(now)})`, 
+    recentLogs, 
+    "Here is the summary of emails dispatched in the last 24 hours."
+  );
+}
+
+// ✅ 報告函式：每週摘要 (並清理舊資料)
+function sendWeeklyReport() {
+  const userProperties = PropertiesService.getUserProperties();
+  const logs = JSON.parse(userProperties.getProperty('dispatchLog') || '[]');
+  const now = new Date();
+  const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+
+  const weeklyLogs = logs.filter(log => new Date(log.timestamp) >= sevenDaysAgo);
+  const dateRange = `${formatDate(sevenDaysAgo)} - ${formatDate(now)}`;
+
+  // 1. 發送週報
+  if (weeklyLogs.length > 0) {
+    sendReportEmail(
+      USER_CONFIG.WEEKLY_REPORT_RECIPIENTS,
+      `📈 Weekly Dispatch Report (${dateRange})`,
+      weeklyLogs,
+      `Summary of all auto-dispatched emails for the past 7 days (${dateRange}).`
+    );
+  } else {
+    MailApp.sendEmail({
+        to: USER_CONFIG.WEEKLY_REPORT_RECIPIENTS,
+        subject: `📈 Weekly Dispatch Report (${dateRange}) - No Activity`,
+        htmlBody: `<p>No emails were auto-dispatched in the past 7 days.</p>`
+    });
+  }
+
+  // 2. 清理舊資料 (只保留最近 7 天的紀錄)
+  userProperties.setProperty('dispatchLog', JSON.stringify(weeklyLogs));
+  Logger.log(`System cleanup: Kept ${weeklyLogs.length} logs from the past 7 days.`);
+}
+
+// 內部使用：產生並發送 HTML 報表
+function sendReportEmail(recipient, subject, logs, description) {
+  let tableRows = logs.map(log => {
+    const time = Utilities.formatDate(new Date(log.timestamp), Session.getScriptTimeZone(), "MM/dd HH:mm");
+    const statusIcon = log.status === 'MATCHED' ? '✅' : '⚠️';
+    return `<tr>
+      <td>${statusIcon}</td>
+      <td>${time}</td>
+      <td>${log.from.replace(/<.*>/, '').trim()}</td>
+      <td>${log.subject}</td>
+      <td>${log.keyword}</td>
+      <td>${log.forwardTo.split('@')[0]}</td>
+    </tr>`;
+  }).join('');
+
+  const html = `
+    <div style="font-family: Arial, sans-serif; color: #333;">
+      <h3 style="color: #007bff;">${subject}</h3>
+      <p>${description}</p>
+      <table style="width: 100%; border-collapse: collapse; border: 1px solid #ddd; font-size: 14px;">
+        <thead style="background-color: #f2f2f2;">
+          <tr><th style="padding:8px;border:1px solid #ddd">Status</th><th style="padding:8px;border:1px solid #ddd">Time</th><th style="padding:8px;border:1px solid #ddd">Sender</th><th style="padding:8px;border:1px solid #ddd">Subject</th><th style="padding:8px;border:1px solid #ddd">Keyword</th><th style="padding:8px;border:1px solid #ddd">To</th></tr>
+        </thead>
+        <tbody>${tableRows}</tbody>
+      </table>
+    </div>
+  `;
+
+  MailApp.sendEmail({ to: recipient, subject: subject, htmlBody: html });
+}</code></pre>
+        </section>
+
+        <section class="guide-section">
+            <h2 style="text-align: center; margin-bottom: 40px;">🚀 只要 3 分鐘，開始使用</h2>
+            
+            <div class="step">
+                <h3>步驟 1：建立專案</h3>
+                <p>前往 <a href="https://script.google.com/" target="_blank">Google Apps Script</a>，點擊「新專案」。</p>
+            </div>
+
+            <div class="step">
+                <h3>步驟 2：貼上程式碼</h3>
+                <p>清空編輯器中的預設代碼，將上方複製的程式碼完整貼上。點擊磁碟片圖示儲存。</p>
+            </div>
+
+            <div class="step">
+                <h3>步驟 3：修改設定 (USER_CONFIG)</h3>
+                <p>在程式碼最上方的 <code>USER_CONFIG</code> 區域，修改成您的信箱、關鍵字與分流規則。</p>
+            </div>
+
+            <div class="step">
+                <h3>步驟 4：設定自動執行 (Triggers)</h3>
+                <p>點擊左側時鐘圖示 (觸發條件)，新增以下三個觸發器：</p>
+                <ul style="margin-top: 10px; background: #f1f5f9; padding: 15px 30px; border-radius: 8px;">
+                    <li style="margin-bottom: 8px;">函式 <strong>autoDispatchEmails</strong> ➝ 設為「時間驅動」➝ 「每小時」執行。</li>
+                    <li style="margin-bottom: 8px;">函式 <strong>sendDailyReport</strong> ➝ 設為「時間驅動」➝ 「每天」執行 (建議早上)。</li>
+                    <li>函式 <strong>sendWeeklyReport</strong> ➝ 設為「時間驅動」➝ 「每週」執行 (建議週一早上，此函式也會自動清理舊紀錄)。</li>
+                </ul>
+            </div>
+            
+             <p style="text-align: center; margin-top: 30px; color: #666;">完成！現在系統會自動幫您監控並分流郵件了。</p>
+        </section>
+
+        <footer>
+            <div class="footer-logo">Created by Evelyn YT Liu</div>
+            <p>
+                <a href="mailto:evelyn.evagor@gmail.com">evelyn.evagor@gmail.com</a>
+            </p>
+            <p>
+                Copyright © 2025. All rights reserved.
+            </p>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script>
+        function copyCode() {
+            const code = document.getElementById('script-code').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const originalHtml = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> 已複製！';
+                btn.classList.add('copied');
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalHtml;
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('複製失敗:', err);
+                alert('複製失敗，請手動選取複製');
+            });
+        }
+    </script>
+</body>
+</html>

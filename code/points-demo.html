@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Points & Screen Time (Online)</title>
+  <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <style>
+    :root {
+      --primary: #00d4ff;
+      --primary-hover: #00b8dd;
+      --bg-dark: #111;
+      --bg-card: #1c1c3c;
+      --bg-input: #222;
+      --text-main: #eee;
+      --text-muted: #bbb;
+      --radius-lg: 20px;
+      --shadow-glow: 0 4px 15px rgba(0, 212, 255, 0.3);
+    }
+    body {
+      font-family: 'Poppins', system-ui, -apple-system, 'Noto Sans TC', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-main);
+      text-align: center;
+      padding: 20px 10px;
+      margin: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    h1 {
+      margin: 10px 0 5px;
+      letter-spacing: 1px;
+    }
+    .child-card {
+      background: var(--bg-card);
+      padding: 24px;
+      margin: 18px auto;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-glow);
+      max-width: 440px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .points-box {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 16px;
+      border-radius: 16px;
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 12px;
+      border: 1px solid rgba(0, 212, 255, 0.1);
+      text-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
+    }
+    .btn {
+      padding: 10px 16px;
+      font-size: 15px;
+      border: none;
+      border-radius: 12px;
+      width: 100%;
+      color: #eee;
+      font-weight: 700;
+      cursor: pointer;
+      background: #444;
+      transition: 0.2s;
+      margin-top: 5px;
+    }
+    .btn:hover { background: #555; }
+    .btn.primary { background: var(--primary); color: #111; }
+    input {
+      background: rgba(0, 0, 0, 0.3);
+      color: #fff;
+      border: 1px solid #444;
+      padding: 12px;
+      width: 100%;
+      margin: 8px 0;
+      border-radius: 10px;
+      box-sizing: border-box;
+      text-align: center;
+      font-size: 16px;
+    }
+    input:focus { outline: none; border-color: var(--primary); }
+    .loading { color: #888; font-style: italic; margin: 20px; }
+    
+    /* Settings Box */
+    #setup-box {
+       background: #1a1a1a;
+       padding: 20px;
+       border-radius: 20px;
+       max-width: 440px;
+       margin: 0 auto 20px;
+       border: 1px solid #333;
+    }
+    
+    /* Admin Panel */
+    #admin-panel {
+       background: #2a2a5a;
+       padding: 24px 20px;
+       border-radius: 24px;
+       max-width: 440px;
+       margin: 24px auto 60px;
+       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+       display: none;
+    }
+    
+    /* Checkbox Group for Admin */
+    label.kid-select {
+        display: inline-block;
+        padding: 12px 16px;
+        background: #333;
+        margin: 4px;
+        border-radius: 12px;
+        cursor: pointer;
+        user-select: none;
+        border: 2px solid transparent;
+        transition: 0.2s;
+    }
+    label.kid-select:has(input:checked) {
+        background: rgba(0, 212, 255, 0.1);
+        color: var(--primary);
+        border-color: var(--primary);
+        font-weight: bold;
+    }
+    label.kid-select input { display: none; }
+  </style>
+</head>
+<body>
+
+  <h1>☁️ Points System (Online)</h1>
+  
+  <!-- 設定 API URL 的區域 -->
+  <div id="setup-box">
+     <h3 style="margin-top:0">Step 1: 連線設定</h3>
+     <p style="font-size:13px;color:#aaa;">請輸入您部署 Apps Script 獲得的 Web App URL:</p>
+     <input type="text" id="apiUrlInput" placeholder="https://script.google.com/macros/s/..." />
+     <button class="btn primary" onclick="saveUrl()">設定並連線</button>
+  </div>
+
+  <div id="leaderboard"></div>
+
+  <!-- 管理後台 -->
+  <div id="admin-panel">
+     <h2 style="margin-top:0;color:#fff;">管理後台 📝</h2>
+     <div id="kid-select-container" style="margin-bottom:15px;"></div>
+     
+     <input type="number" id="ptsChange" placeholder="⭐ 點數增減 (輸入正數有特效)">
+     <input type="number" id="timeChange" placeholder="📺 螢幕時間增減">
+     <input type="text" id="reason" placeholder="原因 (選填)">
+     
+     <button class="btn primary" onclick="submitTx()">送出更新 🚀</button>
+     <button class="btn" onclick="loadData()" style="margin-top:10px;">🔄 重新整理</button>
+     <button class="btn" onclick="resetUrl()" style="background:#333;color:#888;font-size:12px;margin-top:20px;">重設 API網址</button>
+  </div>
+
+  <script>
+    let API_URL = localStorage.getItem('POINTS_API_URL') || '';
+    let currentData = [];
+
+    // 初始化
+    if (API_URL) {
+      document.getElementById('setup-box').style.display = 'none';
+      document.getElementById('admin-panel').style.display = 'block';
+      document.getElementById('apiUrlInput').value = API_URL;
+      loadData();
+    }
+
+    function saveUrl() {
+      const url = document.getElementById('apiUrlInput').value.trim();
+      if (!url) return alert('請輸入網址');
+      localStorage.setItem('POINTS_API_URL', url);
+      API_URL = url;
+      location.reload();
+    }
+
+    function resetUrl() {
+      if (confirm('確定要清除網址設定回到初始畫面嗎？')) {
+        localStorage.removeItem('POINTS_API_URL');
+        location.reload();
+      }
+    }
+
+    async function loadData() {
+      Swal.showLoading();
+      try {
+        const res = await fetch(API_URL + '?action=getleaderboard');
+        const data = await res.json();
+        currentData = data;
+        render();
+        Swal.close();
+      } catch (e) {
+        console.error(e);
+        Swal.fire('讀取失敗', '請檢查網址或權限', 'error');
+      }
+    }
+
+    function render() {
+      const board = document.getElementById('leaderboard');
+      const selectBox = document.getElementById('kid-select-container');
+
+      // 渲染排行榜
+      let html = '';
+      currentData.forEach(k => {
+        html += `
+            <div class="child-card">
+               <div style="font-size:26px;font-weight:bold;color:#00d4ff;margin-bottom:10px;">${k.Name}</div>
+               <div class="points-box">⭐ ${k.TotalPoints}</div>
+               <div style="margin:16px 0;background:#222;border-radius:15px;padding:12px;border:1px solid #333;">
+                  <div style="font-size:14px;color:#00d4ff;margin-bottom:5px;">📺 螢幕時間</div>
+                  <div style="font-size:24px;font-weight:bold;color:#fff">${k.TotalMinutes} min</div>
+               </div>
+               <div style="color:#888;font-size:13px;">可用 ${k.TotalPoints} 點換 ${k.TotalPoints * 2} 分</div>
+            </div>`;
+      });
+      board.innerHTML = html || '<div class="loading">目前無資料，請確認 Sheet K 欄有名字</div>';
+
+      // 渲染選單
+      let selectHtml = '';
+      currentData.forEach(k => {
+        selectHtml += `<label class="kid-select">
+               <input type="checkbox" name="kidSelect" value="${k.Name}"> ${k.Name}
+            </label>`;
+      });
+      selectBox.innerHTML = selectHtml;
+    }
+
+    async function submitTx() {
+      const checks = document.querySelectorAll('input[name="kidSelect"]:checked');
+      if (checks.length === 0) return Swal.fire({ title: '請選擇對象', background: '#333', color: '#fff', icon: 'warning' });
+
+      const pts = document.getElementById('ptsChange').value;
+      const time = document.getElementById('timeChange').value;
+      const reason = document.getElementById('reason').value;
+
+      if (!pts && !time) return Swal.fire({ title: '請輸入數值', background: '#333', color: '#fff', icon: 'info' });
+
+      if (parseInt(pts) > 0) {
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#00d4ff', '#ff0', '#f0f'] });
+      }
+
+      // 逐一發送
+      Swal.showLoading();
+      for (let chk of checks) {
+        const payload = {
+          Name: chk.value,
+          PointsChange: pts,
+          ScreenTimeChange: time,
+          Reason: reason
+        };
+        const json = encodeURIComponent(JSON.stringify(payload));
+        await fetch(API_URL + '?action=submit&data=' + json);
+      }
+
+      // 清空並重整
+      document.getElementById('ptsChange').value = '';
+      document.getElementById('timeChange').value = '';
+      // Uncheck all
+      document.querySelectorAll('input[name="kidSelect"]').forEach(c => c.checked = false);
+
+      await loadData();
+      Swal.fire({ title: '更新成功', timer: 1000, showConfirmButton: false, background: '#333', color: '#fff', icon: 'success' });
+    }
+  </script>
+</body>
+</html>
+    

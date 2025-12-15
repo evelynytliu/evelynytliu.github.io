@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>螢幕時間管理系統 | Points & Screen Time</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Outfit:wght@400;700;900&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* ----------------------------------
+       🎨 Design Tokens & Reset
+    ---------------------------------- */
+    :root {
+      --primary: #00E5FF;
+      --primary-glow: rgba(0, 229, 255, 0.6);
+      --secondary: #2979FF;
+      --accent: #FF2E93;
+      --bg-dark: #080812;
+      --bg-panel: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --text-main: #FFFFFF;
+      --text-muted: #94A3B8;
+
+      --font-display: 'Outfit', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+      overflow-x: hidden;
+      background-image:
+        radial-gradient(circle at 15% 50%, rgba(41, 121, 255, 0.08), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(255, 46, 147, 0.08), transparent 25%);
+      background-attachment: fixed;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      font-family: var(--font-display);
+      margin: 0;
+      font-weight: 700;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+      transition: 0.3s;
+    }
+
+    /* ----------------------------------
+       🌌 Hero Section
+    ---------------------------------- */
+    .hero {
+      position: relative;
+      padding: 120px 20px 80px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    /* Ambient Glow Background */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1200px;
+      height: 800px;
+      background: radial-gradient(closest-side, rgba(0, 229, 255, 0.15), transparent);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      padding: 6px 16px;
+      background: rgba(0, 229, 255, 0.1);
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      border-radius: 50px;
+      color: var(--primary);
+      font-size: 0.9em;
+      font-weight: 600;
+      margin-bottom: 24px;
+      letter-spacing: 0.05em;
+      backdrop-filter: blur(5px);
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      line-height: 1.1;
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, #FFFFFF 0%, #B0C4DE 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 40px rgba(0, 229, 255, 0.3);
+    }
+
+    .hero .tagline {
+      font-size: clamp(1.1rem, 2vw, 1.25rem);
+      color: var(--text-muted);
+      max-width: 680px;
+      margin: 0 auto 40px;
+      font-weight: 300;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    /* ----------------------------------
+       🔘 Buttons
+    ---------------------------------- */
+    .cta-group {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 16px 36px;
+      border-radius: 12px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.1em;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      border: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      color: #fff;
+      box-shadow: 0 10px 30px rgba(0, 229, 255, 0.3);
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: 0.5s;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 40px rgba(0, 229, 255, 0.5);
+    }
+
+    .btn-primary:hover::before {
+      left: 100%;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* ----------------------------------
+       🧊 Glass Cards (Features)
+    ---------------------------------- */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      max-width: 1100px;
+      margin: 60px auto 100px;
+      padding: 0 24px;
+    }
+
+    .feature-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--glass-border);
+      padding: 32px;
+      border-radius: 20px;
+      backdrop-filter: blur(16px);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      border-color: rgba(0, 229, 255, 0.3);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .feature-card h3 {
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+      color: var(--primary);
+    }
+
+    .feature-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin: 0;
+    }
+
+    /* Decorative circles on cards */
+    .feature-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    /* ----------------------------------
+       📜 Content / Setup Area
+    ---------------------------------- */
+    .container {
+      max-width: 900px;
+      margin: 0 auto 80px;
+      padding: 0 24px;
+    }
+
+    h2.section-title {
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 40px;
+      background: linear-gradient(90deg, #fff, #94A3B8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Setup Panel (Static) */
+    .setup-panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .setup-panel h2 {
+      margin: 0;
+      padding: 20px 24px;
+      font-size: 1.2rem;
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .panel-content {
+      padding: 20px 0;
+      background: #000;
+    }
+
+    /* Code Block Styling */
+    .section {
+      padding: 0;
+      border: none;
+      background: transparent;
+    }
+
+    .section h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #fff;
+
+      /* Cyberpunk Glass Style */
+      background: linear-gradient(90deg, rgba(0, 212, 255, 0.1), rgba(0, 0, 0, 0));
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      border-left: 6px solid var(--primary);
+      border-radius: 4px;
+      backdrop-filter: blur(5px);
+
+      padding: 20px 24px;
+      margin: 30px 0 20px;
+
+      /* Neon Glows */
+      text-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3), inset 0 0 20px rgba(0, 212, 255, 0.05);
+
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .section p {
+      padding: 15px 24px 0;
+      font-size: 0.9em;
+      color: #888;
+    }
+
+    textarea {
+      width: 100%;
+      height: 400px;
+      background: #0e0e11;
+      color: #a6accd;
+      /* Dracula theme-ish text */
+      border: none;
+      padding: 24px;
+      font-family: 'JetBrains Mono', 'Consolas', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      resize: vertical;
+      outline: none;
+    }
+
+    .copy-btn-wrap {
+      padding: 0 24px 15px;
+      text-align: right;
+    }
+
+    button.copy-btn {
+      background: #222;
+      color: #fff;
+      border: 1px solid #444;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button.copy-btn:hover {
+      background: var(--primary);
+      color: #000;
+      border-color: var(--primary);
+    }
+
+    /* Footer */
+    .footer-nav {
+      text-align: center;
+      padding: 60px 0;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      border-top: 1px solid var(--glass-border);
+      background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.5));
+    }
+
+    .footer-nav a {
+      border-bottom: 1px dotted #555;
+    }
+
+    .footer-nav a:hover {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+  </style>
+  <script>
+    function copyId(id) {
+      const el = document.getElementById(id);
+      el.select();
+      document.execCommand('copy');
+      // Stylish Toast could go here, but alert is robust
+      alert('已複製到剪貼簿! (Copied)');
+    }
+  </script>
+</head>
+
+<body>
+
+  <!-- Hero Section -->
+  <div class="hero">
+    <div class="hero-badge">✨ V2.0 Screen Time Manager</div>
+    <h1>MAKE TIME<br>VISIBLE</h1>
+    <div class="tagline">
+      把隱形的「時間」變成孩子看得見的「點數」。<br>
+      視覺化管理 × 點數經濟 × 正向教養
+    </div>
+
+    <div class="cta-group">
+      <a href="points-demo.html" class="btn btn-primary">
+        🚀 立即體驗 Demo
+      </a>
+      <a href="#setup-guide" class="btn btn-secondary">
+        📖 部署教學
+      </a>
+    </div>
+  </div>
+
+  <!-- Features Grid -->
+  <div class="features">
+    <div class="feature-card">
+      <h3>📊 視覺化進度</h3>
+      <p>採用紅綠燈概念的動態漸層進度條，讓孩子一眼掌握剩餘時間。</p>
+    </div>
+    <div class="feature-card">
+      <h3>💰 點數經濟</h3>
+      <p>建立「時間即金錢」的觀念。省下的螢幕時間可轉換為點數，累積兌換獎勵。</p>
+    </div>
+    <div class="feature-card">
+      <h3>🚀 快速部署</h3>
+      <p>支援純靜態運行 (Local) 或串接 Google Sheets (Online)，免租伺服器。</p>
+    </div>
+    <div class="feature-card">
+      <h3>☁️ 跨裝置同步</h3>
+      <p>串接 Google Apps Script 後，爸爸的手機、媽媽的電腦都能即時控管。</p>
+    </div>
+    <div class="feature-card">
+      <h3>⚙️ 高度客製</h3>
+      <p>平日 50 分鐘、假日 90 分鐘？匯率 1:5？所有參數皆可自由設定。</p>
+    </div>
+    <div class="feature-card">
+      <h3>🧸 多帳戶管理</h3>
+      <p>後台支援多人批次操作，一次管理多位孩子的時間帳戶。</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2 class="section-title">Get Started</h2>
+
+    <!-- Setup Guide (Static) -->
+    <div class="setup-panel" id="setup-guide">
+      <h2>
+        <span>📖 完整設定教學與原始碼</span>
+      </h2>
+      <div class="panel-content">
+
+
+        <!-- Section 1: Local Demo -->
+        <div class="section">
+          <h2>1. 純前端本機版 (Local Demo)</h2>
+          <p>以下是完整的 Local Demo 程式碼，複製存成 html 即可使用。</p>
+          <button onclick="copyId('code-local')">複製原始碼</button>
+          <textarea id="code-local" readonly>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+  <title>Points & Screen Time (Demo Version)</title>
+  
+  <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --primary: #00d4ff;
+      --primary-hover: #00b8dd;
+      --bg-dark: #111;
+      --bg-card: #1c1c3c;
+      --bg-input: #222;
+      --text-main: #eee;
+      --text-muted: #bbb;
+      --radius-lg: 20px;
+      --shadow-glow: 0 4px 15px rgba(0, 212, 255, 0.3);
+    }
+    body {
+      font-family: 'Poppins', system-ui, -apple-system, 'Noto Sans TC', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-main);
+      text-align: center;
+      padding: 20px 10px;
+      margin: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    h1 { margin: 10px 0 5px; letter-spacing: 1px; }
+    .subtitle { font-size: 14px; color: #888; margin-bottom: 20px; }
+
+    /* --- 卡片樣式 --- */
+    .child-card {
+      background: var(--bg-card);
+      padding: 24px;
+      margin: 18px auto;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-glow);
+      max-width: 440px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .child-name { font-size: 26px; font-weight: 700; color: var(--primary); margin-bottom: 12px; }
+    .points-box {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 16px;
+      border-radius: 16px;
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 12px;
+      border: 1px solid rgba(0, 212, 255, 0.1);
+      text-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
+    }
+    .conversion-info { font-size: 13px; color: var(--text-muted); margin-top: 6px; font-weight: normal; }
+
+    /* --- 進度條區塊 --- */
+    .progress-dual { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 10px; }
+    .progress-title { font-size: 14px; color: var(--primary); margin: 6px 0 4px; display: flex; justify-content: space-between; padding: 0 8px; }
+    .bar-wrap {
+      background: #222;
+      border: 2px solid rgba(0, 212, 255, 0.3);
+      border-radius: 30px;
+      overflow: hidden;
+      height: 36px;
+      width: 100%;
+      position: relative;
+    }
+    .fill {
+      height: 100%;
+      width: 0%;
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      background: linear-gradient(90deg, var(--primary), #005eff);
+      box-shadow: 0 0 10px var(--primary);
+    }
+    .fill.warning { background: linear-gradient(90deg, #ffaa00, #ff7700); box-shadow: 0 0 10px #ffaa00; }
+    .fill.danger { background: linear-gradient(90deg, #ff4444, #ff0000); box-shadow: 0 0 10px #ff0000; }
+    .bar-text {
+      position: absolute; width: 100%; text-align: center; top: 0; line-height: 36px;
+      font-weight: 700; color: #fff; font-size: 15px; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+      z-index: 2; pointer-events: none;
+    }
+
+    /* --- 按鈕與控制區 --- */
+    .control-row { display: grid; grid-template-columns: 1fr; gap: 12px; margin: 16px 0; }
+    .control-row .right { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .deduct-btn {
+      padding: 10px 0; font-size: 15px; border-radius: 12px; border: none;
+      background: #333; color: #ccc; cursor: pointer; transition: 0.2s;
+    }
+    .deduct-btn:active { background: #555; transform: scale(0.95); }
+
+    .chip-toggle {
+      background: #222; border-radius: 999px; padding: 4px; display: inline-flex; gap: 4px; justify-content: center; margin-bottom: 8px;
+    }
+    .chip-toggle button {
+      border: none; padding: 8px 16px; border-radius: 999px; background: transparent;
+      color: #888; cursor: pointer; font-weight: 600; transition: 0.3s;
+    }
+    .chip-toggle button.active { background: var(--primary); color: #111; box-shadow: 0 2px 8px rgba(0, 212, 255, 0.4); }
+
+    .convert-group { display: flex; justify-content: center; gap: 12px; margin-top: 8px; }
+    .btn {
+      padding: 10px 16px; font-size: 15px; border: none; border-radius: 12px; width: 100%;
+      color: #eee; font-weight: 700; cursor: pointer; background: #444; transition: 0.2s;
+    }
+    .btn:hover { background: #555; }
+    .btn.primary { background: var(--primary); color: #111; }
+    .btn:active { transform: scale(0.96); }
+
+    /* --- 表單區 --- */
+    #form-section {
+      background: #2a2a5a; padding: 24px 20px; border-radius: 24px;
+      max-width: 440px; margin: 24px auto 60px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    input[type="number"], input[type="text"], button.submit-btn {
+      padding: 12px; margin: 8px 0; font-size: 16px; border-radius: 10px;
+      border: none; width: 100%; box-sizing: border-box;
+    }
+    input { background: rgba(0, 0, 0, 0.3); color: #fff; border: 1px solid #444; text-align: center; }
+    input:focus { outline: none; border-color: var(--primary); }
+    .submit-btn {
+      background: var(--primary); color: #111; font-weight: 800; margin-top: 12px;
+      box-shadow: 0 4px 12px rgba(0, 212, 255, 0.4); cursor: pointer;
+    }
+    .submit-btn:active { transform: scale(0.98); }
+
+    /* 方案切換 */
+    .plan-toggle { background: #222; border-radius: 999px; padding: 4px; display: inline-flex; gap: 4px; margin-top: 10px; }
+    .btn-plan {
+      border: none; padding: 8px 20px; border-radius: 999px; background: transparent;
+      color: #888; cursor: pointer; font-weight: 600; transition: 0.2s;
+    }
+    .btn-plan.active { background: var(--primary); color: #111; }
+
+    /* --- Checkbox Group --- */
+    .checkbox-group { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
+    .checkbox-group input { display: none; }
+    .checkbox-group label {
+      display: block; padding: 14px; background: #333; color: #ccc; border-radius: 12px;
+      font-size: 18px; cursor: pointer; user-select: none; transition: 0.2s; border: 2px solid transparent;
+    }
+    .checkbox-group input:checked+label {
+      background: rgba(0, 212, 255, 0.1); color: var(--primary); border-color: var(--primary); font-weight: bold;
+    }
+
+    /* Name Item Wrapper */
+    .kid-check-wrapper { position: relative; }
+    .kid-check-wrapper button.edit-icon {
+      position: absolute; top: 8px; right: 8px;
+      background: rgba(0, 0, 0, 0.4); border: none; color: #666; width: 24px; height: 24px;
+      border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 14px; transition: 0.2s;
+    }
+    .kid-check-wrapper button.edit-icon:hover { background: rgba(255, 255, 255, 0.2); color: #fff; }
+
+    /* Add Name Area */
+    .add-name-area { display: flex; gap: 8px; margin-bottom: 20px; }
+    .add-name-area input { margin: 0; text-align: left; }
+    .add-name-area button {
+      width: 50px; background: #444; color: #fff; border: none; border-radius: 10px; cursor: pointer; font-size: 20px; font-weight: bold;
+    }
+    .add-name-area button:hover { background: #555; }
+
+    .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .note { font-size: 12px; color: #888; margin-top: 12px; line-height: 1.6; }
+    .preview { margin-top: 8px; font-size: 13px; color: #9ecfff; }
+
+    /* Demo 提示 */
+    .demo-alert {
+      background: rgba(255, 200, 0, 0.15); color: #ffca28; font-size: 13px;
+      padding: 10px; border-radius: 8px; border: 1px solid rgba(255, 200, 0, 0.3);
+      max-width: 440px; margin: 0 auto 20px; text-align: left;
+    }
+    .demo-alert strong { color: #fff; }
+
+    /* SweetAlert 自定義樣式 */
+    .swal2-popup { border-radius: 20px !important; background: #222 !important; border: 1px solid #444; }
+    .swal2-title { color: #fff !important; }
+    .swal2-content { color: #ccc !important; }
+  </style>
+</head>
+
+<body>
+
+  <h1>⭐ Points & Screen Time 📺</h1>
+  <div class="subtitle">Live Demo / Local Storage Version</div>
+
+  <div class="demo-alert">
+    <strong>💡 這是體驗版本 (Local Demo)</strong><br>
+    所有操作只會儲存在您的瀏覽器中，不會上傳到任何伺服器。您可以自由測試加分、扣分與兌換功能！
+  </div>
+
+  <div id="leaderboard"></div>
+
+  <div id="form-section">
+    <h2 style="margin-top:0;color:#fff;">管理後台 📝</h2>
+
+    <div id="name-list" class="checkbox-group"></div>
+
+    <!-- 新增名字區塊 -->
+    <div class="add-name-area">
+      <input type="text" id="newKidName" placeholder="+ 新增名字..." style="background:rgba(255,255,255,0.1);border:1px dashed #666;">
+      <button onclick="addNewKid()">＋</button>
+    </div>
+
+    <div class="plan-toggle">
+      <button type="button" id="alloc-weekday" class="btn-plan active" onclick="setAllocPlan('weekday')">平日</button>
+      <button type="button" id="alloc-holiday" class="btn-plan" onclick="setAllocPlan('holiday')">假日</button>
+    </div>
+    <div id="alloc-preview" class="preview">—</div>
+
+    <input type="number" id="pointsChange" placeholder="⭐ 點數調整 (輸入正數有特效)">
+    <input type="number" id="screenTimeChange" placeholder="📺 螢幕時間增減">
+    <input type="text" id="reason" placeholder="原因 (選填)">
+
+    <button type="button" class="submit-btn" onclick="submitData()">執行更新 🚀</button>
+
+    <div class="note">
+      規則：⭐1點 ⇄ 📺2分鐘<br>
+      <a href="#" onclick="resetDemoData();return false;" style="color:#666;text-decoration:underline;">重置所有數據</a>
+    </div>
+  </div>
+
+  <div style="margin-top:40px;font-size:12px;color:#555;">
+    Template by Evelyn YT | Demo Version | <a href="points-intro.html" style="color:#777;">取得原始碼 & 跨裝置設定</a>
+  </div>
+
+  <script>
+    // ==========================================
+    // ⚙️ 設定區 (可以讓使用者自己修改)
+    // ==========================================
+    const CONFIG = {
+      // 小孩名單與初始值
+      DEFAULT_KIDS: [
+        { Name: 'Mario', TotalPoints: 10, TotalMinutes: 45 },
+        { Name: 'Luigi', TotalPoints: 5, TotalMinutes: 15 },
+        { Name: 'Peach', TotalPoints: 25, TotalMinutes: 30 }
+      ],
+      // 方案上限
+      LIMITS: { weekday: 50, holiday: 90 },
+      // LocalStorage Key
+      STORAGE_KEY: 'screenTime_demo_v2'
+    };
+    // ==========================================
+
+    let currentData = [];
+    let allocPlan = 'weekday';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadData();
+      syncAllocPlanButtons();
+      updateAllocPreview();
+    });
+
+    // --- 資料處理核心 (Local Logic) ---
+
+    function loadData() {
+      const saved = localStorage.getItem(CONFIG.STORAGE_KEY);
+      if (saved) {
+        currentData = JSON.parse(saved);
+      } else {
+        currentData = JSON.parse(JSON.stringify(CONFIG.DEFAULT_KIDS));
+        saveData();
+      }
+      renderLeaderboard();
+    }
+
+    function saveData() {
+      localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(currentData));
+      renderLeaderboard();
+    }
+
+    function resetDemoData() {
+      Swal.fire({
+        title: '重置資料?',
+        text: "將恢復到預設狀態",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        background: '#333', color: '#fff'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          localStorage.removeItem(CONFIG.STORAGE_KEY);
+          loadData();
+          Swal.fire({ icon: 'success', title: '已重置', timer: 1000, showConfirmButton: false, background: '#333', color: '#fff' });
+        }
+      });
+    }
+
+    // --- UI 渲染 ---
+
+    function renderLeaderboard() {
+      const board = document.getElementById('leaderboard');
+      const nameBox = document.getElementById('name-list');
+
+      const oldChecks = new Set([...document.querySelectorAll('#name-list input:checked')].map(c => c.value));
+      nameBox.innerHTML = '';
+
+      let html = '';
+      const maxTime = CONFIG.LIMITS[allocPlan];
+
+      currentData.forEach(entry => {
+        const cid = `chk-${entry.Name}`;
+        const isChecked = oldChecks.has(entry.Name) ? 'checked' : '';
+        nameBox.innerHTML += `
+        <div class="kid-check-wrapper">
+          <input type="checkbox" id="${cid}" value="${entry.Name}" ${isChecked}>
+          <label for="${cid}">${entry.Name}</label>
+          <button class="edit-icon" onclick="editKid('${entry.Name}'); event.preventDefault();">✎</button>
+        </div>
+      `;
+
+        const mins = entry.TotalMinutes || 0;
+        const pts = entry.TotalPoints || 0;
+        const pct = Math.min(100, (mins / maxTime) * 100);
+        const barClass = pct <= 20 ? 'danger' : (pct <= 50 ? 'warning' : '');
+
+        html += `
+        <div class="child-card">
+          <div class="child-name">${entry.Name}</div>
+
+          <div class="points-box">
+            ⭐ ${pts}
+             <div class="conversion-info">
+                可換：📺 ${pts * 2}m <span style="margin:0 5px;color:#555">|</span> 💰 $${pts * 5}
+             </div>
+          </div>
+
+          <div class="progress-dual">
+            <div>
+              <div class="progress-title">
+                <span>📺 螢幕時間</span> <span style="font-size:12px;color:#666">上限: ${maxTime}m</span>
+              </div>
+              <div class="bar-wrap">
+                <div class="fill ${barClass}" style="width:${pct}%"></div>
+                <div class="bar-text">${mins}m</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="control-row">
+             <div class="right" style="width:100%; grid-template-columns: repeat(3, 1fr);">
+                <button class="deduct-btn" onclick="quickDeduct('${entry.Name}', 10)">-10</button>
+                <button class="deduct-btn" onclick="quickDeduct('${entry.Name}', 30)">-30</button>
+                <button class="deduct-btn" style="color:#ff6666" onclick="customDeduct('${entry.Name}')">自訂</button>
+             </div>
+          </div>
+
+          <div class="convert-group">
+            <button class="btn" onclick="convertTimeToPoints('${entry.Name}')">📺 ➔ ⭐</button>
+            <button class="btn primary" onclick="convertPointsToTime('${entry.Name}')">⭐ ➔ 📺</button>
+          </div>
+        </div>
+        `;
+      });
+
+      board.innerHTML = html;
+    }
+
+    // --- 表單與設定邏輯 ---
+
+    function setAllocPlan(plan) {
+      allocPlan = plan;
+      syncAllocPlanButtons();
+      updateAllocPreview(true);
+
+      document.getElementById('screenTimeChange').value = CONFIG.LIMITS[plan];
+      document.getElementById('reason').value = `${plan === 'weekday' ? '平日' : '假日'}分配`;
+
+      renderLeaderboard();
+    }
+
+    function syncAllocPlanButtons() {
+      document.querySelectorAll('.btn-plan').forEach(b => b.classList.remove('active'));
+      document.getElementById(allocPlan === 'weekday' ? 'alloc-weekday' : 'alloc-holiday').classList.add('active');
+    }
+
+    function updateAllocPreview(bump) {
+      const el = document.getElementById('alloc-preview');
+      const lim = CONFIG.LIMITS[allocPlan];
+      el.textContent = `當前：${allocPlan === 'weekday' ? '平日' : '假日'} (上限 ${lim}m) `;
+      if (bump) {
+        el.style.transform = 'scale(1.1)';
+        el.style.transition = '0.2s';
+        setTimeout(() => el.style.transform = 'scale(1)', 200);
+      }
+    }
+
+    // --- 資料操作 (Actions) ---
+
+    function submitData() {
+      const checked = [...document.querySelectorAll('#name-list input:checked')];
+      if (checked.length === 0) return Swal.fire({ icon: 'warning', title: '請選擇對象', background: '#333', color: '#fff' });
+
+      const pts = parseInt(document.getElementById('pointsChange').value) || 0;
+      const timeChange = parseInt(document.getElementById('screenTimeChange').value) || 0;
+
+      if (pts === 0 && timeChange === 0) return Swal.fire({ icon: 'info', title: '數值未變更', background: '#333', color: '#fff' });
+
+      if (pts > 0) {
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#00d4ff', '#ff0', '#f0f'] });
+      }
+
+      checked.forEach(cb => {
+        modifyKidData(cb.value, pts, timeChange);
+      });
+
+      document.getElementById('pointsChange').value = '';
+      document.getElementById('screenTimeChange').value = '';
+      document.getElementById('name-list').querySelectorAll('input').forEach(i => i.checked = false);
+
+      Swal.fire({ icon: 'success', title: '更新成功', timer: 1000, showConfirmButton: false, background: '#333', color: '#fff' });
+    }
+
+    function quickDeduct(name, minutes) {
+      const kid = currentData.find(k => k.Name === name);
+
+      if (kid.TotalMinutes < minutes) return Swal.fire({ icon: 'error', title: '時間不足', text: `目前只有 ${kid.TotalMinutes} 分`, background: '#333', color: '#fff' });
+
+      Swal.fire({
+        title: `扣除 ${minutes} 分?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        confirmButtonText: '扣除',
+        background: '#333', color: '#fff'
+      }).then((res) => {
+        if (res.isConfirmed) {
+          modifyKidData(name, 0, -minutes);
+          Swal.fire({ icon: 'success', title: '已扣除', timer: 1000, showConfirmButton: false, background: '#333', color: '#fff' });
+        }
+      });
+    }
+
+    function customDeduct(name) {
+      Swal.fire({
+        title: '輸入扣除分鐘',
+        input: 'number',
+        background: '#333', color: '#fff',
+        showCancelButton: true
+      }).then(res => {
+        if (res.isConfirmed && res.value) {
+          quickDeduct(name, parseInt(res.value));
+        }
+      });
+    }
+
+    function convertTimeToPoints(name) {
+      const kid = currentData.find(k => k.Name === name);
+      const mins = kid.TotalMinutes;
+      const rate = 2; // 2 min = 1 pt
+      const maxPts = Math.floor(mins / rate);
+
+      if (maxPts < 1) return Swal.fire({ icon: 'info', title: '時間不足', text: '至少需2分鐘', background: '#333', color: '#fff' });
+
+      Swal.fire({
+        title: '📺 ➔ ⭐ 轉換',
+        text: `目前: ${mins}分 (最多換 ${maxPts}點)`,
+        input: 'number',
+        inputValue: 1,
+        inputAttributes: { min: 1, max: maxPts },
+        showCancelButton: true,
+        background: '#333', color: '#fff'
+      }).then((res) => {
+        if (res.isConfirmed) {
+          const want = parseInt(res.value);
+          if (want > 0 && want <= maxPts) {
+            modifyKidData(name, want, -(want * rate));
+            confetti({ particleCount: 50, spread: 50, origin: { y: 0.7 } });
+            Swal.fire({ icon: 'success', title: `獲得 ${want} 點!`, background: '#333', color: '#fff' });
+          }
+        }
+      });
+    }
+
+    function convertPointsToTime(name) {
+      const kid = currentData.find(k => k.Name === name);
+      const rate = 2; // 1 point = 2 mins
+
+      if (kid.TotalPoints < 1) return Swal.fire({ icon: 'info', title: '點數不足', background: '#333', color: '#fff' });
+
+      Swal.fire({
+        title: '⭐ ➔ 📺 兌換',
+        text: `匯率: 1點 = ${rate}分`,
+        input: 'number',
+        inputValue: 1,
+        inputAttributes: { min: 1, max: kid.TotalPoints },
+        showCancelButton: true,
+        background: '#333', color: '#fff'
+      }).then((res) => {
+        if (res.isConfirmed) {
+          const want = parseInt(res.value);
+          if (want > 0 && want <= kid.TotalPoints) {
+            const mins = want * rate;
+            modifyKidData(name, -want, mins);
+            Swal.fire({ icon: 'success', title: `增加 ${mins} 分鐘!`, background: '#333', color: '#fff' });
+          }
+        }
+      });
+    }
+
+    function modifyKidData(name, dPoints, dMinutes) {
+      const target = currentData.find(k => k.Name === name);
+      if (target) {
+        target.TotalPoints = Math.max(0, target.TotalPoints + dPoints);
+        target.TotalMinutes = Math.max(0, target.TotalMinutes + dMinutes);
+        saveData();
+      }
+    }
+
+    // --- 新增 / 編輯 / 刪除 ---
+    function addNewKid() {
+      const input = document.getElementById('newKidName');
+      const name = input.value.trim();
+      if (!name) return;
+
+      if (currentData.find(k => k.Name === name)) {
+        return Swal.fire({ icon: 'error', title: '名字已存在', background: '#333', color: '#fff' });
+      }
+
+      currentData.push({ Name: name, TotalPoints: 0, TotalMinutes: 0 });
+      saveData();
+      input.value = '';
+      Swal.fire({ icon: 'success', title: '已新增', timer: 1000, showConfirmButton: false, background: '#333', color: '#fff' });
+    }
+
+    function editKid(oldName) {
+      Swal.fire({
+        title: `編輯 ${oldName}`,
+        input: 'text',
+        inputValue: oldName,
+        showDenyButton: true,
+        denyButtonText: '刪除',
+        denyButtonColor: '#d33',
+        confirmButtonText: '更名',
+        showCancelButton: true,
+        background: '#333', color: '#fff'
+      }).then((res) => {
+        if (res.isConfirmed) {
+          const newName = res.value.trim();
+          if (newName && newName !== oldName) {
+            if (currentData.find(k => k.Name === newName)) {
+              return Swal.fire({ icon: 'error', title: '名字已存在', background: '#333', color: '#fff' });
+            }
+            const kid = currentData.find(k => k.Name === oldName);
+            kid.Name = newName;
+            saveData();
+          }
+        } else if (res.isDenied) {
+          Swal.fire({
+            title: `確定刪除 ${oldName}?`,
+            text: '刪除後無法復原',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            background: '#333', color: '#fff'
+          }).then(delRes => {
+            if (delRes.isConfirmed) {
+              currentData = currentData.filter(k => k.Name !== oldName);
+              saveData();
+            }
+          });
+        }
+      });
+    }
+  </script>
+</body>
+</html>
+    </textarea>
+        </div>
+
+
+        <!-- Section 2: Online Version -->
+        <div class="section">
+          <h2>2. 雲端同步版 (Online Version)</h2>
+          <p>若要讓手機、電腦資料同步，請建立這套系統。</p>
+
+          <div class="step">
+            <h3>步驟 A：部署後端 (Google Apps Script)</h3>
+            <p>1. 建立一個新的 Google 試算表。</p>
+            <p>2. 點選上方選單 <code>Extensions (擴充功能)</code> > <code>Apps Script</code>。</p>
+            <p>3. 刪除編輯器內所有程式碼，貼上以下完整代碼 (<strong>無需自行填入 ID，程式會自動抓取</strong>)。</p>
+
+            <button onclick="copyId('code-gas')">複製 GAS 代碼</button>
+            <textarea id="code-gas" readonly>
+/** ========== 設定區 ========== **/
+const SHEET_NAME = 'point-sheet';
+/** ============================ **/
+
+/**
+ * 🛠️ 初始化設定 (請手動執行此函式一次)
+ * 這會自動建立工作表欄位與公式，並儲存 ID 供 Web App 使用
+ */
+function setupSheet() {
+  // 1. 自動取得當前試算表 (不用手動貼 ID)
+  var ss;
+  try {
+    ss = SpreadsheetApp.getActiveSpreadsheet();
+  } catch(e) {
+    Logger.log('錯誤：無法取得試算表。請確認您是從 Google Sheet > 擴充功能 > Apps Script 開啟此專案。');
+    return;
+  }
+
+  // 2. 儲存 ID 到腳本屬性 (給 doGet 使用，解決 WebApp 找不到 ID 的問題)
+  PropertiesService.getScriptProperties().setProperty('SHEET_ID', ss.getId());
+  Logger.log('已綁定試算表 ID: ' + ss.getId());
+
+  // 3. 檢查工作表
+  let sheet = ss.getSheetByName(SHEET_NAME);
+  if (!sheet) {
+    sheet = ss.insertSheet(SHEET_NAME);
+    // 可選：嘗試刪除預設工作表
+    try { ss.deleteSheet(ss.getSheetByName('Sheet1')); } catch(e){}
+    try { ss.deleteSheet(ss.getSheetByName('工作表1')); } catch(e){}
+  }
+
+  // 4. 設定 Log 區 (A1:F1)
+  const headersLog = [['Timestamp', 'Family', 'Name', 'PointsChange', 'ScreenTimeChange', 'Reason']];
+  const rangeLog = sheet.getRange('A1:F1');
+  if(rangeLog.isBlank()) {
+     rangeLog.setValues(headersLog).setFontWeight('bold').setBackground('#efefef');
+  }
+
+  // 5. 設定 Leaderboard 區 (K1:M1)
+  const headersBoard = [['Name', 'TotalPoints', 'TotalMinutes']];
+  sheet.getRange('K1:M1').setValues(headersBoard).setFontWeight('bold').setBackground('#cfe2f3');
+
+  // 6. 設定預設資料
+  if(sheet.getRange('K2').getValue() === '') {
+      sheet.getRange('K2').setValue('Mario');
+      sheet.getRange('K3').setValue('Luigi');
+      sheet.getRange('L2').setFormula('=SUMIF(C:C, K2, D:D)');
+      sheet.getRange('L3').setFormula('=SUMIF(C:C, K3, D:D)');
+      sheet.getRange('M2').setFormula('=SUMIF(C:C, K2, E:E)');
+      sheet.getRange('M3').setFormula('=SUMIF(C:C, K3, E:E)');
+  }
+
+  Logger.log('✅ 初始化完成！現在可以進行部署 (Deploy) 了。');
+}
+
+/** 🌐 Web App 接口 **/
+function doGet(e) {
+  // 從屬性中讀取 ID (由 setupSheet 儲存)
+  const sheetId = PropertiesService.getScriptProperties().getProperty('SHEET_ID');
+  if(!sheetId) return ContentService.createTextOutput('錯誤：請先在編輯器執行 setupSheet() 以綁定試算表 ID。');
+
+  const ss = SpreadsheetApp.openById(sheetId);
+  const sheet = ss.getSheetByName(SHEET_NAME);
+
+  const action = (e.parameter.action || '').toLowerCase();
+
+  // 1. 取得排行榜
+  if (action === 'getleaderboard') {
+    const lastRow = sheet.getLastRow();
+    const maxRows = Math.max(0, lastRow - 1);
+    let result = [];
+    if (maxRows > 0) {
+       const vals = sheet.getRange(2, 11, maxRows, 3).getValues();
+       result = vals.filter(r => r[0]).map(r => ({
+           Name: String(r[0]),
+           TotalPoints: Number(r[1]) || 0,
+           TotalMinutes: Number(r[2]) || 0
+       }));
+    }
+    return ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
+  }
+
+  // 2. 提交交易
+  if (action === 'submit') {
+    const raw = e.parameter.data;
+    if (!raw) return ContentService.createTextOutput('No Data');
+    let obj;
+    try { obj = JSON.parse(raw); } catch(err) { return ContentService.createTextOutput('JSON Error'); }
+    sheet.appendRow([ new Date(), '', obj.Name || '', Number(obj.PointsChange) || 0, Number(obj.ScreenTimeChange) || 0, obj.Reason || '' ]);
+    return ContentService.createTextOutput('Success');
+  }
+
+  return ContentService.createTextOutput('Unknown Action');
+}
+function doPost(e){ return doGet(e); }
+            </textarea>
+
+            <p>4. <strong>執行初始化</strong>：在編輯器上方的下拉選單選擇 <code>setupSheet</code>，然後點擊「執行 (Run)」。程​​式會自動抓取當前試算表並建立欄位。</p>
+
+            <div
+              style="background:#332; padding:15px; border-radius:8px; border:1px solid #554; margin: 15px 0; font-size:14px; line-height:1.6;">
+              <strong>⚠️ 關於授權警告 (Google Auth Warning)</strong><br>
+              首次執行時會跳出「需要授權」視窗，這是 Google 的標準程序，請依序點擊：<br>
+              1. <code>審查權限 (Review permissions)</code><br>
+              2. 選擇您的 Google 帳號<br>
+              3. 看到「未經 Google 驗證」警告不用擔心，點擊左下角的 <code>進階 (Advanced)</code><br>
+              4. 點擊最下方的 <code>前往... (不安全) / Go to ... (unsafe)</code><br>
+              5. 點擊 <code>允許 (Allow)</code>
+            </div>
+
+            <p>5. <strong>部署 (Deploy)</strong>：這是最重要的一步，請仔細操作：
+            <ul style="padding-left: 20px; line-height: 1.8; color: #ccc;">
+              <li>點擊右上角藍色的 <code>部署 (Deploy)</code> 按鈕 > 選擇 <code>新增部署作業 (New deployment)</code>。</li>
+              <li>在跳出的視窗左側「選取類型」旁，點擊 <strong style="font-size:16px;">⚙️ (齒輪圖示)</strong>。</li>
+              <li>選擇 <strong>網頁應用程式 (Web app)</strong>。</li>
+              <li>在右側設定：
+                <ul
+                  style="margin-top:5px; margin-bottom:5px; background:rgba(255,255,255,0.05); padding:10px 10px 10px 30px; border-radius:8px;">
+                  <li><strong>說明</strong>：隨意填寫 (例如 "v1")。</li>
+                  <li><strong>執行身分 (Execute as)</strong>：選擇 <strong>我 (Me)</strong>。</li>
+                  <li><strong>誰可以存取 (Who has access)</strong>：⚠️ <span style="color:#ff5555;font-weight:bold;">務必選擇 任何人
+                      (Anyone)</span>。<br>
+                    <span style="font-size:12px;color:#aaa;">(若選「僅限本人」或「Google 帳戶」，跨裝置網頁會無法讀取資料)</span>
+                  </li>
+                </ul>
+              </li>
+              <li>點擊右下角的 <strong>部署 (Deploy)</strong>。</li>
+              <li>複製顯示的 <strong>網頁應用程式網址 (Web App URL)</strong>。</li>
+            </ul>
+            </p>
+
+          </div>
+
+          <div class="step" style="margin-top:40px; border-top:1px dashed #333; padding-top:30px;">
+            <h3>步驟 B：部署前端 (網頁介面)</h3>
+            <p>取得 Web App URL 後，複製以下代碼存成 HTML 檔，打開後輸入網址即可連線。</p>
+            <button onclick="copyId('code-frontend')">複製前端原始碼</button>
+            <textarea id="code-frontend" readonly>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Points & Screen Time (Online)</title>
+  <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <style>
+    /* 核心樣式 - 與 Demo 版一致 */
+    :root { --primary: #00d4ff; --bg-dark: #111; --bg-card: #1c1c3c; --radius-lg: 20px; }
+    body { font-family: sans-serif; background: var(--bg-dark); color: #eee; text-align: center; padding: 20px 10px; margin: 0; }
+    h1 { margin: 10px 0 5px; position:relative; display:inline-block; }
+    
+    /* 設定按鈕 */
+    .btn-settings { 
+        background: transparent; border: none; font-size: 20px; cursor: pointer; color: #666; 
+        vertical-align: middle; margin-left: 8px; transition: 0.3s;
+    }
+    .btn-settings:hover { color: #fff; transform: rotate(90deg); }
+
+    /* 卡片設計 */
+    .child-card {
+      background: var(--bg-card); padding: 24px; margin: 18px auto; border-radius: var(--radius-lg);
+      box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2); max-width: 440px; position: relative; border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .child-name { font-size: 26px; font-weight: 700; color: var(--primary); margin-bottom: 12px; }
+    .points-box {
+      background: rgba(0, 0, 0, 0.3); padding: 16px; border-radius: 16px; font-size: 36px;
+      font-weight: 800; color: var(--primary); margin-bottom: 12px; border: 1px solid rgba(0, 212, 255, 0.1);
+    }
+    .conversion-info { font-size: 13px; color: #bbb; margin-top: 6px; font-weight: normal; }
+
+    /* 進度條 */
+    .bar-wrap { background: #222; border: 2px solid rgba(0, 212, 255, 0.3); border-radius: 30px; overflow: hidden; height: 36px; position: relative; width: 100%; }
+    .fill { height: 100%; transition: width 0.6s; background: linear-gradient(90deg, var(--primary), #005eff); }
+    .fill.warning { background: linear-gradient(90deg, #ffaa00, #ff7700); }
+    .fill.danger { background: linear-gradient(90deg, #ff4444, #ff0000); }
+    .bar-text { position: absolute; width: 100%; text-align: center; top: 0; line-height: 36px; font-weight: 700; color: #fff; z-index: 2; text-shadow: 0 1px 2px #000; }
+    
+    /* 按鈕 */
+    .btn { padding: 10px; border-radius: 12px; border: none; width: 100%; font-weight: 700; cursor: pointer; background: #444; color: #eee; transition:0.2s; }
+    .btn:hover { background: #555; }
+    .btn.primary { background: var(--primary); color: #111; }
+    
+    .control-row { display: grid; gap: 8px; margin: 16px 0; }
+    .deduct-btn { padding: 8px; border-radius: 8px; border: none; background: #333; color: #ccc; cursor: pointer; }
+    .convert-group { display: flex; gap: 10px; margin-top: 10px; }
+
+    /* 方案切換 */
+    .plan-toggle { background: #222; border-radius: 50px; padding: 4px; display: inline-flex; gap: 4px; margin: 10px; }
+    .btn-plan { border: none; padding: 8px 20px; border-radius: 50px; background: transparent; color: #888; cursor: pointer; font-weight: 600; }
+    .btn-plan.active { background: var(--primary); color: #111; }
+
+    /* 設定與後台 */
+    #setup-box, #admin-panel { background: #2a2a5a; padding: 20px; border-radius: 20px; max-width: 440px; margin: 20px auto; border: 1px solid #444; }
+    input { background: rgba(0,0,0,0.3); color: #fff; border: 1px solid #555; padding: 10px; width: 100%; margin: 5px 0; border-radius: 8px; text-align: center; box-sizing: border-box; }
+    label.kid-select { display: inline-block; padding: 8px 12px; background: #333; margin: 4px; border-radius: 8px; cursor: pointer; border: 1px solid transparent; }
+    label.kid-select:has(input:checked) { background: rgba(0,212,255,0.15); border-color: var(--primary); color: var(--primary); font-weight: bold; }
+    label.kid-select input { display: none; }
+    
+    /* Settings Popup Custom */
+    .setting-row { margin-bottom: 10px; text-align: left; }
+    .setting-label { font-size: 14px; color: #aaa; display: block; margin-bottom: 4px; }
+    .swal2-input { margin: 0 !important; width: 100% !important; background: #222 !important; color: white !important; }
+  </style>
+</head>
+<body>
+
+  <h1>
+      ☁️ Points System
+      <button class="btn-settings" onclick="openSettings()" title="設定">⚙️</button>
+  </h1>
+
+  <!-- 設定區 -->
+  <div id="setup-box">
+     <h3>🔌 連線設定</h3>
+     <p style="font-size:12px;color:#aaa;">輸入 Web App URL:</p>
+     <input type="text" id="apiUrlInput" placeholder="https://script.google.com/..." />
+     <button class="btn primary" onclick="saveUrl()">Save & Connect</button>
+  </div>
+
+  <div id="main-interface" style="display:none;">
+      <!-- 平日/假日切換 -->
+      <div class="plan-toggle">
+        <button id="plan-weekday" class="btn-plan active" onclick="setAllocPlan('weekday')">平日 (50m)</button>
+        <button id="plan-holiday" class="btn-plan" onclick="setAllocPlan('holiday')">假日 (90m)</button>
+      </div>
+    
+      <div id="leaderboard"></div>
+      
+      <button class="btn" style="max-width:200px;margin-top:30px;background:#333;color:#888;" onclick="document.getElementById('admin-panel').style.display='block'">
+         顯示管理後台 ▼
+      </button>
+
+      <!-- 管理後台 -->
+      <div id="admin-panel" style="display:none;margin-top:10px;">
+         <h3 style="margin-top:0;">批次更新</h3>
+         <div id="kid-select-container"></div>
+         <input type="number" id="ptsChange" placeholder="⭐ 點數增減">
+         <input type="number" id="timeChange" placeholder="📺 時間增減">
+         <input type="text" id="reason" placeholder="原因">
+         <button class="btn primary" onclick="submitBatch()">送出更新</button>
+         <button class="btn" onclick="loadData();" style="margin-top:10px;">🔄 重新整理</button>
+         <button class="btn" onclick="resetUrl()" style="background:none;color:#555;font-size:12px;margin-top:10px;">重設網址</button>
+      </div>
+  </div>
+
+  <script>
+    // --- Config & Storage ---
+    let API_URL = localStorage.getItem('POINTS_API_URL') || '';
+
+    // 設定值 Check
+    let LIMITS = {
+      weekday: parseInt(localStorage.getItem('LIMIT_WEEK') || 50),
+      holiday: parseInt(localStorage.getItem('LIMIT_HOLIDAY') || 90)
+    };
+
+    let RATES = {
+      time: parseInt(localStorage.getItem('RATE_TIME') || 2), // 1 pt = ? min
+      cash: parseInt(localStorage.getItem('RATE_CASH') || 5)  // 1 pt = ? cash
+    };
+
+    let currentData = [];
+    let allocPlan = 'weekday'; // 預設平日
+
+    // 初始化
+    if (API_URL) {
+      document.getElementById('setup-box').style.display = 'none';
+      document.getElementById('main-interface').style.display = 'block';
+      document.getElementById('apiUrlInput').value = API_URL;
+      updatePlanUI();
+      loadData();
+    }
+
+    // --- 設定功能 (Settings) ---
+    function openSettings() {
+      Swal.fire({
+        title: '⚙️ 系統設定',
+        html: `
+                <div class="setting-row">
+                    <span class="setting-label">平日時間上限 (分鐘)</span>
+                    <input id="set-week" class="swal2-input" type="number" value="${LIMITS.weekday}">
+                </div>
+                <div class="setting-row">
+                    <span class="setting-label">假日時間上限 (分鐘)</span>
+                    <input id="set-holiday" class="swal2-input" type="number" value="${LIMITS.holiday}">
+                </div>
+                <hr style="border-color:#444">
+                <div class="setting-row">
+                    <span class="setting-label">換算：1 點 = 幾分鐘 ?</span>
+                    <input id="set-rate-time" class="swal2-input" type="number" value="${RATES.time}">
+                </div>
+                <div class="setting-row">
+                    <span class="setting-label">換算：1 點 = 多少錢 ?</span>
+                    <input id="set-rate-cash" class="swal2-input" type="number" value="${RATES.cash}">
+                </div>
+            `,
+        background: '#333', color: '#fff',
+        showCancelButton: true,
+        confirmButtonText: '儲存',
+        preConfirm: () => {
+          return {
+            w: document.getElementById('set-week').value,
+            h: document.getElementById('set-holiday').value,
+            rt: document.getElementById('set-rate-time').value,
+            rc: document.getElementById('set-rate-cash').value
+          }
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const v = result.value;
+          if (v.w && v.h && v.rt && v.rc) {
+            LIMITS.weekday = parseInt(v.w);
+            LIMITS.holiday = parseInt(v.h);
+            RATES.time = parseInt(v.rt);
+            RATES.cash = parseInt(v.rc);
+
+            localStorage.setItem('LIMIT_WEEK', LIMITS.weekday);
+            localStorage.setItem('LIMIT_HOLIDAY', LIMITS.holiday);
+            localStorage.setItem('RATE_TIME', RATES.time);
+            localStorage.setItem('RATE_CASH', RATES.cash);
+
+            updatePlanUI();
+            render();
+            Swal.fire({ icon: 'success', title: '設定已更新', timer: 800, showConfirmButton: false, background: '#333', color: '#fff' });
+          }
+        }
+      });
+    }
+
+    // --- 核心功能 ---
+
+    function saveUrl() {
+      const url = document.getElementById('apiUrlInput').value.trim();
+      if (!url) return alert('請輸入網址');
+      localStorage.setItem('POINTS_API_URL', url);
+      API_URL = url;
+      location.reload();
+    }
+
+    function resetUrl() {
+      if (confirm('清除連線設定?')) {
+        localStorage.removeItem('POINTS_API_URL');
+        location.reload();
+      }
+    }
+
+    function setAllocPlan(plan) {
+      allocPlan = plan;
+      updatePlanUI();
+      render();
+    }
+
+    function updatePlanUI() {
+      document.querySelectorAll('.btn-plan').forEach(b => b.classList.remove('active'));
+      document.getElementById('plan-' + allocPlan).classList.add('active');
+      document.getElementById('plan-weekday').textContent = `平日 (${LIMITS.weekday}m)`;
+      document.getElementById('plan-holiday').textContent = `假日 (${LIMITS.holiday}m)`;
+    }
+
+    async function loadData() {
+      Swal.showLoading();
+      try {
+        const res = await fetch(API_URL + '?action=getleaderboard');
+        const data = await res.json();
+        currentData = data;
+        render();
+        Swal.close();
+      } catch (e) {
+        console.error(e);
+        Swal.fire({ icon: 'error', title: '連線失敗', text: '請檢查網址或網路' });
+      }
+    }
+
+    // --- 渲染 UI ---
+    function render() {
+      const board = document.getElementById('leaderboard');
+      const selectBox = document.getElementById('kid-select-container');
+
+      const limit = LIMITS[allocPlan];
+
+      let html = '';
+      currentData.forEach(k => {
+        const mins = k.TotalMinutes;
+        const pts = k.TotalPoints;
+        const pct = Math.min(100, (mins / limit) * 100);
+
+        let barClass = '';
+        if (pct <= 20) barClass = 'danger';
+        else if (pct <= 50) barClass = 'warning';
+
+        html += `
+            <div class="child-card">
+               <div class="child-name">${k.Name}</div>
+               
+               <div class="points-box">
+                  ⭐ ${pts}
+                  <div class="conversion-info">
+                     可換：📺 ${pts * RATES.time}m <span style="margin:0 5px;color:#555">|</span> 💰 $${pts * RATES.cash}
+                  </div>
+               </div>
+
+               <!-- 進度條 -->
+               <div style="text-align:left;margin-bottom:15px;">
+                  <div style="display:flex;justify-content:space-between;color:#00d4ff;font-size:14px;margin-bottom:5px;">
+                      <span>📺 螢幕時間</span>
+                      <span style="color:#666">上限 ${limit}m</span>
+                  </div>
+                  <div class="bar-wrap">
+                      <div class="fill ${barClass}" style="width:${pct}%"></div>
+                      <div class="bar-text">${mins}m</div>
+                  </div>
+               </div>
+
+               <!-- 快捷操作 -->
+               <div class="control-row" style="grid-template-columns: repeat(3, 1fr);">
+                   <button class="deduct-btn" onclick="sendAction('${k.Name}', 0, -10, '快速扣除')">-10m</button>
+                   <button class="deduct-btn" onclick="sendAction('${k.Name}', 0, -30, '快速扣除')">-30m</button>
+                   <button class="deduct-btn" style="color:#ff6666" onclick="customDeduct('${k.Name}')">自訂</button>
+               </div>
+
+               <!-- 兌換按鈕 -->
+               <div class="convert-group">
+                   <button class="btn" onclick="convertTime('${k.Name}', ${mins})">📺 ➔ ⭐</button>
+                   <button class="btn primary" onclick="convertPoints('${k.Name}', ${pts})">⭐ ➔ 📺</button>
+               </div>
+            </div>`;
+      });
+      board.innerHTML = html || '<div style="color:#888;padding:20px;">讀取中或無資料...</div>';
+
+      // 渲染後台選單
+      let sHtml = '';
+      currentData.forEach(k => {
+        sHtml += `<label class="kid-select"><input type="checkbox" name="kidSelect" value="${k.Name}"> ${k.Name}</label>`;
+      });
+      selectBox.innerHTML = sHtml;
+    }
+
+    // --- 互動邏輯 (API) ---
+
+    async function sendAction(name, pChange, tChange, reason) {
+      if (pChange > 0) confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+
+      Swal.fire({
+        title: '更新中...',
+        didOpen: () => Swal.showLoading(),
+        background: '#333', color: '#fff'
+      });
+
+      try {
+        const payload = { Name: name, PointsChange: pChange, ScreenTimeChange: tChange, Reason: reason };
+        const url = API_URL + '?action=submit&data=' + encodeURIComponent(JSON.stringify(payload));
+        await fetch(url);
+        await loadData();
+        Swal.fire({ icon: 'success', title: '完成', timer: 800, showConfirmButton: false, background: '#333', color: '#fff' });
+      } catch (e) {
+        Swal.fire('Error', '連線錯誤', 'error');
+      }
+    }
+
+    function customDeduct(name) {
+      Swal.fire({
+        title: '扣除分鐘', input: 'number', showCancelButton: true, background: '#333', color: '#fff'
+      }).then(res => {
+        if (res.isConfirmed && res.value) sendAction(name, 0, -parseInt(res.value), '自訂扣除');
+      });
+    }
+
+    function convertTime(name, currentMins) {
+      const rate = RATES.time;
+      const maxPts = Math.floor(currentMins / rate);
+      if (maxPts < 1) return Swal.fire({ title: '時間不足', text: `至少需 ${rate} 分鐘`, icon: 'info', background: '#333', color: '#fff' });
+
+      Swal.fire({
+        title: '📺 ➔ ⭐', text: `目前 ${currentMins}分 (1點=${rate}分)`,
+        input: 'number', inputAttributes: { min: 1, max: maxPts },
+        showCancelButton: true, background: '#333', color: '#fff'
+      }).then(res => {
+        if (res.isConfirmed && res.value) {
+          const want = parseInt(res.value);
+          sendAction(name, want, -(want * rate), '時間換點數');
+        }
+      });
+    }
+
+    function convertPoints(name, currentPts) {
+      const rate = RATES.time;
+      if (currentPts < 1) return Swal.fire({ title: '點數不足', icon: 'info', background: '#333', color: '#fff' });
+
+      Swal.fire({
+        title: '⭐ ➔ 📺', text: `目前 ${currentPts}點 (1點換${rate}分)`,
+        input: 'number', inputAttributes: { min: 1, max: currentPts },
+        showCancelButton: true, background: '#333', color: '#fff'
+      }).then(res => {
+        if (res.isConfirmed && res.value) {
+          const want = parseInt(res.value);
+          sendAction(name, -want, (want * rate), '點數換時間');
+        }
+      });
+    }
+
+    async function submitBatch() {
+      const checks = document.querySelectorAll('input[name="kidSelect"]:checked');
+      if (checks.length === 0) return Swal.fire('請選擇對象');
+
+      const pts = document.getElementById('ptsChange').value;
+      const time = document.getElementById('timeChange').value;
+      const reason = document.getElementById('reason').value;
+
+      if (!pts && !time) return Swal.fire('請輸入數值');
+
+      Swal.fire({ title: '批次更新中...', didOpen: () => Swal.showLoading(), background: '#333', color: '#fff' });
+
+      for (let chk of checks) {
+        const payload = { Name: chk.value, PointsChange: pts, ScreenTimeChange: time, Reason: reason };
+        await fetch(API_URL + '?action=submit&data=' + encodeURIComponent(JSON.stringify(payload)));
+      }
+
+      document.getElementById('ptsChange').value = '';
+      document.getElementById('timeChange').value = '';
+      document.querySelectorAll('input[name="kidSelect"]').forEach(c => c.checked = false);
+
+      await loadData();
+      Swal.fire({ icon: 'success', title: '全部完成', timer: 1000, background: '#333', color: '#fff', showConfirmButton: false });
+    }
+  </script>
+</body>
+</html>
+    </textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer-nav">
+      <div>© 2025 Evelyn YT Liu. All Rights Reserved.</div>
+      <div style="margin-top: 10px;">
+        <a href="../index.html" style="color: var(--primary); text-decoration: none; font-size: 0.9em;">
+          ← Back to Portfolio
+        </a>
+      </div>
+    </div>
+
+</body>
+
+</html>
