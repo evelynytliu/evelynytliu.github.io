@@ -41,7 +41,18 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
         // Apply Private Filter
-        const finalData = showAll ? filteredData : filteredData.filter(item => !item.private);
+        let finalData = showAll ? filteredData : filteredData.filter(item => !item.private);
+
+        // Sort: Pin "Case Studies" to the top
+        finalData = [...finalData].sort((a, b) => {
+            const isACase = a.category === 'Case Studies';
+            const isBCase = b.category === 'Case Studies';
+            // a comes first (-1) if it is case study and b is not
+            if (isACase && !isBCase) return -1;
+            // b comes first (1) if it is case study and a is not
+            if (!isACase && isBCase) return 1;
+            return 0;
+        });
 
         finalData.forEach((item, index) => {
             const card = document.createElement('div');
@@ -54,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (item.category === 'Design') badgeClass = 'bg-orange-50 text-orange-600 border border-orange-100';
             if (item.category === 'Code') badgeClass = 'bg-blue-50 text-blue-600 border border-blue-100 font-mono text-xs';
             if (item.category === 'Notion') badgeClass = 'bg-gray-100 text-gray-800 border border-gray-200';
+            if (item.category === 'Case Studies') badgeClass = 'bg-[#3A4E5C] text-white border border-[#2A3B47] shadow-sm font-semibold tracking-wide';
 
             // Image logic
             const imageUrl = item.image;
@@ -111,7 +123,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // 3 Distinct Frame Styles based on index (Left, Middle, Right)
             const styles = ['frame-style-a', 'frame-style-b', 'frame-style-c'];
             const currentStyle = styles[index % 3];
-            const frameClass = `card-base ${currentStyle}`;
+
+            // Special styling class for Case Studies
+            const extraClass = item.category === 'Case Studies' ? 'case-study-card' : '';
+
+            const frameClass = `card-base ${currentStyle} ${extraClass}`;
 
             // Random decorative doodle injection matching the style somewhat
             let doodleHtml = '';
@@ -148,6 +164,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 doodleHtml = `<div class="doodle ${doodle.class}" style="${posStyle}">${doodle.html}</div>`;
             }
 
+            // Special styling for Case Studies Label
+            let categoryDisplay = item.category;
+            if (item.category === 'Case Studies') {
+                categoryDisplay = `
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-3 h-3 inline-block mr-1 -mt-0.5 text-yellow-300">
+                      <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+                    </svg>${item.category}
+                 `;
+            }
+
             // Card HTML
             card.innerHTML = `
                 <div class="${frameClass} ${stackClass}" onclick="${clickAction}">
@@ -169,8 +195,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     <div class="frame-content">
                         <div class="flex items-center justify-between mb-3">
-                            <span class="text-[10px] uppercase tracking-wider font-semibold px-2 py-1 rounded ${badgeClass}">
-                                ${item.category}
+                            <span class="text-[10px] uppercase tracking-wider font-semibold px-2 py-1 rounded ${badgeClass} flex items-center">
+                                ${categoryDisplay}
                             </span>
                             <span class="text-xs text-gray-400 font-medium">
                                 ${item.tags ? item.tags[0] : ''}

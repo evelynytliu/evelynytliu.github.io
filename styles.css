@@ -315,3 +315,35 @@ h3,
 .frame-content {
     padding: 1.25rem;
 }
+
+/* Highlight for Case Studies */
+.case-study-card {
+    border: 2px solid var(--color-teal-dark) !important;
+    transform: scale(1.01);
+    /* Slightly larger by default */
+}
+
+.case-study-card::after {
+    border-color: var(--color-teal-dark) !important;
+    border-width: 2px !important;
+    opacity: 0.6;
+    /* Force a more "solid" presence */
+    transform: rotate(2deg) scale(1.01) !important;
+}
+
+.case-study-card:hover {
+    transform: scale(1.03) translate(-2px, -2px) !important;
+    box-shadow: 0 10px 30px rgba(58, 78, 92, 0.15) !important;
+    z-index: 50;
+}
+
+.case-study-card:hover::after {
+    transform: rotate(0deg) scale(1.02) !important;
+    background-color: rgba(58, 78, 92, 0.03);
+    /* Slight tint behind */
+}
+
+.case-study-card .frame-content {
+    background-color: #F8FAFC !important;
+    /* Extremely light grey/blue */
+}
