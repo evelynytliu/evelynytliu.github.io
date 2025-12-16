@@ -108,24 +108,46 @@ document.addEventListener('DOMContentLoaded', () => {
                  </div>
             ` : '';
 
+            // Frame Variant Logic (Stable based on index)
+            const variantType = (index % 3) + 1;
+            const frameClass = `frame-variant-${variantType} frame-base`;
+
+            // Random decorative doodle injection
+            let doodleHtml = '';
+            // Only add doodles to some cards to avoid clutter
+            if (index % 2 === 0) {
+                const doodleType = index % 4;
+                if (doodleType === 0) {
+                    doodleHtml = `<div class="doodle doodle-dots" style="top: -10px; left: -10px;"></div>`;
+                } else if (doodleType === 1) {
+                    doodleHtml = `<div class="doodle doodle-sparkle" style="top: -15px; right: -10px;">✨</div>`;
+                } else if (doodleType === 2) {
+                    doodleHtml = `<div class="doodle doodle-lines" style="bottom: -10px; right: 20px;"></div>`;
+                } else {
+                    doodleHtml = `<div class="doodle doodle-circle" style="bottom: 10%; left: -8px;"></div>`;
+                }
+            }
+
             // Card HTML
             card.innerHTML = `
-                <div class="relative bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100 ${stackClass}" onclick="${clickAction}">
-                    <div class="card-image-container relative aspect-auto">
+                <div class="${frameClass} ${stackClass}" onclick="${clickAction}">
+                    ${doodleHtml}
+                    <!-- Add group/image for specific image hover effects -->
+                    <div class="card-image-container relative aspect-auto group/image overflow-hidden">
                         ${galleryIndicatorHtml}
                         ${privateBadge}
                         <!-- Use placeholder if code/notion, or actual image for design -->
-                        <img src="${imageUrl}" alt="${item.title}" class="w-full h-auto object-cover block">
+                        <img src="${imageUrl}" alt="${item.title}" class="w-full h-auto object-cover block transition-transform duration-500 group-hover/image:scale-105">
                         
-                        <!-- Overlay for "View" or "Visit" -->
-                        <div class="card-overlay absolute inset-0 flex items-center justify-center pointer-events-none">
-                            <span class="bg-white/90 backdrop-blur px-4 py-2 rounded-full text-sm font-medium text-gray-900 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                        <!-- Overlay for "View" or "Visit" - Only visible on image hover -->
+                        <div class="card-overlay absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover/image:opacity-100 transition-opacity duration-300">
+                            <span class="bg-white/90 backdrop-blur px-4 py-2 rounded-full text-sm font-medium text-gray-900 shadow-md transform translate-y-2 group-hover/image:translate-y-0 transition-transform duration-300">
                                 ${isCodeOrNotion ? '閱讀更多' : (isGallery ? '查看相簿' : '放大檢視')}
                             </span>
                         </div>
                     </div>
                     
-                    <div class="p-5">
+                    <div class="frame-content">
                         <div class="flex items-center justify-between mb-3">
                             <span class="text-[10px] uppercase tracking-wider font-semibold px-2 py-1 rounded ${badgeClass}">
                                 ${item.category}
@@ -134,7 +156,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                 ${item.tags ? item.tags[0] : ''}
                             </span>
                         </div>
-                        <h3 class="text-lg font-medium text-gray-900 leading-snug group-hover:text-purple-700 transition-colors">
+                        <!-- Updated hover color to use theme blue/teal -->
+                        <h3 class="text-lg font-medium text-gray-900 leading-snug card-title group-hover:text-[#7CA5B8] transition-colors">
                             ${item.title}
                         </h3>
                         ${item.description ? `<p class="mt-2 text-sm text-gray-500 line-clamp-2">${item.description}</p>` : ''}
