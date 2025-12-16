@@ -112,125 +112,183 @@ h3,
     z-index: 1;
 }
 
-/* Variant 1: The "Sketchy Offset" (Like the left reference) */
-.frame-variant-1 {
+/* Unified Card Base - The Content Box */
+.card-base {
+    background: #fff;
     border-radius: 20px;
-    border: 2px solid var(--color-teal-dark);
-    box-shadow: 5px 5px 0px rgba(58, 78, 92, 0.1);
-    /* Based on teal-dark */
+    /* Standard clean roundness for content */
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    /* Very subtle border for content definition */
+    position: relative;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    margin-bottom: 20px;
+    /* More space for offsets */
+    margin-right: 15px;
+    /* More space for offsets */
+    margin-left: 10px;
+    margin-top: 10px;
+    z-index: 1;
 }
 
-.frame-variant-1::after {
-    content: '';
-    position: absolute;
-    top: -6px;
-    left: -6px;
-    right: -6px;
-    bottom: -6px;
-    border: 1px solid var(--color-teal-dark);
-    border-radius: 25px;
-    opacity: 0.6;
-    z-index: -1;
-    transform: rotate(-1deg);
-}
-
-/* Variant 2: The "Peach Pop" (Like the right reference) */
-.frame-variant-2 {
-    border-radius: 15px;
-    border: 2px solid var(--color-teal-dark);
-    box-shadow: 6px 6px 0px var(--color-orange-accent);
-}
-
-.frame-variant-2:hover {
+.card-base:hover {
     transform: translate(-2px, -2px);
-    box-shadow: 8px 8px 0px var(--color-orange-accent);
+    z-index: 10;
 }
 
-/* Variant 3: The "Organic Bubble" (Like the middle reference) */
-.frame-variant-3 {
-    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-    border: 2px solid var(--color-teal-dark);
-    box-shadow: 3px 6px 15px rgba(0, 0, 0, 0.05);
-}
-
-.frame-variant-3::before {
+/* Common Frame Pseudo-element */
+.card-base::after {
     content: '';
     position: absolute;
-    inset: -4px;
-    border: 1px dashed var(--color-teal-light);
-    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-    z-index: -2;
+    background: transparent;
+    z-index: -1;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    border-width: 2px;
+    border-style: solid;
+}
+
+/* === Style A: The "Left" Look (Sketchy, Left-Bottom Offset) === */
+.frame-style-a::after {
+    top: 6px;
+    left: -8px;
+    right: 4px;
+    bottom: -6px;
+    border-color: #64748B;
+    /* Slate Grey/Blue */
+    border-radius: 24px;
+    /* Unified Consistent Radius */
+    transform: rotate(-2deg);
+}
+
+.frame-style-a:hover::after {
+    transform: rotate(0deg) translate(2px, -2px);
+}
+
+/* === Style B: The "Middle" Look (Loose, Top-Bottom Bulge) === */
+.frame-style-b::after {
+    top: -6px;
+    left: -4px;
+    right: -4px;
+    bottom: -6px;
+    border-color: #3A4E5C;
+    /* Dark Teal */
+    border-radius: 24px;
+    /* Unified Consistent Radius */
     transform: rotate(1deg);
 }
 
-/* Doodles */
-.doodle {
-    position: absolute;
-    z-index: 10;
-    pointer-events: none;
+.frame-style-b:hover::after {
+    transform: rotate(0deg) scale(1.02);
 }
 
-.doodle-dots {
-    width: 30px;
-    height: 30px;
-    background-image: radial-gradient(var(--color-teal-light) 20%, transparent 20%);
-    background-size: 8px 8px;
-    opacity: 0.8;
+/* === Style C: The "Right" Look (Simple, Top-Right Offset, Orange) === */
+.frame-style-c::after {
+    top: -10px;
+    left: 8px;
+    right: -10px;
+    bottom: 8px;
+    border-color: #E09F88;
+    /* Orange Accent */
+    border-radius: 24px;
+    /* Slightly rounder than content */
+    transform: rotate(2deg);
 }
 
-.doodle-sparkle {
-    color: var(--color-orange-accent);
-    font-size: 24px;
-    animation: spin-slow 3s linear infinite;
+.frame-style-c:hover::after {
+    transform: translate(-2px, 2px) rotate(0deg);
 }
 
-.doodle-lines {
-    width: 40px;
-    height: 10px;
-    border-top: 2px solid var(--color-teal-dark);
-    border-bottom: 2px solid var(--color-teal-dark);
-    transform: rotate(-15deg);
-    opacity: 0.5;
-}
-
-.doodle-circle {
-    width: 15px;
-    height: 15px;
-    border: 2px solid var(--color-orange-accent);
-    border-radius: 50%;
-}
-
-/* Update Image Container to fit frames */
-.card-image-container {
-    overflow: hidden;
-    /* rounded-t usually handled by frame, but here we might need custom logic */
-    border-top-left-radius: 14px;
-    border-top-right-radius: 14px;
-    /* Slightly less than outer border */
-}
-
-/* Frame specific internal radius adjustments */
-.frame-variant-3 .card-image-container {
-    border-radius: 250px 12px 0 0 / 12px 220px 0 0;
-}
-
-.card-image-container img {
-    border-radius: inherit;
-    /* Follow parent */
-}
-
-/* Stacked Effect Adjustment */
-.card-stacked::before {
-    display: none;
-    /* Remove old effect */
+/* Image Radius Fixing */
+.card-base .card-image-container {
+    border-radius: 19px 19px 0 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .frame-content {
     padding: 1.25rem;
     background: #fff;
-    /* Ensure bg matches frame */
-    border-bottom-left-radius: 18px;
-    border-bottom-right-radius: 18px;
+    border-radius: 0 0 19px 19px;
+}
+
+/* Lively Doodles - Matching Reference */
+.doodle {
+    position: absolute;
+    z-index: 20;
+    pointer-events: none;
+}
+
+/* 1. Dots Cloud (Left side of reference) */
+.doodle-dots-cloud {
+    width: 60px;
+    height: 60px;
+    background-image: radial-gradient(var(--color-teal-dark) 20%, transparent 20%);
+    background-size: 15px 15px;
+    /* Larger dots */
+    opacity: 0.6;
+}
+
+/* 2. Squiggle (Top left of reference) */
+.doodle-squiggle-line {
+    width: 50px;
+    height: 20px;
+    background-image: url("data:image/svg+xml,%3Csvg width='50' height='20' viewBox='0 0 50 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 10C8 0 16 0 22 10C28 20 36 20 42 10' stroke='%233A4E5C' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    transform: rotate(-10deg);
+}
+
+/* 3. Solid Circle (Bottom right of reference) */
+.doodle-solid-circle {
+    width: 40px;
+    height: 40px;
+    background-color: var(--color-orange-accent);
+    border-radius: 50%;
+    opacity: 1;
+    /* Solid per reference */
+}
+
+/* 4. Tiny Dash Lines / Burst (Top right of reference) */
+.doodle-lines-burst {
+    width: 30px;
+    height: 30px;
+    position: relative;
+}
+
+.doodle-lines-burst::before,
+.doodle-lines-burst::after {
+    content: '';
+    position: absolute;
+    background: var(--color-teal-dark);
+    height: 3px;
+    width: 100%;
+    border-radius: 3px;
+}
+
+.doodle-lines-burst::before {
+    transform: rotate(45deg);
+    top: 12px;
+}
+
+.doodle-lines-burst::after {
+    transform: rotate(-45deg);
+    top: 12px;
+}
+
+/* 5. Donut / Ring (Alternate) */
+.doodle-donut {
+    width: 20px;
+    height: 20px;
+    border: 4px solid var(--color-teal-dark);
+    border-radius: 50%;
+}
+
+@keyframes spin-slow {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /* Card Title Hover Color Update */

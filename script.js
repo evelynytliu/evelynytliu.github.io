@@ -108,24 +108,44 @@ document.addEventListener('DOMContentLoaded', () => {
                  </div>
             ` : '';
 
-            // Frame Variant Logic (Stable based on index)
-            const variantType = (index % 3) + 1;
-            const frameClass = `frame-variant-${variantType} frame-base`;
+            // 3 Distinct Frame Styles based on index (Left, Middle, Right)
+            const styles = ['frame-style-a', 'frame-style-b', 'frame-style-c'];
+            const currentStyle = styles[index % 3];
+            const frameClass = `card-base ${currentStyle}`;
 
-            // Random decorative doodle injection
+            // Random decorative doodle injection matching the style somewhat
             let doodleHtml = '';
-            // Only add doodles to some cards to avoid clutter
-            if (index % 2 === 0) {
-                const doodleType = index % 4;
-                if (doodleType === 0) {
-                    doodleHtml = `<div class="doodle doodle-dots" style="top: -10px; left: -10px;"></div>`;
-                } else if (doodleType === 1) {
-                    doodleHtml = `<div class="doodle doodle-sparkle" style="top: -15px; right: -10px;">✨</div>`;
-                } else if (doodleType === 2) {
-                    doodleHtml = `<div class="doodle doodle-lines" style="bottom: -10px; right: 20px;"></div>`;
+            // High frequency of doodles
+            if (index % 1 === 0) {
+                const doodleTypes = [
+                    { class: 'doodle-dots-cloud', html: '' },
+                    { class: 'doodle-dots-cloud', html: '' },
+                    { class: 'doodle-squiggle-line', html: '' },
+                    { class: 'doodle-solid-circle', html: '' },
+                    { class: 'doodle-lines-burst', html: '' },
+                    { class: 'doodle-donut', html: '' }
+                ];
+
+                // Random doodle
+                const randIndex = (index + Math.floor(Math.random() * doodleTypes.length)) % doodleTypes.length;
+                const doodle = doodleTypes[randIndex];
+
+                let posStyle = '';
+                // Customize doodle position slightly based on frame style to avoid overlap
+                if (currentStyle === 'frame-style-a') {
+                    // Frame is bottom-left heavy, so put doodles top-right or top-left high
+                    if (doodle.class === 'doodle-dots-cloud') posStyle = 'top: -20px; left: -20px;';
+                    else posStyle = 'top: -10px; right: -10px; transform: rotate(15deg);';
+                } else if (currentStyle === 'frame-style-b') {
+                    // Frame is bulgy top/bottom, corners are safer
+                    if (doodle.class === 'doodle-squiggle-line') posStyle = 'bottom: -15px; left: 20%; transform: rotate(-5deg);';
+                    else posStyle = 'top: -15px; right: -5px;';
                 } else {
-                    doodleHtml = `<div class="doodle doodle-circle" style="bottom: 10%; left: -8px;"></div>`;
+                    // Frame C is Top-Right heavy (Orange), so put doodle Bottom-Left
+                    posStyle = 'bottom: -10px; left: -10px; transform: rotate(-10deg);';
                 }
+
+                doodleHtml = `<div class="doodle ${doodle.class}" style="${posStyle}">${doodle.html}</div>`;
             }
 
             // Card HTML
@@ -160,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <h3 class="text-lg font-medium text-gray-900 leading-snug card-title group-hover:text-[#7CA5B8] transition-colors">
                             ${item.title}
                         </h3>
-                        ${item.description ? `<p class="mt-2 text-sm text-gray-500 line-clamp-2">${item.description}</p>` : ''}
+                        ${item.description && !item.description.startsWith('Project: ') ? `<p class="mt-2 text-sm text-gray-500 line-clamp-2">${item.description}</p>` : ''}
                     </div>
                 </div>
             `;

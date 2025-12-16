@@ -1,13 +1,17 @@
+// 這裡所有的資料都可以直接修改
+// 如果要改標題，請改 "title": "..." 後面的文字
+// 如果要改描述，請改 "description": "..." 後面的文字
+// 注意：「Design」類別的專案如果重新執行 Python 腳本會被覆蓋，建議直接改檔名，或是不要再執行腳本
 window.projectData = [
   {
     "id": "cafe_cover",
-    "title": "cafe_cover",
+    "title": "轉圈圈餐廳招牌設計",
     "category": "Design",
     "tags": [
       "Other"
     ],
     "image": "design_works/cafe_cover.jpeg",
-    "description": "Project: cafe_cover",
+    "description": "Project: 轉圈圈餐廳招牌設計",
     "link": "",
     "images": [
       "design_works/cafe_cover.jpeg"
@@ -16,7 +20,7 @@ window.projectData = [
     "mtime": 1765768168.583
   },
   {
-    "id": "%E9%A4%90%E5%BB%B3%E8%8F%9C%E5%96%AE%20%28%26%20%E6%89%8B%E7%B9%AA%E5%9C%96%29%20%E8%BD%89%E5%9C%88%E5%9C%88%E8%8F%9C%E5%96%AEP1",
+    "id": "round_and_round_menu",
     "title": "餐廳菜單 (& 手繪圖) 轉圈圈菜單",
     "category": "Design",
     "tags": [
@@ -37,7 +41,7 @@ window.projectData = [
     "mtime": 1755167460.14
   },
   {
-    "id": "%E9%86%AB%E7%99%82%E5%99%A8%E6%9D%90%E8%AA%AA%E6%98%8E%E6%9B%B8%E3%80%81%E7%B0%A1%E5%8D%A1%20%E6%A1%8C%E4%B8%8A%E5%9E%8B%E8%BC%94%E8%81%BD%E5%99%A8%E8%AA%AA%E6%98%8E%E6%9B%B8P1",
+    "id": "desktop_hearing_aid_manual",
     "title": "醫療器材說明書、簡卡 桌上型輔聽器說明書",
     "category": "Design",
     "tags": [
@@ -55,7 +59,7 @@ window.projectData = [
     "private": true
   },
   {
-    "id": "%E9%86%AB%E7%99%82%E5%99%A8%E6%9D%90%E8%AA%AA%E6%98%8E%E6%9B%B8%E3%80%81%E7%B0%A1%E5%8D%A1%20%E8%BC%94%E8%81%BD%E5%99%A8%E7%B0%A1%E5%8D%A1P1",
+    "id": "hearing_aid_guide_card",
     "title": "醫療器材說明書、簡卡 輔聽器簡卡",
     "category": "Design",
     "tags": [
@@ -73,7 +77,7 @@ window.projectData = [
     "private": true
   },
   {
-    "id": "%E9%86%AB%E7%99%82%E5%99%A8%E6%9D%90%E8%AA%AA%E6%98%8E%E6%9B%B8%E3%80%81%E7%B0%A1%E5%8D%A1%20%E8%BC%94%E8%81%BD%E5%99%A8%E8%8B%B1%E6%96%87%E8%AA%AA%E6%98%8E%E6%9B%B8",
+    "id": "hearing_aid_en_manual",
     "title": "醫療器材說明書、簡卡 輔聽器英文說明書",
     "category": "Design",
     "tags": [
@@ -90,7 +94,7 @@ window.projectData = [
     "private": true
   },
   {
-    "id": "%E5%BA%97%E5%85%A7%E6%B4%BB%E5%8B%95%E6%A8%99%E8%AA%9E%E3%80%81%E7%A5%A8%E5%88%B8%20%E8%BD%89%E5%9C%88%E5%9C%88%E7%A5%A8%E5%88%B8",
+    "id": "round_and_round_ticket",
     "title": "店內活動標語、票券 轉圈圈票券",
     "category": "Design",
     "tags": [
@@ -106,7 +110,7 @@ window.projectData = [
     "mtime": 1755165621.84
   },
   {
-    "id": "%E5%BA%97%E5%85%A7%E6%B4%BB%E5%8B%95%E6%A8%99%E8%AA%9E%E3%80%81%E7%A5%A8%E5%88%B8%20%E8%BD%89%E5%9C%88%E5%9C%88%E9%98%B2%E7%96%AB",
+    "id": "round_and_round_covid",
     "title": "店內活動標語、票券 轉圈圈防疫",
     "category": "Design",
     "tags": [
@@ -122,7 +126,7 @@ window.projectData = [
     "mtime": 1755165619.543
   },
   {
-    "id": "%E5%BA%97%E5%85%A7%E6%B4%BB%E5%8B%95%E6%A8%99%E8%AA%9E%E3%80%81%E7%A5%A8%E5%88%B8%20%E8%BD%89%E5%9C%88%E5%9C%88%E5%A4%96%E5%B8%B6%E8%B2%BC%E7%B4%99",
+    "id": "round_and_round_togo_sticker",
     "title": "店內活動標語、票券 轉圈圈外帶貼紙",
     "category": "Design",
     "tags": [
@@ -138,7 +142,7 @@ window.projectData = [
     "mtime": 1755165488.1
   },
   {
-    "id": "%E5%BA%97%E5%85%A7%E6%B4%BB%E5%8B%95%E6%A8%99%E8%AA%9E%E3%80%81%E7%A5%A8%E5%88%B8%20%E8%BD%89%E8%BD%89%E6%A8%82%E6%A8%99%E8%AA%9E",
+    "id": "wheel_of_fortune_slogan",
     "title": "店內活動標語、票券 轉轉樂標語",
     "category": "Design",
     "tags": [
@@ -154,7 +158,7 @@ window.projectData = [
     "mtime": 1755165457.289
   },
   {
-    "id": "%E9%A3%9F%E5%93%81%E5%A4%96%E5%8C%85%E8%A3%9D%E8%A8%AD%E8%A8%88%20%E8%82%A5%E4%BB%94%E8%82%89%E7%9C%9F%E7%A9%BA%E5%8C%85%E8%B2%BC%E7%B4%99-%E5%B0%8F%E9%95%B7%E6%96%B9",
+    "id": "fatboy_meat_sticker",
     "title": "食品外包裝設計 肥仔肉真空包貼紙-小長方",
     "category": "Design",
     "tags": [
@@ -170,7 +174,7 @@ window.projectData = [
     "mtime": 1755165408.447
   },
   {
-    "id": "%E9%A3%9F%E5%93%81%E5%A4%96%E5%8C%85%E8%A3%9D%E8%A8%AD%E8%A8%88%20%E9%BB%83%E9%87%91%E7%B4%94%E9%B5%9D%E6%B2%B9%E8%B2%BC%E7%B4%99",
+    "id": "goose_oil_sticker",
     "title": "食品外包裝設計 黃金純鵝油貼紙",
     "category": "Design",
     "tags": [
@@ -186,7 +190,7 @@ window.projectData = [
     "mtime": 1755165379.783
   },
   {
-    "id": "%E9%A3%9F%E5%93%81%E5%A4%96%E5%8C%85%E8%A3%9D%E8%A8%AD%E8%A8%88%20%E8%82%A5%E4%BB%94%E8%82%89%E7%9C%9F%E7%A9%BA%E5%8C%85%E5%BD%A9%E7%9B%92mockup",
+    "id": "fatboy_meat_box_mockup",
     "title": "食品外包裝設計 肥仔肉真空包彩盒mockup",
     "category": "Design",
     "tags": [
@@ -202,7 +206,7 @@ window.projectData = [
     "mtime": 1755165327.625
   },
   {
-    "id": "%E9%A4%90%E5%BB%B3%E4%B8%80%E8%88%AC%E7%94%A2%E5%93%81%E6%B5%B7%E5%A0%B1%E3%80%81DM%20%E8%BD%89%E5%9C%88%E5%9C%88%E6%BB%91%E6%AD%A5%E8%BB%8A-%E6%BB%91%E6%AD%A5%E8%BB%8ADM-01",
+    "id": "pushbike_dm",
     "title": "餐廳一般產品海報、DM 轉圈圈滑步車-滑步車DM",
     "category": "Design",
     "tags": [
@@ -219,7 +223,7 @@ window.projectData = [
     "mtime": 1755165211.048
   },
   {
-    "id": "%E9%A4%90%E5%BB%B3%E4%B8%80%E8%88%AC%E7%94%A2%E5%93%81%E6%B5%B7%E5%A0%B1%E3%80%81DM%20%E8%BD%89%E5%9C%88%E5%9C%88%E5%B8%B8%E6%85%8B%E6%80%A7",
+    "id": "round_and_round_poster",
     "title": "餐廳一般產品海報、DM 轉圈圈常態性",
     "category": "Design",
     "tags": [
@@ -235,7 +239,7 @@ window.projectData = [
     "mtime": 1755165192.594
   },
   {
-    "id": "%E9%A4%90%E5%BB%B3%E4%B8%80%E8%88%AC%E7%94%A2%E5%93%81%E6%B5%B7%E5%A0%B1%E3%80%81DM%20%E8%BD%89%E5%9C%88%E5%9C%88%E5%A4%96%E5%B8%B6%E5%A4%96%E9%80%81%E4%BE%BF%E7%95%B6",
+    "id": "togo_bento_poster",
     "title": "餐廳一般產品海報、DM 轉圈圈外帶外送便當",
     "category": "Design",
     "tags": [
@@ -251,7 +255,7 @@ window.projectData = [
     "mtime": 1755165183.463
   },
   {
-    "id": "%E9%A4%90%E5%BB%B3%E4%B8%80%E8%88%AC%E7%94%A2%E5%93%81%E6%B5%B7%E5%A0%B1%E3%80%81DM%20%E9%B5%9D%E8%82%89%E7%9C%9F%E7%A9%BA%E5%8C%85",
+    "id": "goose_meat_vacuum_poster",
     "title": "餐廳一般產品海報、DM 鵝肉真空包",
     "category": "Design",
     "tags": [
@@ -267,7 +271,7 @@ window.projectData = [
     "mtime": 1755165175.847
   },
   {
-    "id": "%E9%86%AB%E7%99%82%E7%94%A2%E5%93%81%E6%B5%B7%E5%A0%B1%E3%80%81DM%20GV-SA02%20DM%20MAR21_%E9%A0%81%E9%9D%A2_1",
+    "id": "gv_sa02_dm",
     "title": "醫療產品海報、DM GV-SA02 DM MAR21",
     "category": "Design",
     "tags": [
@@ -285,7 +289,7 @@ window.projectData = [
     "private": true
   },
   {
-    "id": "%E9%86%AB%E7%99%82%E7%94%A2%E5%93%81%E6%B5%B7%E5%A0%B1%E3%80%81DM%20%E5%91%BC%E5%90%B8%E5%99%A8Elite_2023%E7%BE%A9%E5%A4%A7%E5%88%A9-01",
+    "id": "ventilator_elite_poster",
     "title": "醫療產品海報、DM 呼吸器Elite_2023義大利",
     "category": "Design",
     "tags": [
@@ -303,7 +307,7 @@ window.projectData = [
     "private": true
   },
   {
-    "id": "Line%20%E5%9C%96%E6%96%87%E9%81%B8%E5%96%AE%20%E6%AD%90%E5%85%8B",
+    "id": "ok_line_menu",
     "title": "Line 圖文選單 歐克",
     "category": "Design",
     "tags": [
@@ -320,7 +324,7 @@ window.projectData = [
     "private": true
   },
   {
-    "id": "Line%20%E5%9C%96%E6%96%87%E9%81%B8%E5%96%AE%20%E8%BD%89%E5%9C%88%E5%9C%88",
+    "id": "round_and_round_line_menu",
     "title": "Line 圖文選單 轉圈圈",
     "category": "Design",
     "tags": [
