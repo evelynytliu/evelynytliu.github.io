@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (filterCategory === 'Case Studies' && item.category === 'Case Studies') return true;
                 if (filterCategory === 'Code' && item.category === 'Code') return true;
                 if (filterCategory === 'Design' && item.category === 'Design') return true;
-                if (filterCategory === 'Notion' && item.category === 'Notion') return true;
+                if (filterCategory === 'Life Lab' && item.category === 'Life Lab') return true;
                 if (filterCategory === 'Traces' && item.category === 'Traces') return true;
                 return false;
             });
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let badgeClass = 'bg-gray-100 text-gray-600';
             if (item.category === 'Design') badgeClass = 'bg-orange-50 text-orange-600 border border-orange-100';
             if (item.category === 'Code') badgeClass = 'bg-blue-50 text-blue-600 border border-blue-100 font-mono text-xs';
-            if (item.category === 'Notion') badgeClass = 'bg-gray-100 text-gray-800 border border-gray-200';
+            if (item.category === 'Life Lab') badgeClass = 'bg-emerald-50 text-emerald-600 border border-emerald-100 font-medium';
             if (item.category === 'Case Studies') badgeClass = 'bg-[#3A4E5C] text-white border border-[#2A3B47] shadow-sm font-semibold tracking-wide';
 
             // Image logic
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const galleryImages = item.images && item.images.length > 0 ? item.images : [item.image];
 
             // Escape single quotes for the inline onclick handler
-            const isCodeOrNotion = item.category === 'Code' || item.category === 'Notion';
+            const isCodeOrNotion = item.category === 'Code' || item.category === 'Life Lab';
 
             // Prepare data for lightbox
             const itemData = JSON.stringify({
@@ -265,7 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         currentIndex = 0;
 
-        const isTextMode = currentItem.category === 'Code' || currentItem.category === 'Notion' || currentItem.category === 'Case Studies';
+        const isTextMode = currentItem.category === 'Code' || currentItem.category === 'Life Lab' || currentItem.category === 'Case Studies';
 
         if (isTextMode) {
             // Text mode for Code/Notion
