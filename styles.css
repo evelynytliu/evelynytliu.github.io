@@ -1,0 +1,349 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap');
+/* Added Outfit for modern sans */
+
+:root {
+    /* Updated to match Google AI Studio Reference Theme */
+    --color-bg-cream: #F0F4F8;
+    /* evelyn-bg */
+    --color-teal-dark: #3A4E5C;
+    /* evelyn-dark */
+    --color-teal-main: #7CA5B8;
+    /* evelyn-blue */
+    --color-teal-light: #A8D0E6;
+    /* From blobs */
+    --color-orange-accent: #E09F88;
+    /* evelyn-accent */
+    --color-text-main: #3A4E5C;
+}
+
+body {
+    font-family: 'Inter', 'Noto Sans TC', sans-serif;
+    background-color: var(--color-bg-cream);
+    color: var(--color-text-main);
+}
+
+h1,
+h2,
+h3,
+.font-serif {
+    font-family: 'Playfair Display', serif;
+}
+
+.font-mono {
+    font-family: 'IBM Plex Mono', monospace;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 99px;
+    border: 3px solid var(--color-bg-cream);
+    /* Padding effect */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94A3B8;
+}
+
+/* Hide scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Filter Buttons */
+.filter-btn {
+    padding: 0.6rem 1.8rem;
+    border-radius: 9999px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #64748B;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: transparent;
+    border: 2px solid transparent;
+    /* Prepare for border */
+}
+
+.filter-btn:hover {
+    color: var(--color-teal-dark);
+    background-color: rgba(160, 224, 212, 0.2);
+    /* Light teal tint */
+    transform: translateY(-1px);
+}
+
+.filter-btn.active {
+    color: #fff;
+    background-color: var(--color-teal-main);
+    box-shadow: 0 4px 12px rgba(95, 125, 142, 0.3);
+    border-color: transparent;
+}
+
+/* Creative Frames & Playful Signs */
+
+/* Base Card Reset */
+.card-item {
+    background: transparent;
+    padding: 10px;
+    /* Space for doodles */
+}
+
+/* Common Frame Properties */
+.frame-base {
+    position: relative;
+    background: #fff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    overflow: visible !important;
+    /* Allow doodles to stick out */
+    z-index: 1;
+}
+
+/* Unified Card Base - The Content Box */
+.card-base {
+    background: #fff;
+    border-radius: 20px;
+    /* Standard clean roundness for content */
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    /* Very subtle border for content definition */
+    position: relative;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    margin-bottom: 20px;
+    /* More space for offsets */
+    margin-right: 15px;
+    /* More space for offsets */
+    margin-left: 10px;
+    margin-top: 10px;
+    z-index: 1;
+}
+
+.card-base:hover {
+    transform: translate(-2px, -2px);
+    z-index: 10;
+}
+
+/* Common Frame Pseudo-element */
+.card-base::after {
+    content: '';
+    position: absolute;
+    background: transparent;
+    z-index: -1;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    border-width: 2px;
+    border-style: solid;
+}
+
+/* === Style A: The "Left" Look (Sketchy, Left-Bottom Offset) === */
+.frame-style-a::after {
+    top: 6px;
+    left: -8px;
+    right: 4px;
+    bottom: -6px;
+    border-color: #64748B;
+    /* Slate Grey/Blue */
+    border-radius: 24px;
+    /* Unified Consistent Radius */
+    transform: rotate(-2deg);
+}
+
+.frame-style-a:hover::after {
+    transform: rotate(0deg) translate(2px, -2px);
+}
+
+/* === Style B: The "Middle" Look (Loose, Top-Bottom Bulge) === */
+.frame-style-b::after {
+    top: -6px;
+    left: -4px;
+    right: -4px;
+    bottom: -6px;
+    border-color: #3A4E5C;
+    /* Dark Teal */
+    border-radius: 24px;
+    /* Unified Consistent Radius */
+    transform: rotate(1deg);
+}
+
+.frame-style-b:hover::after {
+    transform: rotate(0deg) scale(1.02);
+}
+
+/* === Style C: The "Right" Look (Simple, Top-Right Offset, Orange) === */
+.frame-style-c::after {
+    top: -10px;
+    left: 8px;
+    right: -10px;
+    bottom: 8px;
+    border-color: #E09F88;
+    /* Orange Accent */
+    border-radius: 24px;
+    /* Slightly rounder than content */
+    transform: rotate(2deg);
+}
+
+.frame-style-c:hover::after {
+    transform: translate(-2px, 2px) rotate(0deg);
+}
+
+/* Image Radius Fixing */
+.card-base .card-image-container {
+    border-radius: 19px 19px 0 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.frame-content {
+    padding: 1.25rem;
+    background: #fff;
+    border-radius: 0 0 19px 19px;
+}
+
+/* Lively Doodles - Matching Reference */
+.doodle {
+    position: absolute;
+    z-index: 20;
+    pointer-events: none;
+}
+
+/* 1. Dots Cloud (Left side of reference) */
+.doodle-dots-cloud {
+    width: 60px;
+    height: 60px;
+    background-image: radial-gradient(var(--color-teal-dark) 20%, transparent 20%);
+    background-size: 15px 15px;
+    /* Larger dots */
+    opacity: 0.6;
+}
+
+/* 2. Squiggle (Top left of reference) */
+.doodle-squiggle-line {
+    width: 50px;
+    height: 20px;
+    background-image: url("data:image/svg+xml,%3Csvg width='50' height='20' viewBox='0 0 50 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 10C8 0 16 0 22 10C28 20 36 20 42 10' stroke='%233A4E5C' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    transform: rotate(-10deg);
+}
+
+/* 3. Solid Circle (Bottom right of reference) */
+.doodle-solid-circle {
+    width: 40px;
+    height: 40px;
+    background-color: var(--color-orange-accent);
+    border-radius: 50%;
+    opacity: 1;
+    /* Solid per reference */
+}
+
+/* 4. Tiny Dash Lines / Burst (Top right of reference) */
+.doodle-lines-burst {
+    width: 30px;
+    height: 30px;
+    position: relative;
+}
+
+.doodle-lines-burst::before,
+.doodle-lines-burst::after {
+    content: '';
+    position: absolute;
+    background: var(--color-teal-dark);
+    height: 3px;
+    width: 100%;
+    border-radius: 3px;
+}
+
+.doodle-lines-burst::before {
+    transform: rotate(45deg);
+    top: 12px;
+}
+
+.doodle-lines-burst::after {
+    transform: rotate(-45deg);
+    top: 12px;
+}
+
+/* 5. Donut / Ring (Alternate) */
+.doodle-donut {
+    width: 20px;
+    height: 20px;
+    border: 4px solid var(--color-teal-dark);
+    border-radius: 50%;
+}
+
+@keyframes spin-slow {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Card Title Hover Color Update */
+.card-item:hover .card-title {
+    color: var(--color-teal-main);
+    /* Was purple */
+    transition: color 0.2s ease;
+}
+
+.card-stacked .frame-base::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: -5px;
+    bottom: -5px;
+    background-color: #fff;
+    border: 1px solid #2A4858;
+    border-radius: inherit;
+    z-index: -2;
+}
+
+/* Typography Constraints */
+.frame-content {
+    padding: 1.25rem;
+}
+
+/* Highlight for Case Studies */
+.case-study-card {
+    border: 2px solid var(--color-teal-dark) !important;
+    transform: scale(1.01);
+    /* Slightly larger by default */
+}
+
+.case-study-card::after {
+    border-color: var(--color-teal-dark) !important;
+    border-width: 2px !important;
+    opacity: 0.6;
+    /* Force a more "solid" presence */
+    transform: rotate(2deg) scale(1.01) !important;
+}
+
+.case-study-card:hover {
+    transform: scale(1.03) translate(-2px, -2px) !important;
+    box-shadow: 0 10px 30px rgba(58, 78, 92, 0.15) !important;
+    z-index: 50;
+}
+
+.case-study-card:hover::after {
+    transform: rotate(0deg) scale(1.02) !important;
+    background-color: rgba(58, 78, 92, 0.03);
+    /* Slight tint behind */
+}
+
+.case-study-card .frame-content {
+    background-color: #F8FAFC !important;
+    /* Extremely light grey/blue */
+}
