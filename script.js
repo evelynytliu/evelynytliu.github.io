@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         // Fallback or Error
         console.error('Data not found. Make sure data.js is loaded.');
-        loading.innerText = '載入失�?（找不到 data.js�?;
+        loading.innerText = '載入失敗（找不到 data.js）';
     }
 
     // Render Function
@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <!-- Overlay for "View" or "Visit" - Only visible on image hover -->
                         <div class="card-overlay absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover/image:opacity-100 transition-opacity duration-300">
                             <span class="bg-white/90 backdrop-blur px-4 py-2 rounded-full text-sm font-medium text-gray-900 shadow-md transform translate-y-2 group-hover/image:translate-y-0 transition-transform duration-300">
-                                ${isCodeOrNotion ? '?��??��?' : (isGallery ? '?��??�簿' : '?�大檢�?')}
+                                ${isCodeOrNotion ? '閱讀更多' : (isGallery ? '查看相簿' : '放大檢視')}
                             </span>
                         </div>
                     </div>
@@ -308,7 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             ${currentItem.link ? `
                 <a href="${currentItem.link}" target="_blank" class="inline-flex items-center gap-2 bg-evelyn-blue hover:bg-evelyn-dark text-white px-6 py-3 rounded-full font-medium transition-colors">
-                    ?��?專�?網�? 
+                    前往專案網站 
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
                     </svg>
@@ -320,8 +320,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateLightboxCarousel() {
+        // Ensure carousel is visible
+        lightboxCarousel.style.display = 'flex';
+        const textContainer = document.getElementById('lightbox-text');
+        if (textContainer) textContainer.style.display = 'none';
+
         const track = document.getElementById('lightbox-track');
-        const windowWidth = window.innerWidth;
+        // Safely check for window width
+        const windowWidth = document.documentElement.clientWidth || window.innerWidth;
 
         // Clear existing images
         track.innerHTML = '';
@@ -345,11 +351,15 @@ document.addEventListener('DOMContentLoaded', () => {
             img.src = src;
             img.className = 'max-h-full md:max-h-[90vh] object-contain rounded-none md:rounded shadow-2xl flex-shrink-0';
             img.style.width = `${windowWidth}px`;
-            img.style.maxWidth = '100vw';
+            img.style.maxWidth = '100vw'; // Ensure image does not exceed viewport width
             track.appendChild(img);
         });
 
         // Position track to show current image
+        // If we have > 1 image, the array is [prev, current, next] or similar.
+        // Current image is at index 1 (if prev exists) or index 0 (if single image).
+        // Since we logic: "if > 1 push prev", so if multiple images, first one is prev, second is current.
+        // So offset should be -windowWidth.
         const offset = currentGallery.length > 1 ? -windowWidth : 0;
         track.style.transform = `translateX(${offset}px)`;
         track.style.transition = 'none';
@@ -394,10 +404,10 @@ document.addEventListener('DOMContentLoaded', () => {
             nav.id = 'lightbox-nav';
             nav.innerHTML = `
                 <button id="lb-prev" class="hidden md:block absolute left-4 top-1/2 transform -translate-y-1/2 text-white bg-black/20 hover:bg-black/50 p-3 rounded-full backdrop-blur transition-all z-50">
-                    ??
+                    ←
                 </button>
                 <button id="lb-next" class="hidden md:block absolute right-4 top-1/2 transform -translate-y-1/2 text-white bg-black/20 hover:bg-black/50 p-3 rounded-full backdrop-blur transition-all z-50">
-                    ??
+                    →
                 </button>
             `;
             lightbox.appendChild(nav);
@@ -457,64 +467,78 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const carousel = document.getElementById('lightbox-carousel');
 
-    carousel.addEventListener('touchstart', (e) => {
-        // Only trigger swipe if we are in image mode and have multiple images
-        const track = document.getElementById('lightbox-track');
-        if (!track || currentGallery.length <= 1) {
-            isDragging = false;
-            return;
-        }
-
-        isDragging = true;
-        touchStartX = e.touches[0].clientX;
-
-        // Remove transition for immediate 1:1 following
-        const windowWidth = window.innerWidth;`r`n        startOffset = -windowWidth;`r`n        track.style.transition = 'none';
-    }, { passive: false });
-
-    carousel.addEventListener('touchmove', (e) => {
-        if (!isDragging) return;
-
-        // Critical: prevent scrolling/native gestures while dragging
-        e.preventDefault();
-
-        const currentX = e.touches[0].clientX;
-        currentTranslate = currentX - touchStartX;
-
-        // Move image with finger
-        const track = document.getElementById('lightbox-track');`r`n        track.style.transform = `translateX(${startOffset + currentTranslate}px)`;
-    }, { passive: false });
-
-    carousel.addEventListener('touchend', (e) => {
-        if (!isDragging) return;
-        isDragging = false;
-
-        const swipeThreshold = 50;
-
-        // Add transition back for smooth animate out or snap back
-        const track = document.getElementById('lightbox-track');`r`n        track.style.transition = 'transform 0.3s ease-out';
-
-        if (Math.abs(currentTranslate) > swipeThreshold) {
-            // Swipe Detected
-            if (currentTranslate < 0) {
-                // Next Image (Slide Left)
-                currentIndex = (currentIndex + 1) % currentGallery.length;`r`n                updateLightboxCarousel();
-            } else {
-                // Prev Image (Slide Right)
-                currentIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;`r`n                updateLightboxCarousel();
+    // Only bind if carousel exists
+    if (carousel) {
+        carousel.addEventListener('touchstart', (e) => {
+            const track = document.getElementById('lightbox-track');
+            if (!track || currentGallery.length <= 1) {
+                isDragging = false;
+                return;
             }
-        } else {
-            // Snap back
-            track.style.transform = `translateX(${startOffset}px)`;
-        }
 
-        currentTranslate = 0;
-    }, { passive: true });
+            isDragging = true;
+            touchStartX = e.touches[0].clientX;
 
-    lightboxClose.addEventListener('click', closeLightbox);
-    lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox) closeLightbox();
-    });
+            // Store the current offset
+            const windowWidth = document.documentElement.clientWidth || window.innerWidth;
+            startOffset = -windowWidth; // Track is offset by one image width
+
+            // Remove transition for immediate 1:1 following
+            track.style.transition = 'none';
+        }, { passive: false });
+
+        carousel.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+
+            // Critical: prevent scrolling/native gestures while dragging
+            e.preventDefault();
+
+            const currentX = e.touches[0].clientX;
+            currentTranslate = currentX - touchStartX;
+
+            const track = document.getElementById('lightbox-track');
+            // Move track with finger (shows adjacent images)
+            track.style.transform = `translateX(${startOffset + currentTranslate}px)`;
+        }, { passive: false });
+
+        carousel.addEventListener('touchend', (e) => {
+            if (!isDragging) return;
+            isDragging = false;
+
+            const swipeThreshold = 50;
+            const track = document.getElementById('lightbox-track');
+
+            // Add transition back for smooth animate
+            track.style.transition = 'transform 0.3s ease-out';
+
+            if (Math.abs(currentTranslate) > swipeThreshold) {
+                // Swipe Detected - change image
+                if (currentTranslate < 0) {
+                    // Next Image (Swipe Left)
+                    currentIndex = (currentIndex + 1) % currentGallery.length;
+                } else {
+                    // Prev Image (Swipe Right)
+                    currentIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
+                }
+                updateLightboxCarousel();
+            } else {
+                // Snap back to current image
+                track.style.transform = `translateX(${startOffset}px)`;
+            }
+
+            currentTranslate = 0;
+        }, { passive: true });
+    }
+
+    if (lightboxClose) {
+        lightboxClose.addEventListener('click', closeLightbox);
+    }
+
+    if (lightbox) {
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) closeLightbox();
+        });
+    }
 
     // Scroll Hint Logic
     const filtersContainer = document.getElementById('filters-container');
@@ -537,9 +561,3 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('resize', checkScroll);
     }
 });
-
-
-
-
-
-
