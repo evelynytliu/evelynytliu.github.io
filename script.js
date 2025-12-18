@@ -409,4 +409,25 @@ document.addEventListener('DOMContentLoaded', () => {
     lightbox.addEventListener('click', (e) => {
         if (e.target === lightbox) closeLightbox();
     });
+
+    // Scroll Hint Logic
+    const filtersContainer = document.getElementById('filters-container');
+    const scrollHint = document.getElementById('filter-scroll-hint');
+
+    if (filtersContainer && scrollHint) {
+        const checkScroll = () => {
+            const isEnd = filtersContainer.scrollLeft + filtersContainer.clientWidth >= filtersContainer.scrollWidth - 10;
+            if (isEnd) {
+                scrollHint.classList.add('opacity-0');
+            } else {
+                scrollHint.classList.remove('opacity-0');
+            }
+        };
+
+        filtersContainer.addEventListener('scroll', checkScroll);
+        // Check initially
+        checkScroll();
+        // Also check on resize
+        window.addEventListener('resize', checkScroll);
+    }
 });
