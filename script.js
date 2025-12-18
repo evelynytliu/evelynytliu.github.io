@@ -352,6 +352,10 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
 
+        // Reset any inline styles from touch gestures (e.g. transform, transition)
+        lightboxImg.style.transform = '';
+        lightboxImg.style.transition = '';
+
         lightboxImg.classList.add('opacity-0');
         setTimeout(() => {
             lightboxImg.src = currentGallery[currentIndex];
@@ -370,10 +374,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const nav = document.createElement('div');
             nav.id = 'lightbox-nav';
             nav.innerHTML = `
-                <button id="lb-prev" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white bg-black/20 hover:bg-black/50 p-3 rounded-full backdrop-blur transition-all z-50">
+                <button id="lb-prev" class="hidden md:block absolute left-4 top-1/2 transform -translate-y-1/2 text-white bg-black/20 hover:bg-black/50 p-3 rounded-full backdrop-blur transition-all z-50">
                     ←
                 </button>
-                <button id="lb-next" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white bg-black/20 hover:bg-black/50 p-3 rounded-full backdrop-blur transition-all z-50">
+                <button id="lb-next" class="hidden md:block absolute right-4 top-1/2 transform -translate-y-1/2 text-white bg-black/20 hover:bg-black/50 p-3 rounded-full backdrop-blur transition-all z-50">
                     →
                 </button>
             `;
