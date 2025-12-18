@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let allData = [];
     let msnry;
 
-    // Global gallery for swipe navigation (stores flat list of all visible images)
+    // Global gallery for swipe navigation
     let flattenedGallery = [];
 
     // Load Data
@@ -19,19 +19,17 @@ document.addEventListener('DOMContentLoaded', () => {
         renderProjects('all');
         loading.style.display = 'none';
     } else {
-        // Fallback or Error
         console.error('Data not found. Make sure data.js is loaded.');
         loading.innerText = '載入失敗（找不到 data.js）';
     }
 
     // Render Function
     function renderProjects(filterCategory) {
-        grid.innerHTML = '<div class="grid-sizer w-full md:w-[48%] lg:w-[32%] hidden"></div>'; // Reset grid + sizer
+        grid.innerHTML = '<div class="grid-sizer w-full md:w-[48%] lg:w-[32%] hidden"></div>';
 
         // Reset global gallery
         flattenedGallery = [];
 
-        // Check for ?view=all parameter
         const urlParams = new URLSearchParams(window.location.search);
         const showAll = urlParams.get('view') === 'all';
 
@@ -46,21 +44,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 return false;
             });
 
-        // Apply Private Filter
         let finalData = showAll ? filteredData : filteredData.filter(item => !item.private);
 
-        // Sort: Pin "Case Studies" to the top
         finalData = [...finalData].sort((a, b) => {
             const isACase = a.category === 'Case Studies';
             const isBCase = b.category === 'Case Studies';
-            // a comes first (-1) if it is case study and b is not
             if (isACase && !isBCase) return -1;
-            // b comes first (1) if it is case study and a is not
             if (!isACase && isBCase) return 1;
             return 0;
         });
 
-        // Build Flattened Gallery & Render Cards
         finalData.forEach((item, index) => {
             const galleryImages = item.images && item.images.length > 0 ? item.images : [item.image];
             const isCodeOrNotion = item.category === 'Code';
@@ -71,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Calculate start index for this project in the flattened gallery
             let projectStartIndex = -1;
 
-            // Only add to global swipe gallery if it's NOT a text-mode project and NOT traces
+            // Build Flat Gallery
             if (!isTextMode && !isTraces) {
                 projectStartIndex = flattenedGallery.length;
                 galleryImages.forEach(imgJs => {
@@ -85,38 +78,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
 
-            // Create Card Logic
             const card = document.createElement('div');
-            // Masonry item classes
             card.className = `card-item w-full md:w-[48%] lg:w-[32%] mb-8 p-0 md:px-3 text-left group cursor-pointer`;
             card.setAttribute('data-category', item.category);
 
-            // Determine badge style
             let badgeClass = 'bg-gray-100 text-gray-600';
             if (item.category === 'Design') badgeClass = 'bg-orange-50 text-orange-600 border border-orange-100';
             if (item.category === 'Code') badgeClass = 'bg-blue-50 text-blue-600 border border-blue-100 font-mono text-xs';
             if (item.category === 'Life Lab') badgeClass = 'bg-emerald-50 text-emerald-600 border border-emerald-100 font-medium';
             if (item.category === 'Case Studies') badgeClass = 'bg-[#3A4E5C] text-white border border-[#2A3B47] shadow-sm font-semibold tracking-wide';
 
-            // Click Action Logic
             let clickAction;
             if (isTraces) {
                 clickAction = `window.location.href='${item.link}'`;
             } else if (isTextMode) {
-                // Pass full item data for text display (Legacy behavior for text items)
                 const safeItem = JSON.stringify(item).replace(/"/g, "&quot;");
-                clickAction = `openLightbox(${safeItem})`;
+                clickAction = `openTextLightbox(${safeItem})`;
             } else {
-                // Design (Image Gallery) -> Open Global Gallery at specific index
-                // Note: projectStartIndex points to the first image of this project
-                clickAction = `openLightbox(${projectStartIndex})`;
+                // Open Global Gallery
+                clickAction = `openGlobalGallery(${projectStartIndex})`;
             }
 
             const imageUrl = item.image;
             const isGallery = galleryImages.length > 1;
             const stackClass = isGallery ? 'card-stacked' : '';
 
-            // Gallery Indicator Badge
             const galleryIndicatorHtml = isGallery ? `
                 <div class="${isGallery ? 'absolute top-3 right-3' : 'hidden'} gallery-indicator text-white text-[10px] font-medium px-2 py-1 rounded-full flex items-center gap-1 z-10">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3 h-3">
@@ -126,22 +112,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             ` : '';
 
-            // Private Indicator Badge
             const privateBadge = item.private ? `
                  <div class="absolute top-3 left-3 bg-red-500/80 backdrop-blur text-white text-[10px] font-medium px-2 py-1 rounded-full z-10">
                     <i class="fas fa-eye-slash"></i> Private
                  </div>
             ` : '';
 
-            // 3 Distinct Frame Styles based on index (Left, Middle, Right)
             const styles = ['frame-style-a', 'frame-style-b', 'frame-style-c'];
             const currentStyle = styles[index % 3];
-
-            // Special styling class for Case Studies
             const extraClass = item.category === 'Case Studies' ? 'case-study-card' : '';
             const frameClass = `card-base ${currentStyle} ${extraClass}`;
 
-            // Random decorative doodle injection matching the style somewhat
             let doodleHtml = '';
             if (index % 1 === 0) {
                 const doodleTypes = [
@@ -170,7 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 doodleHtml = `<div class="doodle ${doodle.class}" style="${posStyle}">${doodle.html}</div>`;
             }
 
-            // Special styling for Case Studies Label
             let categoryDisplay = item.category;
             if (item.category === 'Case Studies') {
                 categoryDisplay = `
@@ -180,25 +160,19 @@ document.addEventListener('DOMContentLoaded', () => {
                  `;
             }
 
-            // Card HTML
             card.innerHTML = `
                 <div class="${frameClass} ${stackClass}" onclick="${clickAction}">
                     ${doodleHtml}
-                    <!-- Add group/image for specific image hover effects -->
                     <div class="card-image-container relative aspect-auto group/image overflow-hidden">
                         ${galleryIndicatorHtml}
                         ${privateBadge}
-                        <!-- Use placeholder if code/notion, or actual image for design -->
                         <img src="${imageUrl}" alt="${item.title}" class="w-full h-auto object-cover block transition-transform duration-500 group-hover/image:scale-105">
-                        
-                        <!-- Overlay for "View" or "Visit" - Only visible on image hover -->
                         <div class="card-overlay absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover/image:opacity-100 transition-opacity duration-300">
                             <span class="bg-white/90 backdrop-blur px-4 py-2 rounded-full text-sm font-medium text-gray-900 shadow-md transform translate-y-2 group-hover/image:translate-y-0 transition-transform duration-300">
                                 ${isCodeOrNotion ? '閱讀更多' : (isGallery ? '查看相簿' : '放大檢視')}
                             </span>
                         </div>
                     </div>
-                    
                     <div class="frame-content">
                         <div class="flex items-center justify-between mb-3">
                             <span class="text-[10px] uppercase tracking-wider font-semibold px-2 py-1 rounded ${badgeClass} flex items-center">
@@ -208,7 +182,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 ${item.tags ? item.tags[0] : ''}
                             </span>
                         </div>
-                        <!-- Updated hover color to use theme blue/teal -->
                         <h3 class="text-lg font-medium text-gray-900 leading-snug card-title group-hover:text-[#7CA5B8] transition-colors">
                             ${item.title}
                         </h3>
@@ -218,83 +191,74 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
 
             grid.appendChild(card);
-
-            // Stagger animation
-            setTimeout(() => {
-                card.classList.add('visible');
-            }, index * 50);
+            setTimeout(() => { card.classList.add('visible'); }, index * 50);
         });
 
-        // Initialize/Re-initialize Masonry after images load
-        if (msnry) {
-            msnry.destroy();
-        }
-
+        if (msnry) msnry.destroy();
         imagesLoaded(grid, function () {
             msnry = new Masonry(grid, {
                 itemSelector: '.card-item',
                 columnWidth: '.grid-sizer',
                 percentPosition: true,
-                gutter: 0 // We handle spacing with padding inside items
+                gutter: 0
             });
             msnry.layout();
         });
     }
 
-    // Filter Logic
     filterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            // Active State
             filterBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-
-            const filterValue = btn.getAttribute('data-filter');
-            renderProjects(filterValue);
+            renderProjects(btn.getAttribute('data-filter'));
         });
     });
 
-    // Lightbox Logic
     let currentGallery = [];
     let currentIndex = 0;
     let currentItem = null;
 
-    window.openLightbox = (arg) => {
-        if (typeof arg === 'number') {
-            // Global Gallery Mode (Swipe through all visible project images)
-            currentIndex = arg;
-            currentGallery = flattenedGallery;
-            // Ensure index is valid
-            if (currentIndex < 0 || currentIndex >= currentGallery.length) {
-                currentIndex = 0;
-            }
-            // Need to set currentItem for text population
-            currentItem = currentGallery[currentIndex];
+    // Explicit function for global gallery mode
+    window.openGlobalGallery = (index) => {
+        currentIndex = index;
+        currentGallery = flattenedGallery;
 
-            updateLightboxCarousel();
-            setupLightboxNav();
-        } else {
-            // Text Mode (Legacy object passed for Code/Case Studies)
-            const itemData = arg;
-
-            // For text mode, we just treat the passed item as currentItem
-            currentItem = itemData;
-
-            // Text mode mainly uses displayTextContent
-            displayTextContent();
+        // Safety check
+        if (currentIndex < 0 || currentIndex >= currentGallery.length) {
+            console.error('Index out of bounds:', currentIndex, 'Gallery size:', currentGallery.length);
+            currentIndex = 0;
         }
 
+        currentItem = currentGallery[currentIndex];
+        updateLightboxCarousel();
+        setupLightboxNav();
+
+        openLightboxElement();
+    };
+
+    // Explicit function for text mode
+    window.openTextLightbox = (itemData) => {
+        currentItem = itemData;
+        displayTextContent();
+        openLightboxElement();
+    };
+
+    // Legacy support just in case
+    window.openLightbox = (arg) => {
+        if (typeof arg === 'number') window.openGlobalGallery(arg);
+        else window.openTextLightbox(arg);
+    }
+
+    function openLightboxElement() {
         lightbox.classList.remove('hidden');
         setTimeout(() => {
             lightbox.classList.remove('opacity-0');
         }, 10);
         document.body.style.overflow = 'hidden';
-    };
+    }
 
     function displayTextContent() {
-        // Hide carousel, show text
         lightboxCarousel.style.display = 'none';
-
-        // Create text container
         let textContainer = document.getElementById('lightbox-text');
         if (!textContainer) {
             textContainer = document.createElement('div');
@@ -302,7 +266,6 @@ document.addEventListener('DOMContentLoaded', () => {
             textContainer.className = 'max-w-2xl mx-auto bg-white rounded-lg p-8 overflow-y-auto max-h-[80vh]';
             lightbox.insertBefore(textContainer, lightboxClose);
         }
-
         textContainer.style.display = 'block';
         textContainer.innerHTML = `
             <h2 class="text-3xl font-bold mb-4 text-gray-900">${currentItem.title}</h2>
@@ -318,57 +281,47 @@ document.addEventListener('DOMContentLoaded', () => {
                 </a>
             ` : ''}
         `;
-
         lightboxCaption.style.display = 'none';
     }
 
     function updateLightboxCarousel() {
-        // Ensure carousel is visible
         lightboxCarousel.style.display = 'flex';
         const textContainer = document.getElementById('lightbox-text');
         if (textContainer) textContainer.style.display = 'none';
 
         const track = document.getElementById('lightbox-track');
-        track.style.willChange = 'transform'; // Optimize for animation
-
-        // Use container width for better accuracy
+        track.style.willChange = 'transform';
         const containerWidth = lightboxCarousel.clientWidth || window.innerWidth;
-
-        // Clear existing images
         track.innerHTML = '';
 
-        // Load 3 images: prev, current, next
         const imagesToLoad = [];
         const prevIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
         const nextIndex = (currentIndex + 1) % currentGallery.length;
 
-        // Update currentItem for caption update (since we swipe via index now)
+        // Update current item reference for caption
         currentItem = currentGallery[currentIndex];
 
         if (currentGallery.length > 1) {
-            imagesToLoad.push({ item: currentGallery[prevIndex], position: -1 });
+            imagesToLoad.push({ item: currentGallery[prevIndex] });
         }
-        imagesToLoad.push({ item: currentGallery[currentIndex], position: 0 });
+        imagesToLoad.push({ item: currentGallery[currentIndex] });
         if (currentGallery.length > 1) {
-            imagesToLoad.push({ item: currentGallery[nextIndex], position: 1 });
+            imagesToLoad.push({ item: currentGallery[nextIndex] });
         }
 
-        // Create image elements
-        imagesToLoad.forEach(({ item, position }) => {
+        imagesToLoad.forEach(({ item }) => {
             const img = document.createElement('img');
-            img.src = item.src; // Ensure we access .src property
+            img.src = item.src;
             img.className = 'max-h-full md:max-h-[90vh] object-contain rounded-none md:rounded shadow-2xl flex-shrink-0';
             img.style.width = `${containerWidth}px`;
             img.style.maxWidth = '100%';
             track.appendChild(img);
         });
 
-        // Position track to show current image
         const offset = currentGallery.length > 1 ? -containerWidth : 0;
         track.style.transform = `translateX(${offset}px)`;
         track.style.transition = 'none';
 
-        // Update caption
         updateCaption();
     }
 
@@ -393,13 +346,11 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
 
-        // Styling for the Caption Area (Bottom Overlay)
         lightboxCaption.className = 'absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/95 via-black/70 to-transparent p-6 pb-8 pt-24 text-white transition-opacity duration-300 pointer-events-none';
         lightboxCaption.style.display = 'block';
     }
 
     function setupLightboxNav() {
-        // Remove existing nav if any
         const oldNav = document.getElementById('lightbox-nav');
         if (oldNav) oldNav.remove();
 
@@ -407,21 +358,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const nav = document.createElement('div');
             nav.id = 'lightbox-nav';
             nav.innerHTML = `
-                <button id="lb-prev" class="hidden md:block absolute left-4 top-1/2 transform -translate-y-1/2 text-white bg-black/20 hover:bg-black/50 p-3 rounded-full backdrop-blur transition-all z-50">
-                    ←
-                </button>
-                <button id="lb-next" class="hidden md:block absolute right-4 top-1/2 transform -translate-y-1/2 text-white bg-black/20 hover:bg-black/50 p-3 rounded-full backdrop-blur transition-all z-50">
-                    →
-                </button>
+                <button id="lb-prev" class="hidden md:block absolute left-4 top-1/2 transform -translate-y-1/2 text-white bg-black/20 hover:bg-black/50 p-3 rounded-full backdrop-blur transition-all z-50">←</button>
+                <button id="lb-next" class="hidden md:block absolute right-4 top-1/2 transform -translate-y-1/2 text-white bg-black/20 hover:bg-black/50 p-3 rounded-full backdrop-blur transition-all z-50">→</button>
             `;
             lightbox.appendChild(nav);
-
             document.getElementById('lb-prev').addEventListener('click', (e) => {
                 e.stopPropagation();
                 currentIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
                 updateLightboxCarousel();
             });
-
             document.getElementById('lb-next').addEventListener('click', (e) => {
                 e.stopPropagation();
                 currentIndex = (currentIndex + 1) % currentGallery.length;
@@ -434,7 +379,6 @@ document.addEventListener('DOMContentLoaded', () => {
         lightbox.classList.add('opacity-0');
         setTimeout(() => {
             lightbox.classList.add('hidden');
-            // Clear carousel track
             const track = document.getElementById('lightbox-track');
             if (track) track.innerHTML = '';
             lightboxCarousel.style.display = 'flex';
@@ -444,12 +388,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = '';
     };
 
-    // Keyboard Navigation
     document.addEventListener('keydown', (e) => {
         if (lightbox.classList.contains('hidden')) return;
-
         if (e.key === 'Escape') closeLightbox();
-
         const isImageMode = lightboxCarousel.style.display !== 'none';
         if (isImageMode && currentGallery.length > 1) {
             if (e.key === 'ArrowLeft') {
@@ -463,15 +404,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Touch Navigation (Carousel-based Live Swipe)
     let touchStartX = 0;
     let currentTranslate = 0;
     let isDragging = false;
     let startOffset = 0;
-
     const carousel = document.getElementById('lightbox-carousel');
 
-    // Only bind if carousel exists
     if (carousel) {
         carousel.addEventListener('touchstart', (e) => {
             const track = document.getElementById('lightbox-track');
@@ -479,91 +417,58 @@ document.addEventListener('DOMContentLoaded', () => {
                 isDragging = false;
                 return;
             }
-
             isDragging = true;
             touchStartX = e.touches[0].clientX;
-
-            // Store the current offset
-
-            // Use container width for better accuracy
             const containerWidth = carousel.clientWidth || window.innerWidth;
-            startOffset = -containerWidth; // Track is offset by one image width
-
-            // Remove transition for immediate 1:1 following
+            startOffset = -containerWidth;
             track.style.transition = 'none';
         }, { passive: false });
 
         carousel.addEventListener('touchmove', (e) => {
             if (!isDragging) return;
-
-            // Critical: prevent scrolling/native gestures while dragging
             e.preventDefault();
-
             const currentX = e.touches[0].clientX;
             currentTranslate = currentX - touchStartX;
-
             const track = document.getElementById('lightbox-track');
-            // Move track with finger (shows adjacent images)
             track.style.transform = `translateX(${startOffset + currentTranslate}px)`;
         }, { passive: false });
 
         carousel.addEventListener('touchend', (e) => {
             if (!isDragging) return;
             isDragging = false;
-
             const swipeThreshold = 50;
             const track = document.getElementById('lightbox-track');
-
-            // Add transition back for smooth animate
             track.style.transition = 'transform 0.3s ease-out';
 
             if (Math.abs(currentTranslate) > swipeThreshold) {
-                // Swipe Detected - change image
                 if (currentTranslate < 0) {
-                    // Next Image (Swipe Left)
                     currentIndex = (currentIndex + 1) % currentGallery.length;
                 } else {
-                    // Prev Image (Swipe Right)
                     currentIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
                 }
                 updateLightboxCarousel();
             } else {
-                // Snap back to current image
                 track.style.transform = `translateX(${startOffset}px)`;
             }
-
             currentTranslate = 0;
         }, { passive: true });
     }
 
-    if (lightboxClose) {
-        lightboxClose.addEventListener('click', closeLightbox);
-    }
+    if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+    if (lightbox) lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) closeLightbox();
+    });
 
-    if (lightbox) {
-        lightbox.addEventListener('click', (e) => {
-            if (e.target === lightbox) closeLightbox();
-        });
-    }
-
-    // Scroll Hint Logic
     const filtersContainer = document.getElementById('filters-container');
     const scrollHint = document.getElementById('filter-scroll-hint');
-
     if (filtersContainer && scrollHint) {
         const checkScroll = () => {
             const isEnd = filtersContainer.scrollLeft + filtersContainer.clientWidth >= filtersContainer.scrollWidth - 10;
-            if (isEnd) {
-                scrollHint.classList.add('opacity-0');
-            } else {
-                scrollHint.classList.remove('opacity-0');
-            }
+            if (isEnd) scrollHint.classList.add('opacity-0');
+            else scrollHint.classList.remove('opacity-0');
         };
-
         filtersContainer.addEventListener('scroll', checkScroll);
-        // Check initially
         checkScroll();
-        // Also check on resize
         window.addEventListener('resize', checkScroll);
     }
 });
