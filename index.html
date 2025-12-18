@@ -309,24 +309,26 @@
     <!-- Lightbox -->
     <div id="lightbox"
         class="fixed inset-0 z-[100] bg-black/90 hidden backdrop-blur-sm opacity-0 transition-opacity duration-300 flex items-center justify-center p-0 md:p-4">
-        <button id="lightbox-close"
-            class="absolute top-6 right-6 text-white hover:text-gray-300 transition-colors z-[60]">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                stroke="currentColor" class="w-10 h-10">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-        </button>
 
         <!-- Image Carousel Container -->
-        <div id="lightbox-carousel" class="relative w-full h-full overflow-hidden flex items-center justify-center">
+        <div id="lightbox-carousel"
+            class="relative w-full h-full overflow-hidden flex items-center justify-center touch-none">
             <div id="lightbox-track" class="flex items-center h-full transition-transform duration-300 ease-out"
                 style="transform: translateX(0)">
                 <!-- Images will be dynamically inserted here -->
             </div>
         </div>
 
+        <button id="lightbox-close"
+            class="absolute top-6 right-6 text-white hover:text-gray-300 transition-colors z-[200] p-4 cursor-pointer active:scale-90 transform transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor" class="w-8 h-8 drop-shadow-md">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+
         <div id="lightbox-caption"
-            class="absolute bottom-6 left-6 text-white/80 text-sm font-medium tracking-wide bg-black/50 px-4 py-2 rounded-full backdrop-blur-md">
+            class="absolute bottom-6 left-6 text-white/80 text-sm font-medium tracking-wide bg-black/50 px-4 py-2 rounded-full backdrop-blur-md pointer-events-none">
         </div>
     </div>
 
