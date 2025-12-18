@@ -4,6 +4,23 @@
 // 注意：「Design」類別的專案如果重新執行 Python 腳本會被覆蓋，建議直接改檔名，或是不要再執行腳本
 window.projectData = [
   {
+    "id": "lab_spring_couplets",
+    "title": "自製斗方小春聯",
+    "category": "Life Lab",
+    "tags": [
+      "DIY",
+      "Procreate"
+    ],
+    "image": "lab/自製斗方小春聯.jpg",
+    "description": "用 iPad Procreate 繪製，再自己打印輸出的兔年小春聯，當時也有把連結分享給網友們印刷。把數位創作變成實體，為家裡增添一點節慶儀式感！",
+    "link": "",
+    "images": [
+      "lab/自製斗方小春聯.jpg"
+    ],
+    "hue": 0,
+    "mtime": 1766066000.0
+  },
+  {
     "id": "rr_blackboard_art",
     "title": "黑板畫系列 (Blackboard Art)",
     "category": "Design",

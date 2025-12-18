@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const galleryImages = item.images && item.images.length > 0 ? item.images : [item.image];
 
             // Escape single quotes for the inline onclick handler
-            const isCodeOrNotion = item.category === 'Code' || item.category === 'Life Lab';
+            const isCodeOrNotion = item.category === 'Code';
 
             // Prepare data for lightbox
             const itemData = JSON.stringify({
@@ -269,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         currentIndex = 0;
 
-        const isTextMode = currentItem.category === 'Code' || currentItem.category === 'Life Lab' || currentItem.category === 'Case Studies';
+        const isTextMode = currentItem.category === 'Code' || currentItem.category === 'Case Studies';
 
         if (isTextMode) {
             // Text mode for Code/Notion
@@ -326,6 +326,32 @@ document.addEventListener('DOMContentLoaded', () => {
         if (textContainer) textContainer.style.display = 'none';
         lightboxCaption.style.display = 'block';
 
+        // Styling for the Caption Area (Bottom Overlay)
+        lightboxCaption.className = 'absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/95 via-black/70 to-transparent p-6 pb-8 pt-24 text-white transition-opacity duration-300 pointer-events-none';
+
+        // Content for Caption
+        // Note: pointer-events-auto on the inner container allows text selection if needed, 
+        // but keeping it simple for now to avoid blocking clicks.
+        const counterHtml = currentGallery.length > 1
+            ? `<span class="bg-white/20 backdrop-blur px-2 py-0.5 rounded text-xs font-mono ml-2">${currentIndex + 1} / ${currentGallery.length}</span>`
+            : '';
+
+        const descHtml = currentItem.description
+            ? `<p class="text-gray-200 text-sm md:text-base leading-relaxed mt-2 max-w-3xl whitespace-pre-line">${currentItem.description}</p>`
+            : '';
+
+        lightboxCaption.innerHTML = `
+            <div class="max-w-7xl mx-auto w-full pointer-events-auto">
+                <div class="flex flex-col items-start justify-end">
+                    <h3 class="text-xl md:text-2xl font-bold font-serif tracking-wide flex items-center">
+                        ${currentItem.title}
+                        ${counterHtml}
+                    </h3>
+                    ${descHtml}
+                </div>
+            </div>
+        `;
+
         lightboxImg.classList.add('opacity-0');
         setTimeout(() => {
             lightboxImg.src = currentGallery[currentIndex];
@@ -333,13 +359,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 lightboxImg.classList.remove('opacity-0');
             };
         }, 200);
-
-        // Update counter if gallery
-        if (currentGallery.length > 1) {
-            lightboxCaption.innerHTML = `<span class="opacity-70">${currentIndex + 1} / ${currentGallery.length}</span>`;
-        } else {
-            lightboxCaption.innerHTML = currentItem.title || '';
-        }
     }
 
     function setupLightboxNav() {
@@ -404,6 +423,39 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
+
+    // Touch Navigation (Swipe)
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    lightbox.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    lightbox.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipeGesture();
+    }, { passive: true });
+
+    function handleSwipeGesture() {
+        if (lightbox.classList.contains('hidden')) return;
+        const isImageMode = lightboxImg.style.display !== 'none';
+
+        // Only trigger swipe if we are in image mode and have multiple images
+        if (isImageMode && currentGallery.length > 1) {
+            // Swipe Left (Next)
+            if (touchEndX < touchStartX - 50) {
+                currentIndex = (currentIndex + 1) % currentGallery.length;
+                updateLightboxImage();
+            }
+
+            // Swipe Right (Prev)
+            if (touchEndX > touchStartX + 50) {
+                currentIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
+                updateLightboxImage();
+            }
+        }
+    }
 
     lightboxClose.addEventListener('click', closeLightbox);
     lightbox.addEventListener('click', (e) => {
