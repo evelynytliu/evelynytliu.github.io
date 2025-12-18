@@ -63,13 +63,13 @@ window.projectData = [
   },
   {
     "id": "round_and_round_menu",
-    "title": "餐廳菜單 (& 手繪圖) 轉圈圈菜單",
+    "title": "餐廳菜單 (& 手繪圖)",
     "category": "Design",
     "tags": [
       "Menus"
     ],
     "image": "design_works/作品  餐廳菜單 (& 手繪圖) 轉圈圈菜單P0.png",
-    "description": "Project: 餐廳菜單 (& 手繪圖) 轉圈圈菜單P0",
+    "description": "Project: 餐廳菜單 (& 手繪圖)P0",
     "link": "",
     "images": [
       "design_works/作品  餐廳菜單 (& 手繪圖) 轉圈圈菜單P0.png",
@@ -138,13 +138,13 @@ window.projectData = [
   },
   {
     "id": "round_and_round_ticket",
-    "title": "轉圈圈騎車票券",
+    "title": "滑步車騎車票券",
     "category": "Design",
     "tags": [
       "Other"
     ],
     "image": "design_works/作品  店內活動標語、票券 轉圈圈票券01.png",
-    "description": "Project: 轉圈圈騎車票券",
+    "description": "Project: 滑步車騎車票券",
     "link": "",
     "images": [
       "design_works/作品  店內活動標語、票券 轉圈圈票券01.png",
@@ -156,13 +156,13 @@ window.projectData = [
   },
   {
     "id": "round_and_round_covid",
-    "title": "轉圈圈防疫標語",
+    "title": "餐廳防疫標語",
     "category": "Design",
     "tags": [
       "Other"
     ],
     "image": "design_works/作品  店內活動標語、票券 轉圈圈防疫.webp",
-    "description": "Project: 轉圈圈防疫標語",
+    "description": "Project: 餐廳防疫標語",
     "link": "",
     "images": [
       "design_works/作品  店內活動標語、票券 轉圈圈防疫.webp"
@@ -172,13 +172,13 @@ window.projectData = [
   },
   {
     "id": "round_and_round_togo_sticker",
-    "title": "轉圈圈外帶貼紙",
+    "title": "餐廳外帶貼紙",
     "category": "Design",
     "tags": [
       "Other"
     ],
     "image": "design_works/作品  店內活動標語、票券 轉圈圈外帶貼紙.webp",
-    "description": "Project: 轉圈圈外帶貼紙",
+    "description": "Project: 餐廳外帶貼紙",
     "link": "",
     "images": [
       "design_works/作品  店內活動標語、票券 轉圈圈外帶貼紙.webp"
@@ -269,13 +269,13 @@ window.projectData = [
   },
   {
     "id": "round_and_round_poster",
-    "title": "轉圈圈常態性DM",
+    "title": "親子友善餐廳DM",
     "category": "Design",
     "tags": [
       "Posters"
     ],
     "image": "design_works/作品  餐廳一般產品海報、DM 轉圈圈常態性.jpg",
-    "description": "Project: 轉圈圈常態性DM",
+    "description": "Project: 親子友善餐廳DM",
     "link": "",
     "images": [
       "design_works/作品  餐廳一般產品海報、DM 轉圈圈常態性.jpg"
@@ -285,13 +285,13 @@ window.projectData = [
   },
   {
     "id": "togo_bento_poster",
-    "title": "轉圈圈外帶外送便當DM",
+    "title": "餐廳外帶外送便當DM",
     "category": "Design",
     "tags": [
       "Posters"
     ],
     "image": "design_works/作品  餐廳一般產品海報、DM 轉圈圈外帶外送便當.jpg",
-    "description": "Project: 轉圈圈外帶外送便當DM",
+    "description": "Project: 餐廳外帶外送便當DM",
     "link": "",
     "images": [
       "design_works/作品  餐廳一般產品海報、DM 轉圈圈外帶外送便當.jpg"
