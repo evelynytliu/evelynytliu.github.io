@@ -276,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
             displayTextContent();
         } else {
             // Image gallery mode
-            updateLightboxImage();
+            updateLightboxCarousel();
             setupLightboxNav();
         }
 
@@ -319,19 +319,46 @@ document.addEventListener('DOMContentLoaded', () => {
         lightboxCaption.style.display = 'none';
     }
 
-    function updateLightboxImage() {
-        // Show image, hide text
-        lightboxImg.style.display = 'block';
-        const textContainer = document.getElementById('lightbox-text');
-        if (textContainer) textContainer.style.display = 'none';
-        lightboxCaption.style.display = 'block';
+    function updateLightboxCarousel() {
+        const track = document.getElementById('lightbox-track');
+        const windowWidth = window.innerWidth;
 
-        // Styling for the Caption Area (Bottom Overlay)
-        lightboxCaption.className = 'absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/95 via-black/70 to-transparent p-6 pb-8 pt-24 text-white transition-opacity duration-300 pointer-events-none';
+        // Clear existing images
+        track.innerHTML = '';
 
-        // Content for Caption
-        // Note: pointer-events-auto on the inner container allows text selection if needed, 
-        // but keeping it simple for now to avoid blocking clicks.
+        // Load 3 images: prev, current, next
+        const imagesToLoad = [];
+        const prevIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
+        const nextIndex = (currentIndex + 1) % currentGallery.length;
+
+        if (currentGallery.length > 1) {
+            imagesToLoad.push({ src: currentGallery[prevIndex], position: -1 });
+        }
+        imagesToLoad.push({ src: currentGallery[currentIndex], position: 0 });
+        if (currentGallery.length > 1) {
+            imagesToLoad.push({ src: currentGallery[nextIndex], position: 1 });
+        }
+
+        // Create image elements
+        imagesToLoad.forEach(({ src, position }) => {
+            const img = document.createElement('img');
+            img.src = src;
+            img.className = 'max-h-full md:max-h-[90vh] object-contain rounded-none md:rounded shadow-2xl flex-shrink-0';
+            img.style.width = `${windowWidth}px`;
+            img.style.maxWidth = '100vw';
+            track.appendChild(img);
+        });
+
+        // Position track to show current image
+        const offset = currentGallery.length > 1 ? -windowWidth : 0;
+        track.style.transform = `translateX(${offset}px)`;
+        track.style.transition = 'none';
+
+        // Update caption
+        updateCaption();
+    }
+
+    function updateCaption() {
         const counterHtml = currentGallery.length > 1
             ? `<span class="bg-white/20 backdrop-blur px-2 py-0.5 rounded text-xs font-mono ml-2">${currentIndex + 1} / ${currentGallery.length}</span>`
             : '';
@@ -352,17 +379,9 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
 
-        // Reset any inline styles from touch gestures (e.g. transform, transition)
-        lightboxImg.style.transform = '';
-        lightboxImg.style.transition = '';
-
-        lightboxImg.classList.add('opacity-0');
-        setTimeout(() => {
-            lightboxImg.src = currentGallery[currentIndex];
-            lightboxImg.onload = () => {
-                lightboxImg.classList.remove('opacity-0');
-            };
-        }, 200);
+        // Styling for the Caption Area (Bottom Overlay)
+        lightboxCaption.className = 'absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/95 via-black/70 to-transparent p-6 pb-8 pt-24 text-white transition-opacity duration-300 pointer-events-none';
+        lightboxCaption.style.display = 'block';
     }
 
     function setupLightboxNav() {
@@ -386,13 +405,13 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('lb-prev').addEventListener('click', (e) => {
                 e.stopPropagation();
                 currentIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
-                updateLightboxImage();
+                updateLightboxCarousel();
             });
 
             document.getElementById('lb-next').addEventListener('click', (e) => {
                 e.stopPropagation();
                 currentIndex = (currentIndex + 1) % currentGallery.length;
-                updateLightboxImage();
+                updateLightboxCarousel();
             });
         }
     }

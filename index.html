@@ -316,8 +316,15 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
         </button>
-        <img id="lightbox-img" src="" alt="Project Preview"
-            class="max-h-full max-w-full md:max-h-[90vh] md:max-w-[90vw] object-contain rounded-none md:rounded shadow-2xl transform transition-transform duration-300">
+
+        <!-- Image Carousel Container -->
+        <div id="lightbox-carousel" class="relative w-full h-full overflow-hidden flex items-center justify-center">
+            <div id="lightbox-track" class="flex items-center h-full transition-transform duration-300 ease-out"
+                style="transform: translateX(0)">
+                <!-- Images will be dynamically inserted here -->
+            </div>
+        </div>
+
         <div id="lightbox-caption"
             class="absolute bottom-6 left-6 text-white/80 text-sm font-medium tracking-wide bg-black/50 px-4 py-2 rounded-full backdrop-blur-md">
         </div>
