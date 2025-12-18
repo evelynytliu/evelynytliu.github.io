@@ -4,6 +4,31 @@
 // 注意：「Design」類別的專案如果重新執行 Python 腳本會被覆蓋，建議直接改檔名，或是不要再執行腳本
 window.projectData = [
   {
+    "id": "rr_blackboard_art",
+    "title": "黑板畫系列 (Blackboard Art)",
+    "category": "Design",
+    "tags": [
+      "Illustration"
+    ],
+    "image": "https://evelynytliu.github.io/project_rr/images/rr-blackboard_giraffe.JPEG",
+    "description": "黑板畫系列作品 (Blackboard Art Collection)",
+    "link": "",
+    "images": [
+      "https://evelynytliu.github.io/project_rr/images/rr-blackboard_giraffe.JPEG",
+      "https://evelynytliu.github.io/project_rr/images/rr-blackboard_xmas.JPEG",
+      "https://evelynytliu.github.io/project_rr/images/rr-blackboard_whale.JPEG",
+      "https://evelynytliu.github.io/project_rr/images/rr-blackboard-tree.jpg",
+      "https://evelynytliu.github.io/project_rr/images/rr-blackboard_dinosaur.JPG",
+      "https://evelynytliu.github.io/project_rr/images/rr-blackboard-xmas.JPEG",
+      "https://evelynytliu.github.io/project_rr/images/rr-blackboard-halloween.jpg",
+      "https://evelynytliu.github.io/project_rr/images/rr-blackboard-lunaryear.jpg",
+      "https://evelynytliu.github.io/project_rr/images/rr-blackboard-midautumn.jpg",
+      "https://evelynytliu.github.io/project_rr/images/rr-blackboard_0660.JPEG"
+    ],
+    "hue": 200,
+    "mtime": 1766065757.0
+  },
+  {
     "id": "round_and_round_menu",
     "title": "餐廳菜單 (& 手繪圖) 轉圈圈菜單",
     "category": "Design",
@@ -80,13 +105,13 @@ window.projectData = [
   },
   {
     "id": "round_and_round_ticket",
-    "title": "店內活動標語、票券 轉圈圈票券",
+    "title": "轉圈圈騎車票券",
     "category": "Design",
     "tags": [
       "Other"
     ],
     "image": "design_works/作品  店內活動標語、票券 轉圈圈票券01.png",
-    "description": "Project: 店內活動標語、票券 轉圈圈票券",
+    "description": "Project: 轉圈圈騎車票券",
     "link": "",
     "images": [
       "design_works/作品  店內活動標語、票券 轉圈圈票券01.png",
@@ -98,13 +123,13 @@ window.projectData = [
   },
   {
     "id": "round_and_round_covid",
-    "title": "店內活動標語、票券 轉圈圈防疫",
+    "title": "轉圈圈防疫標語",
     "category": "Design",
     "tags": [
       "Other"
     ],
     "image": "design_works/作品  店內活動標語、票券 轉圈圈防疫.webp",
-    "description": "Project: 店內活動標語、票券 轉圈圈防疫",
+    "description": "Project: 轉圈圈防疫標語",
     "link": "",
     "images": [
       "design_works/作品  店內活動標語、票券 轉圈圈防疫.webp"
@@ -114,13 +139,13 @@ window.projectData = [
   },
   {
     "id": "round_and_round_togo_sticker",
-    "title": "店內活動標語、票券 轉圈圈外帶貼紙",
+    "title": "轉圈圈外帶貼紙",
     "category": "Design",
     "tags": [
       "Other"
     ],
     "image": "design_works/作品  店內活動標語、票券 轉圈圈外帶貼紙.webp",
-    "description": "Project: 店內活動標語、票券 轉圈圈外帶貼紙",
+    "description": "Project: 轉圈圈外帶貼紙",
     "link": "",
     "images": [
       "design_works/作品  店內活動標語、票券 轉圈圈外帶貼紙.webp"
@@ -130,13 +155,13 @@ window.projectData = [
   },
   {
     "id": "wheel_of_fortune_slogan",
-    "title": "店內活動標語、票券 轉轉樂標語",
+    "title": "轉轉樂標語",
     "category": "Design",
     "tags": [
       "Other"
     ],
     "image": "design_works/作品  店內活動標語、票券 轉轉樂標語.webp",
-    "description": "Project: 店內活動標語、票券 轉轉樂標語",
+    "description": "Project: 轉轉樂標語",
     "link": "",
     "images": [
       "design_works/作品  店內活動標語、票券 轉轉樂標語.webp"
@@ -146,13 +171,13 @@ window.projectData = [
   },
   {
     "id": "fatboy_meat_sticker",
-    "title": "食品外包裝設計 肥仔肉真空包貼紙-小長方",
+    "title": "食品外包裝設計 肥仔肉真空包貼紙",
     "category": "Design",
     "tags": [
       "Packaging"
     ],
     "image": "design_works/作品  食品外包裝設計 肥仔肉真空包貼紙-小長方.webp",
-    "description": "Project: 食品外包裝設計 肥仔肉真空包貼紙-小長方",
+    "description": "Project: 食品外包裝設計 肥仔肉真空包貼紙",
     "link": "",
     "images": [
       "design_works/作品  食品外包裝設計 肥仔肉真空包貼紙-小長方.webp"
@@ -194,13 +219,13 @@ window.projectData = [
   },
   {
     "id": "pushbike_dm",
-    "title": "餐廳一般產品海報、DM 轉圈圈滑步車-滑步車DM",
+    "title": "轉圈圈滑步車-滑步車DM",
     "category": "Design",
     "tags": [
       "Posters"
     ],
     "image": "design_works/作品  餐廳一般產品海報、DM 轉圈圈滑步車-滑步車DM-01.jpg",
-    "description": "Project: 餐廳一般產品海報、DM 轉圈圈滑步車-滑步車DM-01",
+    "description": "Project: 轉圈圈滑步車-滑步車DM-01",
     "link": "",
     "images": [
       "design_works/作品  餐廳一般產品海報、DM 轉圈圈滑步車-滑步車DM-01.jpg",
@@ -211,13 +236,13 @@ window.projectData = [
   },
   {
     "id": "round_and_round_poster",
-    "title": "餐廳一般產品海報、DM 轉圈圈常態性",
+    "title": "轉圈圈常態性DM",
     "category": "Design",
     "tags": [
       "Posters"
     ],
     "image": "design_works/作品  餐廳一般產品海報、DM 轉圈圈常態性.jpg",
-    "description": "Project: 餐廳一般產品海報、DM 轉圈圈常態性",
+    "description": "Project: 轉圈圈常態性DM",
     "link": "",
     "images": [
       "design_works/作品  餐廳一般產品海報、DM 轉圈圈常態性.jpg"
@@ -227,13 +252,13 @@ window.projectData = [
   },
   {
     "id": "togo_bento_poster",
-    "title": "餐廳一般產品海報、DM 轉圈圈外帶外送便當",
+    "title": "轉圈圈外帶外送便當DM",
     "category": "Design",
     "tags": [
       "Posters"
     ],
     "image": "design_works/作品  餐廳一般產品海報、DM 轉圈圈外帶外送便當.jpg",
-    "description": "Project: 餐廳一般產品海報、DM 轉圈圈外帶外送便當",
+    "description": "Project: 轉圈圈外帶外送便當DM",
     "link": "",
     "images": [
       "design_works/作品  餐廳一般產品海報、DM 轉圈圈外帶外送便當.jpg"
@@ -243,13 +268,13 @@ window.projectData = [
   },
   {
     "id": "goose_meat_vacuum_poster",
-    "title": "餐廳一般產品海報、DM 鵝肉真空包",
+    "title": "鵝肉真空包",
     "category": "Design",
     "tags": [
       "Posters"
     ],
     "image": "design_works/作品  餐廳一般產品海報、DM 鵝肉真空包.jpg",
-    "description": "Project: 餐廳一般產品海報、DM 鵝肉真空包",
+    "description": "Project: 鵝肉真空包",
     "link": "",
     "images": [
       "design_works/作品  餐廳一般產品海報、DM 鵝肉真空包.jpg"
