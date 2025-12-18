@@ -433,7 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentTranslate = 0;
     let isDragging = false;
 
-    lightbox.addEventListener('touchstart', (e) => {
+    lightboxImg.addEventListener('touchstart', (e) => {
         // Only trigger swipe if we are in image mode and have multiple images
         const isImageMode = lightboxImg.style.display !== 'none';
         if (!isImageMode || currentGallery.length <= 1) {
@@ -446,19 +446,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Remove transition for immediate 1:1 following
         lightboxImg.style.transition = 'none';
-    }, { passive: true });
+    }, { passive: false });
 
-    lightbox.addEventListener('touchmove', (e) => {
+    lightboxImg.addEventListener('touchmove', (e) => {
         if (!isDragging) return;
+
+        // Critical: prevent scrolling/native gestures while dragging
+        e.preventDefault();
 
         const currentX = e.touches[0].clientX;
         currentTranslate = currentX - touchStartX;
 
         // Move image with finger
         lightboxImg.style.transform = `translateX(${currentTranslate}px)`;
-    }, { passive: true });
+    }, { passive: false });
 
-    lightbox.addEventListener('touchend', (e) => {
+    lightboxImg.addEventListener('touchend', (e) => {
         if (!isDragging) return;
         isDragging = false;
 
