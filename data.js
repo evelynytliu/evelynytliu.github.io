@@ -4,6 +4,22 @@
 // 注意：「Design」類別的專案如果重新執行 Python 腳本會被覆蓋，建議直接改檔名，或是不要再執行腳本
 window.projectData = [
   {
+    "id": "blog_keep_exploring",
+    "title": "【開站日記】Keep Exploring, and Leave Traces.",
+    "category": "Traces",
+    "tags": [
+      "Blog",
+      "Life"
+    ],
+    "image": "img/blog-keep-exploring-cover.png",
+    "description": "整理歷年來的作品，也整理那些在探索路上，也許微不足道、但真實存在過的小小成果。\n\"Keep Exploring, and Leave Traces.\"\nM這是我放在網站首頁的一句話，其實也是這一切的起點。",
+    "link": "blog-keep-exploring.html",
+    "images": [
+      "img/blog-keep-exploring-cover.png"
+    ],
+    "mtime": 1755167465.0
+  },
+  {
     "id": "round_and_round_menu",
     "title": "餐廳菜單 (& 手繪圖) 轉圈圈菜單",
     "category": "Design",

@@ -86,11 +86,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const isCaseStudy = item.category === 'Case Studies';
 
             // Click Action:
-            // Case Study -> Lightbox (Text Content) - SAME AS CODE
+            // Case Study -> Lightbox (Text Content)
+            // Code/Notion -> Lightbox (Text Content)
             // Design -> Lightbox (Image Gallery)
+            // Traces -> Direct Navigation (New Page)
             let clickAction;
-            // Treat Case Studies like Code/Notion for interaction (Text Info First)
-            if (isCaseStudy || isCodeOrNotion) {
+
+            if (item.category === 'Traces') {
+                clickAction = `window.location.href='${item.link}'`;
+            } else if (isCaseStudy || isCodeOrNotion) {
                 // Pass full item data for text display
                 const safeItem = JSON.stringify(item).replace(/"/g, "&quot;");
                 clickAction = `openLightbox(${safeItem})`;
