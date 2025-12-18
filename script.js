@@ -428,38 +428,69 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Touch Navigation (Swipe)
+    // Touch Navigation (Live Swipe)
     let touchStartX = 0;
-    let touchEndX = 0;
+    let currentTranslate = 0;
+    let isDragging = false;
 
     lightbox.addEventListener('touchstart', (e) => {
-        touchStartX = e.changedTouches[0].screenX;
+        // Only trigger swipe if we are in image mode and have multiple images
+        const isImageMode = lightboxImg.style.display !== 'none';
+        if (!isImageMode || currentGallery.length <= 1) {
+            isDragging = false;
+            return;
+        }
+
+        isDragging = true;
+        touchStartX = e.touches[0].clientX;
+
+        // Remove transition for immediate 1:1 following
+        lightboxImg.style.transition = 'none';
+    }, { passive: true });
+
+    lightbox.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+
+        const currentX = e.touches[0].clientX;
+        currentTranslate = currentX - touchStartX;
+
+        // Move image with finger
+        lightboxImg.style.transform = `translateX(${currentTranslate}px)`;
     }, { passive: true });
 
     lightbox.addEventListener('touchend', (e) => {
-        touchEndX = e.changedTouches[0].screenX;
-        handleSwipeGesture();
-    }, { passive: true });
+        if (!isDragging) return;
+        isDragging = false;
 
-    function handleSwipeGesture() {
-        if (lightbox.classList.contains('hidden')) return;
-        const isImageMode = lightboxImg.style.display !== 'none';
+        const swipeThreshold = 50;
 
-        // Only trigger swipe if we are in image mode and have multiple images
-        if (isImageMode && currentGallery.length > 1) {
-            // Swipe Left (Next)
-            if (touchEndX < touchStartX - 50) {
-                currentIndex = (currentIndex + 1) % currentGallery.length;
-                updateLightboxImage();
+        // Add transition back for smooth animate out or snap back
+        lightboxImg.style.transition = 'transform 0.3s ease-out';
+
+        if (Math.abs(currentTranslate) > swipeThreshold) {
+            // Swipe Detected
+            if (currentTranslate < 0) {
+                // Next Image (Slide Left)
+                lightboxImg.style.transform = `translateX(-100vw)`;
+                setTimeout(() => {
+                    currentIndex = (currentIndex + 1) % currentGallery.length;
+                    updateLightboxImage();
+                }, 300);
+            } else {
+                // Prev Image (Slide Right)
+                lightboxImg.style.transform = `translateX(100vw)`;
+                setTimeout(() => {
+                    currentIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
+                    updateLightboxImage();
+                }, 300);
             }
-
-            // Swipe Right (Prev)
-            if (touchEndX > touchStartX + 50) {
-                currentIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
-                updateLightboxImage();
-            }
+        } else {
+            // Snap back
+            lightboxImg.style.transform = 'translateX(0px)';
         }
-    }
+
+        currentTranslate = 0;
+    }, { passive: true });
 
     lightboxClose.addEventListener('click', closeLightbox);
     lightbox.addEventListener('click', (e) => {

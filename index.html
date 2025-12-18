@@ -308,15 +308,16 @@
 
     <!-- Lightbox -->
     <div id="lightbox"
-        class="fixed inset-0 z-[100] bg-black/90 hidden backdrop-blur-sm opacity-0 transition-opacity duration-300 flex items-center justify-center p-4">
-        <button id="lightbox-close" class="absolute top-6 right-6 text-white hover:text-gray-300 transition-colors">
+        class="fixed inset-0 z-[100] bg-black/90 hidden backdrop-blur-sm opacity-0 transition-opacity duration-300 flex items-center justify-center p-0 md:p-4">
+        <button id="lightbox-close"
+            class="absolute top-6 right-6 text-white hover:text-gray-300 transition-colors z-[60]">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="w-10 h-10">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
         </button>
         <img id="lightbox-img" src="" alt="Project Preview"
-            class="max-h-[90vh] max-w-[90vw] object-contain rounded shadow-2xl transform scale-95 transition-transform duration-300">
+            class="max-h-full max-w-full md:max-h-[90vh] md:max-w-[90vw] object-contain rounded-none md:rounded shadow-2xl transform transition-transform duration-300">
         <div id="lightbox-caption"
             class="absolute bottom-6 left-6 text-white/80 text-sm font-medium tracking-wide bg-black/50 px-4 py-2 rounded-full backdrop-blur-md">
         </div>
