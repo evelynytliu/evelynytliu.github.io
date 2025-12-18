@@ -326,8 +326,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (textContainer) textContainer.style.display = 'none';
 
         const track = document.getElementById('lightbox-track');
-        // Safely check for window width
-        const windowWidth = document.documentElement.clientWidth || window.innerWidth;
+        track.style.willChange = 'transform'; // Optimize for animation
+
+        // Use container width for better accuracy
+        const containerWidth = lightboxCarousel.clientWidth || window.innerWidth;
 
         // Clear existing images
         track.innerHTML = '';
@@ -350,17 +352,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const img = document.createElement('img');
             img.src = src;
             img.className = 'max-h-full md:max-h-[90vh] object-contain rounded-none md:rounded shadow-2xl flex-shrink-0';
-            img.style.width = `${windowWidth}px`;
-            img.style.maxWidth = '100vw'; // Ensure image does not exceed viewport width
+            img.style.width = `${containerWidth}px`;
+            img.style.maxWidth = '100%';
             track.appendChild(img);
         });
 
         // Position track to show current image
-        // If we have > 1 image, the array is [prev, current, next] or similar.
-        // Current image is at index 1 (if prev exists) or index 0 (if single image).
-        // Since we logic: "if > 1 push prev", so if multiple images, first one is prev, second is current.
-        // So offset should be -windowWidth.
-        const offset = currentGallery.length > 1 ? -windowWidth : 0;
+        const offset = currentGallery.length > 1 ? -containerWidth : 0;
         track.style.transform = `translateX(${offset}px)`;
         track.style.transition = 'none';
 
@@ -480,8 +478,10 @@ document.addEventListener('DOMContentLoaded', () => {
             touchStartX = e.touches[0].clientX;
 
             // Store the current offset
-            const windowWidth = document.documentElement.clientWidth || window.innerWidth;
-            startOffset = -windowWidth; // Track is offset by one image width
+
+            // Use container width for better accuracy
+            const containerWidth = carousel.clientWidth || window.innerWidth;
+            startOffset = -containerWidth; // Track is offset by one image width
 
             // Remove transition for immediate 1:1 following
             track.style.transition = 'none';
