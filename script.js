@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         // Fallback or Error
         console.error('Data not found. Make sure data.js is loaded.');
-        loading.innerText = '載入失敗（找不到 data.js）';
+        loading.innerText = '載入失�?（找不到 data.js�?;
     }
 
     // Render Function
@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <!-- Overlay for "View" or "Visit" - Only visible on image hover -->
                         <div class="card-overlay absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover/image:opacity-100 transition-opacity duration-300">
                             <span class="bg-white/90 backdrop-blur px-4 py-2 rounded-full text-sm font-medium text-gray-900 shadow-md transform translate-y-2 group-hover/image:translate-y-0 transition-transform duration-300">
-                                ${isCodeOrNotion ? '閱讀更多' : (isGallery ? '查看相簿' : '放大檢視')}
+                                ${isCodeOrNotion ? '?��??��?' : (isGallery ? '?��??�簿' : '?�大檢�?')}
                             </span>
                         </div>
                     </div>
@@ -308,7 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             ${currentItem.link ? `
                 <a href="${currentItem.link}" target="_blank" class="inline-flex items-center gap-2 bg-evelyn-blue hover:bg-evelyn-dark text-white px-6 py-3 rounded-full font-medium transition-colors">
-                    前往專案網站 
+                    ?��?專�?網�? 
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
                     </svg>
@@ -394,10 +394,10 @@ document.addEventListener('DOMContentLoaded', () => {
             nav.id = 'lightbox-nav';
             nav.innerHTML = `
                 <button id="lb-prev" class="hidden md:block absolute left-4 top-1/2 transform -translate-y-1/2 text-white bg-black/20 hover:bg-black/50 p-3 rounded-full backdrop-blur transition-all z-50">
-                    ←
+                    ??
                 </button>
                 <button id="lb-next" class="hidden md:block absolute right-4 top-1/2 transform -translate-y-1/2 text-white bg-black/20 hover:bg-black/50 p-3 rounded-full backdrop-blur transition-all z-50">
-                    →
+                    ??
                 </button>
             `;
             lightbox.appendChild(nav);
@@ -459,8 +459,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     carousel.addEventListener('touchstart', (e) => {
         // Only trigger swipe if we are in image mode and have multiple images
-        const isImageMode = lightboxImg.style.display !== 'none';
-        if (!isImageMode || currentGallery.length <= 1) {
+        const track = document.getElementById('lightbox-track');
+        if (!track || currentGallery.length <= 1) {
             isDragging = false;
             return;
         }
@@ -469,7 +469,7 @@ document.addEventListener('DOMContentLoaded', () => {
         touchStartX = e.touches[0].clientX;
 
         // Remove transition for immediate 1:1 following
-        lightboxImg.style.transition = 'none';
+        const windowWidth = window.innerWidth;`r`n        startOffset = -windowWidth;`r`n        track.style.transition = 'none';
     }, { passive: false });
 
     carousel.addEventListener('touchmove', (e) => {
@@ -482,7 +482,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentTranslate = currentX - touchStartX;
 
         // Move image with finger
-        lightboxImg.style.transform = `translateX(${currentTranslate}px)`;
+        const track = document.getElementById('lightbox-track');`r`n        track.style.transform = `translateX(${startOffset + currentTranslate}px)`;
     }, { passive: false });
 
     carousel.addEventListener('touchend', (e) => {
@@ -492,28 +492,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const swipeThreshold = 50;
 
         // Add transition back for smooth animate out or snap back
-        lightboxImg.style.transition = 'transform 0.3s ease-out';
+        const track = document.getElementById('lightbox-track');`r`n        track.style.transition = 'transform 0.3s ease-out';
 
         if (Math.abs(currentTranslate) > swipeThreshold) {
             // Swipe Detected
             if (currentTranslate < 0) {
                 // Next Image (Slide Left)
-                lightboxImg.style.transform = `translateX(-100vw)`;
-                setTimeout(() => {
-                    currentIndex = (currentIndex + 1) % currentGallery.length;
-                    updateLightboxImage();
-                }, 300);
+                currentIndex = (currentIndex + 1) % currentGallery.length;`r`n                updateLightboxCarousel();
             } else {
                 // Prev Image (Slide Right)
-                lightboxImg.style.transform = `translateX(100vw)`;
-                setTimeout(() => {
-                    currentIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
-                    updateLightboxImage();
-                }, 300);
+                currentIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;`r`n                updateLightboxCarousel();
             }
         } else {
             // Snap back
-            lightboxImg.style.transform = 'translateX(0px)';
+            track.style.transform = `translateX(${startOffset}px)`;
         }
 
         currentTranslate = 0;
@@ -545,3 +537,9 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('resize', checkScroll);
     }
 });
+
+
+
+
+
+
