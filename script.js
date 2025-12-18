@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loading = document.getElementById('loading');
     const filterBtns = document.querySelectorAll('.filter-btn');
     const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxCarousel = document.getElementById('lightbox-carousel');
     const lightboxCaption = document.getElementById('lightbox-caption');
     const lightboxClose = document.getElementById('lightbox-close');
 
@@ -288,8 +288,8 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function displayTextContent() {
-        // Hide image, show text
-        lightboxImg.style.display = 'none';
+        // Hide carousel, show text
+        lightboxCarousel.style.display = 'none';
 
         // Create text container
         let textContainer = document.getElementById('lightbox-text');
@@ -420,8 +420,10 @@ document.addEventListener('DOMContentLoaded', () => {
         lightbox.classList.add('opacity-0');
         setTimeout(() => {
             lightbox.classList.add('hidden');
-            lightboxImg.src = '';
-            lightboxImg.style.display = 'block';
+            // Clear carousel track
+            const track = document.getElementById('lightbox-track');
+            if (track) track.innerHTML = '';
+            lightboxCarousel.style.display = 'flex';
             const textContainer = document.getElementById('lightbox-text');
             if (textContainer) textContainer.style.display = 'none';
         }, 300);
@@ -434,7 +436,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (e.key === 'Escape') closeLightbox();
 
-        const isImageMode = lightboxImg.style.display !== 'none';
+        const isImageMode = lightboxCarousel.style.display !== 'none';
         if (isImageMode && currentGallery.length > 1) {
             if (e.key === 'ArrowLeft') {
                 currentIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
@@ -455,7 +457,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const carousel = document.getElementById('lightbox-carousel');
 
-    lightboxImg.addEventListener('touchstart', (e) => {
+    carousel.addEventListener('touchstart', (e) => {
         // Only trigger swipe if we are in image mode and have multiple images
         const isImageMode = lightboxImg.style.display !== 'none';
         if (!isImageMode || currentGallery.length <= 1) {
@@ -470,7 +472,7 @@ document.addEventListener('DOMContentLoaded', () => {
         lightboxImg.style.transition = 'none';
     }, { passive: false });
 
-    lightboxImg.addEventListener('touchmove', (e) => {
+    carousel.addEventListener('touchmove', (e) => {
         if (!isDragging) return;
 
         // Critical: prevent scrolling/native gestures while dragging
@@ -483,7 +485,7 @@ document.addEventListener('DOMContentLoaded', () => {
         lightboxImg.style.transform = `translateX(${currentTranslate}px)`;
     }, { passive: false });
 
-    lightboxImg.addEventListener('touchend', (e) => {
+    carousel.addEventListener('touchend', (e) => {
         if (!isDragging) return;
         isDragging = false;
 
