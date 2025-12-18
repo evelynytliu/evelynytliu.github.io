@@ -13,7 +13,7 @@ window.projectData = [
     ],
     "image": "img/blog-keep-exploring-cover.png",
     "description": "整理歷年來的作品，也整理那些在探索路上，也許微不足道、但真實存在過的小小成果。\n\"Keep Exploring, and Leave Traces.\"\nM這是我放在網站首頁的一句話，其實也是這一切的起點。",
-    "link": "blog-keep-exploring.html",
+    "link": "blog/blog-keep-exploring.html",
     "images": [
       "img/blog-keep-exploring-cover.png"
     ],
