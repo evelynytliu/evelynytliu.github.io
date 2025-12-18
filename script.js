@@ -10,6 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let allData = [];
     let msnry;
 
+    // Global gallery for swipe navigation (stores flat list of all visible images)
+    let flattenedGallery = [];
+
     // Load Data
     if (window.projectData) {
         allData = window.projectData;
@@ -24,6 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Render Function
     function renderProjects(filterCategory) {
         grid.innerHTML = '<div class="grid-sizer w-full md:w-[48%] lg:w-[32%] hidden"></div>'; // Reset grid + sizer
+
+        // Reset global gallery
+        flattenedGallery = [];
 
         // Check for ?view=all parameter
         const urlParams = new URLSearchParams(window.location.search);
@@ -54,7 +60,32 @@ document.addEventListener('DOMContentLoaded', () => {
             return 0;
         });
 
+        // Build Flattened Gallery & Render Cards
         finalData.forEach((item, index) => {
+            const galleryImages = item.images && item.images.length > 0 ? item.images : [item.image];
+            const isCodeOrNotion = item.category === 'Code';
+            const isCaseStudy = item.category === 'Case Studies';
+            const isTextMode = isCodeOrNotion || isCaseStudy;
+            const isTraces = item.category === 'Traces';
+
+            // Calculate start index for this project in the flattened gallery
+            let projectStartIndex = -1;
+
+            // Only add to global swipe gallery if it's NOT a text-mode project and NOT traces
+            if (!isTextMode && !isTraces) {
+                projectStartIndex = flattenedGallery.length;
+                galleryImages.forEach(imgJs => {
+                    flattenedGallery.push({
+                        src: imgJs,
+                        title: item.title,
+                        description: item.description,
+                        link: item.link,
+                        category: item.category
+                    });
+                });
+            }
+
+            // Create Card Logic
             const card = document.createElement('div');
             // Masonry item classes
             card.className = `card-item w-full md:w-[48%] lg:w-[32%] mb-8 p-0 md:px-3 text-left group cursor-pointer`;
@@ -67,47 +98,25 @@ document.addEventListener('DOMContentLoaded', () => {
             if (item.category === 'Life Lab') badgeClass = 'bg-emerald-50 text-emerald-600 border border-emerald-100 font-medium';
             if (item.category === 'Case Studies') badgeClass = 'bg-[#3A4E5C] text-white border border-[#2A3B47] shadow-sm font-semibold tracking-wide';
 
-            // Image logic
-            const imageUrl = item.image;
-            const galleryImages = item.images && item.images.length > 0 ? item.images : [item.image];
-
-            // Escape single quotes for the inline onclick handler
-            const isCodeOrNotion = item.category === 'Code';
-
-            // Prepare data for lightbox
-            const itemData = JSON.stringify({
-                images: galleryImages,
-                title: item.title,
-                description: item.description || '',
-                link: item.link || '',
-                category: item.category
-            }).replace(/"/g, "&quot;");
-
-            const isCaseStudy = item.category === 'Case Studies';
-
-            // Click Action:
-            // Case Study -> Lightbox (Text Content)
-            // Code/Notion -> Lightbox (Text Content)
-            // Design -> Lightbox (Image Gallery)
-            // Traces -> Direct Navigation (New Page)
+            // Click Action Logic
             let clickAction;
-
-            if (item.category === 'Traces') {
+            if (isTraces) {
                 clickAction = `window.location.href='${item.link}'`;
-            } else if (isCaseStudy || isCodeOrNotion) {
-                // Pass full item data for text display
+            } else if (isTextMode) {
+                // Pass full item data for text display (Legacy behavior for text items)
                 const safeItem = JSON.stringify(item).replace(/"/g, "&quot;");
                 clickAction = `openLightbox(${safeItem})`;
             } else {
-                // Design (Image Gallery)
-                const safeItem = JSON.stringify(item).replace(/"/g, "&quot;");
-                clickAction = `openLightbox(${safeItem})`;
+                // Design (Image Gallery) -> Open Global Gallery at specific index
+                // Note: projectStartIndex points to the first image of this project
+                clickAction = `openLightbox(${projectStartIndex})`;
             }
 
+            const imageUrl = item.image;
             const isGallery = galleryImages.length > 1;
             const stackClass = isGallery ? 'card-stacked' : '';
 
-            // Gallery Indicator Badge (Top Right)
+            // Gallery Indicator Badge
             const galleryIndicatorHtml = isGallery ? `
                 <div class="${isGallery ? 'absolute top-3 right-3' : 'hidden'} gallery-indicator text-white text-[10px] font-medium px-2 py-1 rounded-full flex items-center gap-1 z-10">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3 h-3">
@@ -117,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             ` : '';
 
-            // Private Indicator Badge (Top Left)
+            // Private Indicator Badge
             const privateBadge = item.private ? `
                  <div class="absolute top-3 left-3 bg-red-500/80 backdrop-blur text-white text-[10px] font-medium px-2 py-1 rounded-full z-10">
                     <i class="fas fa-eye-slash"></i> Private
@@ -130,12 +139,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Special styling class for Case Studies
             const extraClass = item.category === 'Case Studies' ? 'case-study-card' : '';
-
             const frameClass = `card-base ${currentStyle} ${extraClass}`;
 
             // Random decorative doodle injection matching the style somewhat
             let doodleHtml = '';
-            // High frequency of doodles
             if (index % 1 === 0) {
                 const doodleTypes = [
                     { class: 'doodle-dots-cloud', html: '' },
@@ -146,22 +153,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     { class: 'doodle-donut', html: '' }
                 ];
 
-                // Random doodle
                 const randIndex = (index + Math.floor(Math.random() * doodleTypes.length)) % doodleTypes.length;
                 const doodle = doodleTypes[randIndex];
 
                 let posStyle = '';
-                // Customize doodle position slightly based on frame style to avoid overlap
                 if (currentStyle === 'frame-style-a') {
-                    // Frame is bottom-left heavy, so put doodles top-right or top-left high
                     if (doodle.class === 'doodle-dots-cloud') posStyle = 'top: -20px; left: -20px;';
                     else posStyle = 'top: -10px; right: -10px; transform: rotate(15deg);';
                 } else if (currentStyle === 'frame-style-b') {
-                    // Frame is bulgy top/bottom, corners are safer
                     if (doodle.class === 'doodle-squiggle-line') posStyle = 'bottom: -15px; left: 20%; transform: rotate(-5deg);';
                     else posStyle = 'top: -15px; right: -5px;';
                 } else {
-                    // Frame C is Top-Right heavy (Orange), so put doodle Bottom-Left
                     posStyle = 'bottom: -10px; left: -10px; transform: rotate(-10deg);';
                 }
 
@@ -256,28 +258,29 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentIndex = 0;
     let currentItem = null;
 
-    window.openLightbox = (itemData) => {
-        // Parse item data
-        if (typeof itemData === 'string') {
-            // Old format compatibility (just images array)
-            currentGallery = [itemData];
-            currentItem = { images: currentGallery, title: '', description: '', link: '', category: 'Design' };
-        } else {
-            currentItem = itemData;
-            currentGallery = currentItem.images || [];
-        }
+    window.openLightbox = (arg) => {
+        if (typeof arg === 'number') {
+            // Global Gallery Mode (Swipe through all visible project images)
+            currentIndex = arg;
+            currentGallery = flattenedGallery;
+            // Ensure index is valid
+            if (currentIndex < 0 || currentIndex >= currentGallery.length) {
+                currentIndex = 0;
+            }
+            // Need to set currentItem for text population
+            currentItem = currentGallery[currentIndex];
 
-        currentIndex = 0;
-
-        const isTextMode = currentItem.category === 'Code' || currentItem.category === 'Case Studies';
-
-        if (isTextMode) {
-            // Text mode for Code/Notion
-            displayTextContent();
-        } else {
-            // Image gallery mode
             updateLightboxCarousel();
             setupLightboxNav();
+        } else {
+            // Text Mode (Legacy object passed for Code/Case Studies)
+            const itemData = arg;
+
+            // For text mode, we just treat the passed item as currentItem
+            currentItem = itemData;
+
+            // Text mode mainly uses displayTextContent
+            displayTextContent();
         }
 
         lightbox.classList.remove('hidden');
@@ -339,18 +342,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const prevIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
         const nextIndex = (currentIndex + 1) % currentGallery.length;
 
+        // Update currentItem for caption update (since we swipe via index now)
+        currentItem = currentGallery[currentIndex];
+
         if (currentGallery.length > 1) {
-            imagesToLoad.push({ src: currentGallery[prevIndex], position: -1 });
+            imagesToLoad.push({ item: currentGallery[prevIndex], position: -1 });
         }
-        imagesToLoad.push({ src: currentGallery[currentIndex], position: 0 });
+        imagesToLoad.push({ item: currentGallery[currentIndex], position: 0 });
         if (currentGallery.length > 1) {
-            imagesToLoad.push({ src: currentGallery[nextIndex], position: 1 });
+            imagesToLoad.push({ item: currentGallery[nextIndex], position: 1 });
         }
 
         // Create image elements
-        imagesToLoad.forEach(({ src, position }) => {
+        imagesToLoad.forEach(({ item, position }) => {
             const img = document.createElement('img');
-            img.src = src;
+            img.src = item.src; // Ensure we access .src property
             img.className = 'max-h-full md:max-h-[90vh] object-contain rounded-none md:rounded shadow-2xl flex-shrink-0';
             img.style.width = `${containerWidth}px`;
             img.style.maxWidth = '100%';
