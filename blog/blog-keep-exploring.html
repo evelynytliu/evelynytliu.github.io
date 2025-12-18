@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keep Exploring, and Leave Traces - Evelyn's Blog</title>
+    <link rel="icon" type="image/png" href="../img/favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Sans+TC:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        script: ['"Dancing Script"', 'cursive'],
+                        sans: ['"Inter"', '"Noto Sans TC"', 'sans-serif'],
+                    },
+                    colors: {
+                        'evelyn-blue': '#7CA5B8',
+                        'evelyn-dark': '#3A4E5C',
+                        'evelyn-bg': '#F0F4F8',
+                        'evelyn-accent': '#E09F88',
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+
+<body
+    class="bg-evelyn-bg text-evelyn-dark font-sans selection:bg-evelyn-blue selection:text-white transition-colors duration-300">
+
+    <!-- Navigation -->
+    <header class="fixed top-0 w-full z-50 bg-evelyn-bg/80 backdrop-blur-md border-b border-white/50">
+        <div class="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="../index.html"
+                class="text-xl font-bold font-serif tracking-tight hover:opacity-70 transition-opacity text-evelyn-dark">EVELYN.</a>
+            <a href="../index.html"
+                class="text-sm font-medium text-slate-500 hover:text-evelyn-dark transition-colors flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m12 19-7-7 7-7" />
+                    <path d="M19 12H5" />
+                </svg>
+                回首頁
+            </a>
+        </div>
+    </header>
+
+    <main class="pt-32 pb-24 px-6 md:px-0">
+        <article class="max-w-3xl mx-auto">
+
+            <!-- Hero Image -->
+            <div class="mb-12 relative group pb-4">
+                <div
+                    class="absolute -inset-1 bg-gradient-to-r from-evelyn-blue to-evelyn-accent opacity-20 blur rounded-2xl group-hover:opacity-30 transition duration-1000 group-hover:duration-200">
+                </div>
+                <img src="../img/blog-keep-exploring-cover.png" alt="Keep Exploring Abstract Illustration"
+                    class="relative rounded-xl shadow-lg w-full h-[400px] object-cover object-center">
+
+                <!-- Float Decoration -->
+                <div class="absolute -bottom-6 -right-6 hidden md:block">
+                    <svg class="w-24 h-24 text-evelyn-accent animate-spin-slow opacity-80" viewBox="0 0 100 100"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path fill="currentColor"
+                            d="M42.7,-72.8C54.6,-67.1,63.1,-55.4,70.5,-43.3C77.9,-31.2,84.2,-18.7,83.1,-6.8C82,5.1,73.5,16.4,64.8,26.4C56.1,36.4,47.2,45.1,37.3,51.8C27.4,58.5,16.5,63.2,5.1,63.2C-6.3,63.2,-18.9,58.5,-30.4,52.2C-41.9,45.9,-52.3,38,-61.4,28C-70.5,18,-78.3,5.9,-77.1,-5.5C-75.9,-16.9,-65.7,-27.6,-55.4,-37.2C-45.1,-46.8,-34.7,-55.3,-23.4,-61.4C-12.1,-67.5,-0.1,-71.2,12.7,-72.1C25.5,-73,51,-70.9,42.7,-72.8Z"
+                            transform="translate(50 50) scale(0.4)" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Title Section -->
+            <header class="mb-10 text-center md:text-left">
+                <div
+                    class="flex items-center justify-center md:justify-start gap-2 mb-4 text-evelyn-blue text-sm font-semibold tracking-wider uppercase">
+                    <span class="bg-blue-50 px-3 py-1 rounded-full border border-blue-100">開站日記</span>
+                    <span class="text-slate-400">|</span>
+                    <span class="text-slate-500">Dec 14, 2025</span>
+                </div>
+                <h1 class="text-3xl md:text-5xl font-serif font-bold text-slate-800 leading-tight mb-6">
+                    Keep Exploring, <br />
+                    <span class="italic text-evelyn-accent font-script text-4xl md:text-6xl pl-4">and Leave
+                        Traces.</span>
+                </h1>
+                <p
+                    class="text-lg text-slate-600 font-medium leading-relaxed italic border-l-4 border-evelyn-blue/30 pl-4 py-1">
+                    終於下定決心，要把這個小小的個人網站整理起來。
+                </p>
+            </header>
+
+            <!-- Content Body -->
+            <div
+                class="prose prose-lg prose-slate prose-headings:font-serif prose-p:font-sans hover:prose-a:text-evelyn-blue mx-auto text-justify space-y-12 leading-loose">
+                <p
+                    class="first-letter:text-5xl first-letter:font-serif first-letter:text-evelyn-dark first-letter:float-left first-letter:mr-3 first-letter:mt-[-6px]">
+                    在設計與行銷的領域打滾了十多個年頭，日子過得很快，身上的標籤也疊加了好幾層。我是設計師，是喜歡躲在螢幕前研究各種小工具的宅宅，也是兩個男孩的媽媽。
+                </p>
+                <p>
+                    以前總有個壞習慣，覺得凡事要準備得盡善盡美才敢拿出來見人。但最近轉念一想，不如就把它當作是一個「整理」的過程吧？整理歷年來的作品，也整理那些在探索路上，也許微不足道、但真實存在過的小小成果。
+                </p>
+
+                <div
+                    class="my-12 p-8 bg-white/60 rounded-3xl backdrop-blur-sm border border-white/60 shadow-sm relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 text-evelyn-dark">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"
+                            fill="currentColor">
+                            <path
+                                d="M4.583 17.321C3.553 16.227 3 15 3 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179zm10 0C13.553 16.227 13 15 13 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179z" />
+                        </svg>
+                    </div>
+                    <blockquote
+                        class="text-2xl md:text-3xl font-serif text-center text-evelyn-dark font-bold italic relative z-10">
+                        "Keep Exploring, and Leave Traces."
+                    </blockquote>
+                    <p class="text-center text-sm text-slate-500 mt-4 font-medium uppercase tracking-widest">
+                        — 這是一切的起點
+                    </p>
+                </div>
+
+                <p>
+                    說來有趣，這是在我對未來感到迷惘、不知道下一步該往哪去的時候，被 AI 鼓勵到的一句話。
+                </p>
+                <p>
+                    一直以來，我對什麼都好奇，像海綿一樣吸收了很多，卻始終待在舒適圈裡不敢動彈。雖然現在的我，可能還沒完全想通該不該變、或是為了什麼而變，但我決定至少先試著紀錄下自己的足跡。
+                </p>
+                <p>
+                    畢竟我的記性不算太好（笑）。
+                </p>
+                <p>
+                    所以，這裡會像是一個給自己的<strong>時光膠囊</strong>。我想開始把做過的事、試過的小東西，一點一點地放在這裡。不為了向誰證明什麼，就當作是給自己的紀錄，也留給未來那個回頭看的自己，一些有趣的線索。
+                </p>
+            </div>
+
+            <!-- Footer / Back Button -->
+            <div class="mt-20 pt-10 border-t border-slate-200 flex justify-center">
+                <a href="../index.html"
+                    class="group relative px-8 py-3 rounded-full bg-evelyn-dark text-white font-medium tracking-wide overflow-hidden hover:shadow-lg transition-all duration-300">
+                    <div
+                        class="absolute inset-0 w-full h-full bg-gradient-to-r from-evelyn-blue to-evelyn-dark opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    </div>
+                    <span class="relative flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="group-hover:-translate-x-1 transition-transform">
+                            <path d="m12 19-7-7 7-7" />
+                            <path d="M19 12H5" />
+                        </svg>
+                        回到首頁
+                    </span>
+                </a>
+            </div>
+
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-100 py-12 mt-20">
+        <div class="max-w-4xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-gray-500 text-sm">
+                © 2025 Evelyn YT Liu. All rights reserved.
+            </div>
+            <div class="flex gap-6 flex-wrap justify-center">
+                <a href="mailto:evelyn.evagor@gmail.com"
+                    class="text-gray-400 hover:text-black transition-colors">Email</a>
+                <a href="https://www.instagram.com/eviesmuffy/" target="_blank"
+                    class="text-gray-400 hover:text-black transition-colors">Instagram</a>
+                <a href="https://github.com/evelynytliu" target="_blank"
+                    class="text-gray-400 hover:text-black transition-colors">GitHub</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>

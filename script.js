@@ -86,11 +86,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const isCaseStudy = item.category === 'Case Studies';
 
             // Click Action:
-            // Case Study -> Lightbox (Text Content) - SAME AS CODE
+            // Case Study -> Lightbox (Text Content)
+            // Code/Notion -> Lightbox (Text Content)
             // Design -> Lightbox (Image Gallery)
+            // Traces -> Direct Navigation (New Page)
             let clickAction;
-            // Treat Case Studies like Code/Notion for interaction (Text Info First)
-            if (isCaseStudy || isCodeOrNotion) {
+
+            if (item.category === 'Traces') {
+                clickAction = `window.location.href='${item.link}'`;
+            } else if (isCaseStudy || isCodeOrNotion) {
                 // Pass full item data for text display
                 const safeItem = JSON.stringify(item).replace(/"/g, "&quot;");
                 clickAction = `openLightbox(${safeItem})`;
@@ -405,4 +409,25 @@ document.addEventListener('DOMContentLoaded', () => {
     lightbox.addEventListener('click', (e) => {
         if (e.target === lightbox) closeLightbox();
     });
+
+    // Scroll Hint Logic
+    const filtersContainer = document.getElementById('filters-container');
+    const scrollHint = document.getElementById('filter-scroll-hint');
+
+    if (filtersContainer && scrollHint) {
+        const checkScroll = () => {
+            const isEnd = filtersContainer.scrollLeft + filtersContainer.clientWidth >= filtersContainer.scrollWidth - 10;
+            if (isEnd) {
+                scrollHint.classList.add('opacity-0');
+            } else {
+                scrollHint.classList.remove('opacity-0');
+            }
+        };
+
+        filtersContainer.addEventListener('scroll', checkScroll);
+        // Check initially
+        checkScroll();
+        // Also check on resize
+        window.addEventListener('resize', checkScroll);
+    }
 });

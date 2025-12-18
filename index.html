@@ -222,62 +222,74 @@
 
     <!-- Filter Section -->
     <section class="sticky top-16 z-40 bg-gray-50/95 backdrop-blur-sm py-4 border-b border-gray-200/50" id="work">
-        <div class="max-w-7xl mx-auto px-6 overflow-x-auto no-scrollbar">
-            <div class="flex space-x-2 md:space-x-4 min-w-max" id="filters">
-                <button class="filter-btn active flex items-center gap-2" data-filter="all">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect width="7" height="7" x="3" y="3" rx="1" />
-                        <rect width="7" height="7" x="14" y="3" rx="1" />
-                        <rect width="7" height="7" x="14" y="14" rx="1" />
-                        <rect width="7" height="7" x="3" y="14" rx="1" />
-                    </svg>
-                    <span>全部</span>
-                </button>
-                <button class="filter-btn flex items-center gap-2" data-filter="Case Studies">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polygon
-                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                    </svg>
-                    <span>精選專案</span>
-                </button>
-                <button class="filter-btn flex items-center gap-2" data-filter="Design">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 19l7-7 3 3-7 7-3-3z" />
-                        <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" />
-                        <path d="M2 2l7.586 7.586" />
-                        <circle cx="11" cy="11" r="2" />
-                    </svg>
-                    <span>設計作品</span>
-                </button>
-                <button class="filter-btn flex items-center gap-2" data-filter="Code">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="16 18 22 12 16 6" />
-                        <polyline points="8 6 2 12 8 18" />
-                    </svg>
-                    <span>寫的程式</span>
-                </button>
-                <button class="filter-btn flex items-center gap-2" data-filter="Life Lab">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path
-                            d="M10 2v7.527a2 2 0 0 1 .211.896v.015a2 2 0 0 1-.211.897L7.5 15.602l-.004.004A4.002 4.002 0 0 0 9.875 22h4.25a4.002 4.002 0 0 0 2.38-6.39l-2.505-4.288a2 2 0 0 1-.211-.897v-.015a2 2 0 0 1 .211-.896V2" />
-                        <path d="M8.5 2h7" />
-                        <path d="M9 2v6" />
-                    </svg>
-                    <span>生活實驗室</span>
-                </button>
-                <button class="filter-btn flex items-center gap-2" data-filter="Traces">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10" />
-                        <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
-                    </svg>
-                    <span>探索筆記</span>
-                </button>
+        <div class="relative max-w-7xl mx-auto px-6 group">
+            <div class="overflow-x-auto no-scrollbar" id="filters-container">
+                <div class="flex space-x-2 md:space-x-4 min-w-max" id="filters">
+                    <button class="filter-btn active flex items-center gap-2" data-filter="all">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="7" height="7" x="3" y="3" rx="1" />
+                            <rect width="7" height="7" x="14" y="3" rx="1" />
+                            <rect width="7" height="7" x="14" y="14" rx="1" />
+                            <rect width="7" height="7" x="3" y="14" rx="1" />
+                        </svg>
+                        <span>全部</span>
+                    </button>
+                    <button class="filter-btn flex items-center gap-2" data-filter="Case Studies">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon
+                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                        <span>精選專案</span>
+                    </button>
+                    <button class="filter-btn flex items-center gap-2" data-filter="Design">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 19l7-7 3 3-7 7-3-3z" />
+                            <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" />
+                            <path d="M2 2l7.586 7.586" />
+                            <circle cx="11" cy="11" r="2" />
+                        </svg>
+                        <span>設計作品</span>
+                    </button>
+                    <button class="filter-btn flex items-center gap-2" data-filter="Code">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="16 18 22 12 16 6" />
+                            <polyline points="8 6 2 12 8 18" />
+                        </svg>
+                        <span>寫的程式</span>
+                    </button>
+                    <button class="filter-btn flex items-center gap-2" data-filter="Life Lab">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M10 2v7.527a2 2 0 0 1 .211.896v.015a2 2 0 0 1-.211.897L7.5 15.602l-.004.004A4.002 4.002 0 0 0 9.875 22h4.25a4.002 4.002 0 0 0 2.38-6.39l-2.505-4.288a2 2 0 0 1-.211-.897v-.015a2 2 0 0 1 .211-.896V2" />
+                            <path d="M8.5 2h7" />
+                            <path d="M9 2v6" />
+                        </svg>
+                        <span>生活實驗室</span>
+                    </button>
+                    <button class="filter-btn flex items-center gap-2" data-filter="Traces">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
+                        </svg>
+                        <span>探索筆記</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Scroll Hint -->
+            <div id="filter-scroll-hint"
+                class="absolute top-0 right-0 h-full w-24 bg-gradient-to-l from-[#F9FAFB] to-transparent pointer-events-none flex items-center justify-end pr-4 transition-opacity duration-300 md:hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="text-slate-400 animate-pulse">
+                    <path d="m9 18 6-6-6-6" />
+                </svg>
             </div>
         </div>
     </section>
