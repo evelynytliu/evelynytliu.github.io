@@ -438,19 +438,22 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isImageMode && currentGallery.length > 1) {
             if (e.key === 'ArrowLeft') {
                 currentIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
-                updateLightboxImage();
+                updateLightboxCarousel();
             }
             if (e.key === 'ArrowRight') {
                 currentIndex = (currentIndex + 1) % currentGallery.length;
-                updateLightboxImage();
+                updateLightboxCarousel();
             }
         }
     });
 
-    // Touch Navigation (Live Swipe)
+    // Touch Navigation (Carousel-based Live Swipe)
     let touchStartX = 0;
     let currentTranslate = 0;
     let isDragging = false;
+    let startOffset = 0;
+
+    const carousel = document.getElementById('lightbox-carousel');
 
     lightboxImg.addEventListener('touchstart', (e) => {
         // Only trigger swipe if we are in image mode and have multiple images
