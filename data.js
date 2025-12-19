@@ -209,11 +209,11 @@ window.projectData = [
     "tags": [
       "Packaging"
     ],
-    "image": "design_works/作品  食品外包裝設計 肥仔肉真空包貼紙-小長方.webp",
+    "image": "design_works/作品  食品外包裝設計 肥仔肉真空包貼紙-小長方.jpg",
     "description": "Project: 食品外包裝設計 肥仔肉真空包貼紙",
     "link": "",
     "images": [
-      "design_works/作品  食品外包裝設計 肥仔肉真空包貼紙-小長方.webp"
+      "design_works/作品  食品外包裝設計 肥仔肉真空包貼紙-小長方.jpg"
     ],
     "hue": 32.307692307692314,
     "mtime": 1755165408.447
