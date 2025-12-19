@@ -301,13 +301,13 @@ window.projectData = [
   },
   {
     "id": "goose_meat_vacuum_poster",
-    "title": "鵝肉真空包",
+    "title": "鵝肉真空包海報",
     "category": "Design",
     "tags": [
       "Posters"
     ],
     "image": "design_works/作品  餐廳一般產品海報、DM 鵝肉真空包.jpg",
-    "description": "Project: 鵝肉真空包",
+    "description": "Project: 鵝肉真空包海報",
     "link": "",
     "images": [
       "design_works/作品  餐廳一般產品海報、DM 鵝肉真空包.jpg"
