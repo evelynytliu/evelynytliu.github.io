@@ -1,267 +1,850 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Points & Screen Time (Online)</title>
-  <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-  <style>
-    :root {
-      --primary: #00d4ff;
-      --primary-hover: #00b8dd;
-      --bg-dark: #111;
-      --bg-card: #1c1c3c;
-      --bg-input: #222;
-      --text-main: #eee;
-      --text-muted: #bbb;
-      --radius-lg: 20px;
-      --shadow-glow: 0 4px 15px rgba(0, 212, 255, 0.3);
-    }
-    body {
-      font-family: 'Poppins', system-ui, -apple-system, 'Noto Sans TC', sans-serif;
-      background: var(--bg-dark);
-      color: var(--text-main);
-      text-align: center;
-      padding: 20px 10px;
-      margin: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
-    h1 {
-      margin: 10px 0 5px;
-      letter-spacing: 1px;
-    }
-    .child-card {
-      background: var(--bg-card);
-      padding: 24px;
-      margin: 18px auto;
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-glow);
-      max-width: 440px;
-      position: relative;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-    .points-box {
-      background: rgba(0, 0, 0, 0.3);
-      padding: 16px;
-      border-radius: 16px;
-      font-size: 36px;
-      font-weight: 800;
-      color: var(--primary);
-      margin-bottom: 12px;
-      border: 1px solid rgba(0, 212, 255, 0.1);
-      text-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
-    }
-    .btn {
-      padding: 10px 16px;
-      font-size: 15px;
-      border: none;
-      border-radius: 12px;
-      width: 100%;
-      color: #eee;
-      font-weight: 700;
-      cursor: pointer;
-      background: #444;
-      transition: 0.2s;
-      margin-top: 5px;
-    }
-    .btn:hover { background: #555; }
-    .btn.primary { background: var(--primary); color: #111; }
-    input {
-      background: rgba(0, 0, 0, 0.3);
-      color: #fff;
-      border: 1px solid #444;
-      padding: 12px;
-      width: 100%;
-      margin: 8px 0;
-      border-radius: 10px;
-      box-sizing: border-box;
-      text-align: center;
-      font-size: 16px;
-    }
-    input:focus { outline: none; border-color: var(--primary); }
-    .loading { color: #888; font-style: italic; margin: 20px; }
-    
-    /* Settings Box */
-    #setup-box {
-       background: #1a1a1a;
-       padding: 20px;
-       border-radius: 20px;
-       max-width: 440px;
-       margin: 0 auto 20px;
-       border: 1px solid #333;
-    }
-    
-    /* Admin Panel */
-    #admin-panel {
-       background: #2a2a5a;
-       padding: 24px 20px;
-       border-radius: 24px;
-       max-width: 440px;
-       margin: 24px auto 60px;
-       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-       display: none;
-    }
-    
-    /* Checkbox Group for Admin */
-    label.kid-select {
-        display: inline-block;
-        padding: 12px 16px;
-        background: #333;
-        margin: 4px;
-        border-radius: 12px;
-        cursor: pointer;
-        user-select: none;
-        border: 2px solid transparent;
-        transition: 0.2s;
-    }
-    label.kid-select:has(input:checked) {
-        background: rgba(0, 212, 255, 0.1);
-        color: var(--primary);
-        border-color: var(--primary);
-        font-weight: bold;
-    }
-    label.kid-select input { display: none; }
-  </style>
+    <!-- Google Tag Manager -->
+    <script>(function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-WX5VQK2V');</script>
+    <!-- End Google Tag Manager -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <title>Points & Screen Time (Demo Version)</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #00d4ff;
+            --primary-hover: #00b8dd;
+            --bg-dark: #111;
+            --bg-card: #1c1c3c;
+            --bg-input: #222;
+            --text-main: #eee;
+            --text-muted: #bbb;
+            --radius-lg: 20px;
+            --shadow-glow: 0 4px 15px rgba(0, 212, 255, 0.3);
+        }
+
+        body {
+            font-family: 'Poppins', system-ui, -apple-system, 'Noto Sans TC', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-main);
+            text-align: center;
+            padding: 20px 10px;
+            margin: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        h1 {
+            margin: 10px 0 5px;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        /* --- 卡片樣式 --- */
+        .child-card {
+            background: var(--bg-card);
+            padding: 24px;
+            margin: 18px auto;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-glow);
+            max-width: 440px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .child-name {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .points-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 16px;
+            border-radius: 16px;
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 12px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
+        }
+
+        .conversion-info {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 6px;
+            font-weight: normal;
+        }
+
+        /* --- 進度條區塊 --- */
+        .progress-dual {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .progress-title {
+            font-size: 14px;
+            color: var(--primary);
+            margin: 6px 0 4px;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 8px;
+        }
+
+        .bar-wrap {
+            background: #222;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 30px;
+            overflow: hidden;
+            height: 36px;
+            width: 100%;
+            position: relative;
+        }
+
+        .fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(90deg, var(--primary), #005eff);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .fill.warning {
+            background: linear-gradient(90deg, #ffaa00, #ff7700);
+            box-shadow: 0 0 10px #ffaa00;
+        }
+
+        .fill.danger {
+            background: linear-gradient(90deg, #ff4444, #ff0000);
+            box-shadow: 0 0 10px #ff0000;
+        }
+
+        .bar-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            top: 0;
+            line-height: 36px;
+            font-weight: 700;
+            color: #fff;
+            font-size: 15px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* --- 按鈕與控制區 --- */
+        .control-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        .control-row .right {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .deduct-btn {
+            padding: 10px 0;
+            font-size: 15px;
+            border-radius: 12px;
+            border: none;
+            background: #333;
+            color: #ccc;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .deduct-btn:active {
+            background: #555;
+            transform: scale(0.95);
+        }
+
+        .chip-toggle {
+            background: #222;
+            border-radius: 999px;
+            padding: 4px;
+            display: inline-flex;
+            gap: 4px;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+
+        .chip-toggle button {
+            border: none;
+            padding: 8px 16px;
+            border-radius: 999px;
+            background: transparent;
+            color: #888;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .chip-toggle button.active {
+            background: var(--primary);
+            color: #111;
+            box-shadow: 0 2px 8px rgba(0, 212, 255, 0.4);
+        }
+
+        .convert-group {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            font-size: 15px;
+            border: none;
+            border-radius: 12px;
+            width: 100%;
+            color: #eee;
+            font-weight: 700;
+            cursor: pointer;
+            background: #444;
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            background: #555;
+        }
+
+        .btn.primary {
+            background: var(--primary);
+            color: #111;
+        }
+
+        .btn:active {
+            transform: scale(0.96);
+        }
+
+        /* --- 表單區 --- */
+        #form-section {
+            background: #2a2a5a;
+            padding: 24px 20px;
+            border-radius: 24px;
+            max-width: 440px;
+            margin: 24px auto 60px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        input[type="number"],
+        input[type="text"],
+        button.submit-btn {
+            padding: 12px;
+            margin: 8px 0;
+            font-size: 16px;
+            border-radius: 10px;
+            border: none;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        input {
+            background: rgba(0, 0, 0, 0.3);
+            color: #fff;
+            border: 1px solid #444;
+            text-align: center;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .submit-btn {
+            background: var(--primary);
+            color: #111;
+            font-weight: 800;
+            margin-top: 12px;
+            box-shadow: 0 4px 12px rgba(0, 212, 255, 0.4);
+            cursor: pointer;
+        }
+
+        .submit-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* 方案切換 */
+        .plan-toggle {
+            background: #222;
+            border-radius: 999px;
+            padding: 4px;
+            display: inline-flex;
+            gap: 4px;
+            margin-top: 10px;
+        }
+
+        .btn-plan {
+            border: none;
+            padding: 8px 20px;
+            border-radius: 999px;
+            background: transparent;
+            color: #888;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .btn-plan.active {
+            background: var(--primary);
+            color: #111;
+        }
+
+        /* --- Checkbox Group --- */
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .checkbox-group input {
+            display: none;
+        }
+
+        .checkbox-group label {
+            display: block;
+            padding: 14px;
+            background: #333;
+            color: #ccc;
+            border-radius: 12px;
+            font-size: 18px;
+            cursor: pointer;
+            user-select: none;
+            transition: 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .checkbox-group input:checked+label {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--primary);
+            border-color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Name Item Wrapper */
+        .kid-check-wrapper {
+            position: relative;
+        }
+
+        .kid-check-wrapper button.edit-icon {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.4);
+            border: none;
+            color: #666;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .kid-check-wrapper button.edit-icon:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        /* Add Name Area */
+        .add-name-area {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .add-name-area input {
+            margin: 0;
+            text-align: left;
+        }
+
+        .add-name-area button {
+            width: 50px;
+            background: #444;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .add-name-area button:hover {
+            background: #555;
+        }
+
+        .pair {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .note {
+            font-size: 12px;
+            color: #888;
+            margin-top: 12px;
+            line-height: 1.6;
+        }
+
+        .preview {
+            margin-top: 8px;
+            font-size: 13px;
+            color: #9ecfff;
+        }
+
+        /* Demo 提示 */
+        .demo-alert {
+            background: rgba(255, 200, 0, 0.15);
+            color: #ffca28;
+            font-size: 13px;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 200, 0, 0.3);
+            max-width: 440px;
+            margin: 0 auto 20px;
+            text-align: left;
+        }
+
+        .demo-alert strong {
+            color: #fff;
+        }
+
+        /* SweetAlert 自定義樣式 */
+        .swal2-popup {
+            border-radius: 20px !important;
+            background: #222 !important;
+            border: 1px solid #444;
+        }
+
+        .swal2-title {
+            color: #fff !important;
+        }
+
+        .swal2-content {
+            color: #ccc !important;
+        }
+    </style>
 </head>
+
 <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WX5VQK2V" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
 
-  <h1>☁️ Points System (Online)</h1>
-  
-  <!-- 設定 API URL 的區域 -->
-  <div id="setup-box">
-     <h3 style="margin-top:0">Step 1: 連線設定</h3>
-     <p style="font-size:13px;color:#aaa;">請輸入您部署 Apps Script 獲得的 Web App URL:</p>
-     <input type="text" id="apiUrlInput" placeholder="https://script.google.com/macros/s/..." />
-     <button class="btn primary" onclick="saveUrl()">設定並連線</button>
-  </div>
+    <h1>⭐ Points & Screen Time 📺</h1>
+    <div class="subtitle">Live Demo / Local Storage Version</div>
 
-  <div id="leaderboard"></div>
+    <div class="demo-alert">
+        <strong>💡 這是體驗版本 (Local Demo)</strong><br>
+        所有操作只會儲存在您的瀏覽器中，不會上傳到任何伺服器。您可以自由測試加分、扣分與兌換功能！
+    </div>
 
-  <!-- 管理後台 -->
-  <div id="admin-panel">
-     <h2 style="margin-top:0;color:#fff;">管理後台 📝</h2>
-     <div id="kid-select-container" style="margin-bottom:15px;"></div>
-     
-     <input type="number" id="ptsChange" placeholder="⭐ 點數增減 (輸入正數有特效)">
-     <input type="number" id="timeChange" placeholder="📺 螢幕時間增減">
-     <input type="text" id="reason" placeholder="原因 (選填)">
-     
-     <button class="btn primary" onclick="submitTx()">送出更新 🚀</button>
-     <button class="btn" onclick="loadData()" style="margin-top:10px;">🔄 重新整理</button>
-     <button class="btn" onclick="resetUrl()" style="background:#333;color:#888;font-size:12px;margin-top:20px;">重設 API網址</button>
-  </div>
+    <div id="leaderboard"></div>
 
-  <script>
-    let API_URL = localStorage.getItem('POINTS_API_URL') || '';
-    let currentData = [];
+    <div id="form-section">
+        <h2 style="margin-top:0;color:#fff;">管理後台 📝</h2>
 
-    // 初始化
-    if (API_URL) {
-      document.getElementById('setup-box').style.display = 'none';
-      document.getElementById('admin-panel').style.display = 'block';
-      document.getElementById('apiUrlInput').value = API_URL;
-      loadData();
-    }
+        <div id="name-list" class="checkbox-group"></div>
 
-    function saveUrl() {
-      const url = document.getElementById('apiUrlInput').value.trim();
-      if (!url) return alert('請輸入網址');
-      localStorage.setItem('POINTS_API_URL', url);
-      API_URL = url;
-      location.reload();
-    }
+        <!-- 新增名字區塊 -->
+        <div class="add-name-area">
+            <input type="text" id="newKidName" placeholder="+ 新增名字..."
+                style="background:rgba(255,255,255,0.1);border:1px dashed #666;">
+            <button onclick="addNewKid()">＋</button>
+        </div>
 
-    function resetUrl() {
-      if (confirm('確定要清除網址設定回到初始畫面嗎？')) {
-        localStorage.removeItem('POINTS_API_URL');
-        location.reload();
-      }
-    }
+        <div class="plan-toggle">
+            <button type="button" id="alloc-weekday" class="btn-plan active"
+                onclick="setAllocPlan('weekday')">平日</button>
+            <button type="button" id="alloc-holiday" class="btn-plan" onclick="setAllocPlan('holiday')">假日</button>
+        </div>
+        <div id="alloc-preview" class="preview">—</div>
 
-    async function loadData() {
-      Swal.showLoading();
-      try {
-        const res = await fetch(API_URL + '?action=getleaderboard');
-        const data = await res.json();
-        currentData = data;
-        render();
-        Swal.close();
-      } catch (e) {
-        console.error(e);
-        Swal.fire('讀取失敗', '請檢查網址或權限', 'error');
-      }
-    }
+        <input type="number" id="pointsChange" placeholder="⭐ 點數調整 (輸入正數มี特效)">
+        <input type="number" id="screenTimeChange" placeholder="📺 螢幕時間增減">
+        <input type="text" id="reason" placeholder="原因 (選填)">
 
-    function render() {
-      const board = document.getElementById('leaderboard');
-      const selectBox = document.getElementById('kid-select-container');
+        <button type="button" class="submit-btn" onclick="submitData()">執行更新 🚀</button>
 
-      // 渲染排行榜
-      let html = '';
-      currentData.forEach(k => {
-        html += `
-            <div class="child-card">
-               <div style="font-size:26px;font-weight:bold;color:#00d4ff;margin-bottom:10px;">${k.Name}</div>
-               <div class="points-box">⭐ ${k.TotalPoints}</div>
-               <div style="margin:16px 0;background:#222;border-radius:15px;padding:12px;border:1px solid #333;">
-                  <div style="font-size:14px;color:#00d4ff;margin-bottom:5px;">📺 螢幕時間</div>
-                  <div style="font-size:24px;font-weight:bold;color:#fff">${k.TotalMinutes} min</div>
-               </div>
-               <div style="color:#888;font-size:13px;">可用 ${k.TotalPoints} 點換 ${k.TotalPoints * 2} 分</div>
-            </div>`;
-      });
-      board.innerHTML = html || '<div class="loading">目前無資料，請確認 Sheet K 欄有名字</div>';
+        <div class="note">
+            規則：⭐1點 ⇄ 📺2分鐘<br>
+            <a href="#" onclick="resetDemoData();return false;" style="color:#666;text-decoration:underline;">重置所有數據</a>
+        </div>
+    </div>
 
-      // 渲染選單
-      let selectHtml = '';
-      currentData.forEach(k => {
-        selectHtml += `<label class="kid-select">
-               <input type="checkbox" name="kidSelect" value="${k.Name}"> ${k.Name}
-            </label>`;
-      });
-      selectBox.innerHTML = selectHtml;
-    }
+    <div style="margin-top:40px;font-size:12px;color:#555;">
+        Template by Evelyn YT | Demo Version | <a href="points-intro.html" style="color:#777;">取得原始碼 & 跨裝置設定</a>
+    </div>
 
-    async function submitTx() {
-      const checks = document.querySelectorAll('input[name="kidSelect"]:checked');
-      if (checks.length === 0) return Swal.fire({ title: '請選擇對象', background: '#333', color: '#fff', icon: 'warning' });
-
-      const pts = document.getElementById('ptsChange').value;
-      const time = document.getElementById('timeChange').value;
-      const reason = document.getElementById('reason').value;
-
-      if (!pts && !time) return Swal.fire({ title: '請輸入數值', background: '#333', color: '#fff', icon: 'info' });
-
-      if (parseInt(pts) > 0) {
-        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#00d4ff', '#ff0', '#f0f'] });
-      }
-
-      // 逐一發送
-      Swal.showLoading();
-      for (let chk of checks) {
-        const payload = {
-          Name: chk.value,
-          PointsChange: pts,
-          ScreenTimeChange: time,
-          Reason: reason
+    <script>
+        // ==========================================
+        // ⚙️ 設定區 (可以讓使用者自己修改)
+        // ==========================================
+        const CONFIG = {
+            // 小孩名單與初始值
+            DEFAULT_KIDS: [
+                { Name: 'Mario', TotalPoints: 10, TotalMinutes: 45 },
+                { Name: 'Luigi', TotalPoints: 5, TotalMinutes: 15 },
+                { Name: 'Peach', TotalPoints: 25, TotalMinutes: 30 }
+            ],
+            // 方案上限
+            LIMITS: { weekday: 50, holiday: 90 },
+            // LocalStorage Key
+            STORAGE_KEY: 'screenTime_demo_v2'
         };
-        const json = encodeURIComponent(JSON.stringify(payload));
-        await fetch(API_URL + '?action=submit&data=' + json);
-      }
+        // ==========================================
 
-      // 清空並重整
-      document.getElementById('ptsChange').value = '';
-      document.getElementById('timeChange').value = '';
-      // Uncheck all
-      document.querySelectorAll('input[name="kidSelect"]').forEach(c => c.checked = false);
+        let currentData = [];
+        let allocPlan = 'weekday';
 
-      await loadData();
-      Swal.fire({ title: '更新成功', timer: 1000, showConfirmButton: false, background: '#333', color: '#fff', icon: 'success' });
-    }
-  </script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            syncAllocPlanButtons();
+            updateAllocPreview();
+        });
+
+        // --- 資料處理核心 (Local Logic) ---
+
+        function loadData() {
+            const saved = localStorage.getItem(CONFIG.STORAGE_KEY);
+            if (saved) {
+                currentData = JSON.parse(saved);
+            } else {
+                currentData = JSON.parse(JSON.stringify(CONFIG.DEFAULT_KIDS));
+                saveData();
+            }
+            renderLeaderboard();
+        }
+
+        function saveData() {
+            localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(currentData));
+            renderLeaderboard();
+        }
+
+        function resetDemoData() {
+            Swal.fire({
+                title: '重置資料?',
+                text: "將恢復到預設狀態",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                background: '#333', color: '#fff'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem(CONFIG.STORAGE_KEY);
+                    loadData();
+                    Swal.fire({ icon: 'success', title: '已重置', timer: 1000, showConfirmButton: false, background: '#333', color: '#fff' });
+                }
+            });
+        }
+
+        // --- UI 渲染 ---
+
+        function renderLeaderboard() {
+            const board = document.getElementById('leaderboard');
+            const nameBox = document.getElementById('name-list');
+
+            const oldChecks = new Set([...document.querySelectorAll('#name-list input:checked')].map(c => c.value));
+            nameBox.innerHTML = '';
+
+            let html = '';
+            const maxTime = CONFIG.LIMITS[allocPlan];
+
+            currentData.forEach(entry => {
+                const cid = `chk-${entry.Name}`;
+                const isChecked = oldChecks.has(entry.Name) ? 'checked' : '';
+                nameBox.innerHTML += `
+        <div class="kid-check-wrapper">
+          <input type="checkbox" id="${cid}" value="${entry.Name}" ${isChecked}>
+          <label for="${cid}">${entry.Name}</label>
+          <button class="edit-icon" onclick="editKid('${entry.Name}'); event.preventDefault();">✎</button>
+        </div>
+      `;
+
+                const mins = entry.TotalMinutes || 0;
+                const pts = entry.TotalPoints || 0;
+                const pct = Math.min(100, (mins / maxTime) * 100);
+                const barClass = pct <= 20 ? 'danger' : (pct <= 50 ? 'warning' : '');
+
+                html += `
+        <div class="child-card">
+          <div class="child-name">${entry.Name}</div>
+
+          <div class="points-box">
+            ⭐ ${pts}
+             <div class="conversion-info">
+                可換：📺 ${pts * 2}m <span style="margin:0 5px;color:#555">|</span> 💰 $${pts * 5}
+             </div>
+          </div>
+
+          <div class="progress-dual">
+            <div>
+              <div class="progress-title">
+                <span>📺 螢幕時間</span> <span style="font-size:12px;color:#666">上限: ${maxTime}m</span>
+              </div>
+              <div class="bar-wrap">
+                <div class="fill ${barClass}" style="width:${pct}%"></div>
+                <div class="bar-text">${mins}m</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="control-row">
+             <div class="right" style="width:100%; grid-template-columns: repeat(3, 1fr);">
+                <button class="deduct-btn" onclick="quickDeduct('${entry.Name}', 10)">-10</button>
+                <button class="deduct-btn" onclick="quickDeduct('${entry.Name}', 30)">-30</button>
+                <button class="deduct-btn" style="color:#ff6666" onclick="customDeduct('${entry.Name}')">自訂</button>
+             </div>
+          </div>
+
+          <div class="convert-group">
+            <button class="btn" onclick="convertTimeToPoints('${entry.Name}')">📺 ➔ ⭐</button>
+            <button class="btn primary" onclick="convertPointsToTime('${entry.Name}')">⭐ ➔ 📺</button>
+          </div>
+        </div>
+        `;
+            });
+
+            board.innerHTML = html;
+        }
+
+        // --- 表單與設定邏輯 ---
+
+        function setAllocPlan(plan) {
+            allocPlan = plan;
+            syncAllocPlanButtons();
+            updateAllocPreview(true);
+
+            document.getElementById('screenTimeChange').value = CONFIG.LIMITS[plan];
+            document.getElementById('reason').value = `${plan === 'weekday' ? '平日' : '假日'}分配`;
+
+            renderLeaderboard();
+        }
+
+        function syncAllocPlanButtons() {
+            document.querySelectorAll('.btn-plan').forEach(b => b.classList.remove('active'));
+            document.getElementById(allocPlan === 'weekday' ? 'alloc-weekday' : 'alloc-holiday').classList.add('active');
+        }
+
+        function updateAllocPreview(bump) {
+            const el = document.getElementById('alloc-preview');
+            const lim = CONFIG.LIMITS[allocPlan];
+            el.textContent = `當前：${allocPlan === 'weekday' ? '平日' : '假日'} (上限 ${lim}m) `;
+            if (bump) {
+                el.style.transform = 'scale(1.1)';
+                el.style.transition = '0.2s';
+                setTimeout(() => el.style.transform = 'scale(1)', 200);
+            }
+        }
+
+        // --- 資料操作 (Actions) ---
+
+        function submitData() {
+            const checked = [...document.querySelectorAll('#name-list input:checked')];
+            if (checked.length === 0) return Swal.fire({ icon: 'warning', title: '請選擇對象', background: '#333', color: '#fff' });
+
+            const pts = parseInt(document.getElementById('pointsChange').value) || 0;
+            const timeChange = parseInt(document.getElementById('screenTimeChange').value) || 0;
+
+            if (pts === 0 && timeChange === 0) return Swal.fire({ icon: 'info', title: '數值未變更', background: '#333', color: '#fff' });
+
+            if (pts > 0) {
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#00d4ff', '#ff0', '#f0f'] });
+            }
+
+            checked.forEach(cb => {
+                modifyKidData(cb.value, pts, timeChange);
+            });
+
+            document.getElementById('pointsChange').value = '';
+            document.getElementById('screenTimeChange').value = '';
+            document.getElementById('name-list').querySelectorAll('input').forEach(i => i.checked = false);
+
+            Swal.fire({ icon: 'success', title: '更新成功', timer: 1000, showConfirmButton: false, background: '#333', color: '#fff' });
+        }
+
+        function quickDeduct(name, minutes) {
+            const kid = currentData.find(k => k.Name === name);
+
+            if (kid.TotalMinutes < minutes) return Swal.fire({ icon: 'error', title: '時間不足', text: `目前只有 ${kid.TotalMinutes} 分`, background: '#333', color: '#fff' });
+
+            Swal.fire({
+                title: `扣除 ${minutes} 分?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                confirmButtonText: '扣除',
+                background: '#333', color: '#fff'
+            }).then((res) => {
+                if (res.isConfirmed) {
+                    modifyKidData(name, 0, -minutes);
+                    Swal.fire({ icon: 'success', title: '已扣除', timer: 1000, showConfirmButton: false, background: '#333', color: '#fff' });
+                }
+            });
+        }
+
+        function customDeduct(name) {
+            Swal.fire({
+                title: '輸入扣除分鐘',
+                input: 'number',
+                background: '#333', color: '#fff',
+                showCancelButton: true
+            }).then(res => {
+                if (res.isConfirmed && res.value) {
+                    quickDeduct(name, parseInt(res.value));
+                }
+            });
+        }
+
+        function convertTimeToPoints(name) {
+            const kid = currentData.find(k => k.Name === name);
+            const mins = kid.TotalMinutes;
+            const rate = 2; // 2 min = 1 pt
+            const maxPts = Math.floor(mins / rate);
+
+            if (maxPts < 1) return Swal.fire({ icon: 'info', title: '時間不足', text: '至少需2分鐘', background: '#333', color: '#fff' });
+
+            Swal.fire({
+                title: '📺 ➔ ⭐ 轉換',
+                text: `目前: ${mins}分 (最多換 ${maxPts}點)`,
+                input: 'number',
+                inputValue: 1,
+                inputAttributes: { min: 1, max: maxPts },
+                showCancelButton: true,
+                background: '#333', color: '#fff'
+            }).then((res) => {
+                if (res.isConfirmed) {
+                    const want = parseInt(res.value);
+                    if (want > 0 && want <= maxPts) {
+                        modifyKidData(name, want, -(want * rate));
+                        confetti({ particleCount: 50, spread: 50, origin: { y: 0.7 } });
+                        Swal.fire({ icon: 'success', title: `獲得 ${want} 點!`, background: '#333', color: '#fff' });
+                    }
+                }
+            });
+        }
+
+        function convertPointsToTime(name) {
+            const kid = currentData.find(k => k.Name === name);
+            const rate = 2; // 1 point = 2 mins
+
+            if (kid.TotalPoints < 1) return Swal.fire({ icon: 'info', title: '點數不足', background: '#333', color: '#fff' });
+
+            Swal.fire({
+                title: '⭐ ➔ 📺 兌換',
+                text: `匯率: 1點 = ${rate}分`,
+                input: 'number',
+                inputValue: 1,
+                inputAttributes: { min: 1, max: kid.TotalPoints },
+                showCancelButton: true,
+                background: '#333', color: '#fff'
+            }).then((res) => {
+                if (res.isConfirmed) {
+                    const want = parseInt(res.value);
+                    if (want > 0 && want <= kid.TotalPoints) {
+                        const mins = want * rate;
+                        modifyKidData(name, -want, mins);
+                        Swal.fire({ icon: 'success', title: `增加 ${mins} 分鐘!`, background: '#333', color: '#fff' });
+                    }
+                }
+            });
+        }
+
+        function modifyKidData(name, dPoints, dMinutes) {
+            const target = currentData.find(k => k.Name === name);
+            if (target) {
+                target.TotalPoints = Math.max(0, target.TotalPoints + dPoints);
+                target.TotalMinutes = Math.max(0, target.TotalMinutes + dMinutes);
+                saveData();
+            }
+        }
+
+        // --- 新增 / 編輯 / 刪除 ---
+        function addNewKid() {
+            const input = document.getElementById('newKidName');
+            const name = input.value.trim();
+            if (!name) return;
+
+            if (currentData.find(k => k.Name === name)) {
+                return Swal.fire({ icon: 'error', title: '名字已存在', background: '#333', color: '#fff' });
+            }
+
+            currentData.push({ Name: name, TotalPoints: 0, TotalMinutes: 0 });
+            saveData();
+            input.value = '';
+            Swal.fire({ icon: 'success', title: '已新增', timer: 1000, showConfirmButton: false, background: '#333', color: '#fff' });
+        }
+
+        function editKid(oldName) {
+            Swal.fire({
+                title: `編輯 ${oldName}`,
+                input: 'text',
+                inputValue: oldName,
+                showDenyButton: true,
+                denyButtonText: '刪除',
+                denyButtonColor: '#d33',
+                confirmButtonText: '更名',
+                showCancelButton: true,
+                background: '#333', color: '#fff'
+            }).then((res) => {
+                if (res.isConfirmed) {
+                    const newName = res.value.trim();
+                    if (newName && newName !== oldName) {
+                        if (currentData.find(k => k.Name === newName)) {
+                            return Swal.fire({ icon: 'error', title: '名字已存在', background: '#333', color: '#fff' });
+                        }
+                        const kid = currentData.find(k => k.Name === oldName);
+                        kid.Name = newName;
+                        saveData();
+                    }
+                } else if (res.isDenied) {
+                    Swal.fire({
+                        title: `確定刪除 ${oldName}?`,
+                        text: '刪除後無法復原',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        background: '#333', color: '#fff'
+                    }).then(delRes => {
+                        if (delRes.isConfirmed) {
+                            currentData = currentData.filter(k => k.Name !== oldName);
+                            saveData();
+                        }
+                    });
+                }
+            });
+        }
+    </script>
 </body>
+
 </html>
-    
