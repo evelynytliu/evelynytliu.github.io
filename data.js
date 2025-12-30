@@ -46,6 +46,23 @@ window.projectData = [
     "mtime": 1766065757.0
   },
   {
+    "id": "blog_points_bank",
+    "title": "【育兒工具】點數存摺：把「螢幕鬥爭」轉化為「資源管理」的修煉場",
+    "category": "Traces",
+    "tags": [
+      "Blog",
+      "Parenting",
+      "Code"
+    ],
+    "image": "img/blog-points-bank-cover.jpg",
+    "description": "「阿迷，我想看電視。」曾經是我們家每天最頻繁出現的背景音。作為兩個男孩的媽媽，我深深理解那種「螢幕時間」帶來的焦慮感。與其拉鋸鬥爭，不如把這件事變成一種「資源管理」的練習。這篇文章分享了我如何從一個簡單的 HTML 頁面，到開發出完整的 Points Bank 系統，幫助孩子練習延遲享樂與自主管理。",
+    "link": "blog/blog-points-bank.html",
+    "images": [
+      "img/blog-points-bank-cover.jpg"
+    ],
+    "mtime": 1767078884.0
+  },
+  {
     "id": "blog_keep_exploring",
     "title": "【開站日記】Keep Exploring, and Leave Traces.",
     "category": "Traces",
@@ -442,8 +459,8 @@ window.projectData = [
     "images": [
       "https://placehold.co/800x600/00D4FF/111111?text=Screen+Time"
     ],
-    "description": "因為我們家採限時螢幕時間政策，對於當時4歲（現在5歲）的孩子來說，視覺上能知道時間已經用掉多少，對他會比較有效，所以設計了這個螢幕時間管理頁面，把時間視覺化。\n\n少用一些螢幕時間，可以換成點數，點數可以換錢。下次小孩吵著買玩具的時候，就拿這個頁面給他看，說「你看你現在點數只有這些，少看一點螢幕，下次就有機會可以買了哦！」他大部分都會接受呢～\n\n系統提供兩個版本：離線版（資料存在瀏覽器）和雲端版（使用 Google Sheets 同步多裝置）。支援平日/假日不同時間上限、彈性設定點數兌換比例、即時進度條顯示剩餘時間，還有快速扣時間和兌換功能。\n\n介面設計成卡片式、有漸層進度條（綠/橘/紅依使用狀況變色），孩子一眼就能看懂自己還剩多少時間。家長也可以用後台批次管理多個小孩的點數跟時間，非常方便。",
-    "link": "code/points-intro.html"
+    "description": "因為我們家採限時螢幕時間政策，對於孩子來說，視覺上能知道時間已經用掉多少，對他會比較有效，所以設計了這個螢幕時間管理頁面，把時間視覺化。\n\n少用一些螢幕時間，可以換成點數，點數可以換錢。下次小孩吵著買玩具的時候，就拿這個頁面給他看，說「你看你現在點數只有這些，少看一點螢幕，下次就有機會可以買了哦！」他大部分都會接受呢～",
+    "link": "https://evelynytliu.github.io/points-bank/"
   },
   {
     "id": "smart_file_renamer",
