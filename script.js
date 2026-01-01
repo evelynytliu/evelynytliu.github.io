@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const filteredData = filterCategory === 'all'
             ? allData
             : allData.filter(item => {
-                if (filterCategory === 'Case Studies' && item.category === 'Case Studies') return true;
+                if (filterCategory === 'Case Studies' && (item.category === 'Case Studies' || item.featured)) return true;
                 if (filterCategory === 'Code' && item.category === 'Code') return true;
                 if (filterCategory === 'Design' && item.category === 'Design') return true;
                 if (filterCategory === 'Life Lab' && item.category === 'Life Lab') return true;
@@ -47,8 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
         let finalData = showAll ? filteredData : filteredData.filter(item => !item.private);
 
         finalData = [...finalData].sort((a, b) => {
-            const isACase = a.category === 'Case Studies';
-            const isBCase = b.category === 'Case Studies';
+            const isACase = a.category === 'Case Studies' || a.featured;
+            const isBCase = b.category === 'Case Studies' || b.featured;
             if (isACase && !isBCase) return -1;
             if (!isACase && isBCase) return 1;
             return 0;

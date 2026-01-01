@@ -450,16 +450,17 @@ window.projectData = [
     "id": "screen_time_points_manager",
     "title": "螢幕時間管理系統",
     "category": "Code",
+    "featured": true,
     "tags": [
       "Web App",
       "Google Sheets",
       "Parenting Tool"
     ],
-    "image": "https://placehold.co/800x600/00D4FF/111111?text=Screen+Time",
+    "image": "img/screen-time-manager-cover.png",
     "images": [
-      "https://placehold.co/800x600/00D4FF/111111?text=Screen+Time"
+      "img/screen-time-manager-cover.png"
     ],
-    "description": "因為我們家採限時螢幕時間政策，對於孩子來說，視覺上能知道時間已經用掉多少，對他會比較有效，所以設計了這個螢幕時間管理頁面，把時間視覺化。\n\n少用一些螢幕時間，可以換成點數，點數可以換錢。下次小孩吵著買玩具的時候，就拿這個頁面給他看，說「你看你現在點數只有這些，少看一點螢幕，下次就有機會可以買了哦！」他大部分都會接受呢～",
+    "description": "起初只是為了家裡的「限時螢幕政策」。對孩子來說，時間是很抽象的，所以我做了一個簡單的頁面，把「螢幕時間」變成看得到的額度。想看電視？行，那就要用點數換。這不但減少了親子間的拉鋸，也讓孩子開始學習資源管理的概念。\n\n用著用著，我自己也玩上癮了。從原本簡陋的計時器，忍不住一直加功能：存摺紀錄、手繪風格切換、甚至還做了設定後台。把一個簡單的念頭慢慢打磨，看它一點一點變得更完整、更像一個成熟的產品，這過程本身就是一種樂趣。\n\n於是，這個「點數存摺」不再只是我們家的私房工具，我把它整理成一個完整的產品網站分享出來。這也是我練習獨立建站的一個實驗作品——探索如何從零開始，把生活中的痛點，轉化為有趣又有用的數位解方。",
     "link": "https://evelynytliu.github.io/points-bank/"
   },
   {
