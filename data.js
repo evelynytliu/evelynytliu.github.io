@@ -116,7 +116,7 @@ window.projectData = [
     ],
     "hue": 240.0,
     "mtime": 1755167396.078,
-    "private": true
+
   },
   {
     "id": "hearing_aid_guide_card",
@@ -134,7 +134,7 @@ window.projectData = [
     ],
     "hue": 84.00000000000021,
     "mtime": 1755167394.188,
-    "private": true
+
   },
   {
     "id": "hearing_aid_en_manual",
@@ -170,7 +170,7 @@ window.projectData = [
     ],
     "hue": 0,
     "mtime": 1755167129.358,
-    "private": true
+
   },
   {
     "id": "round_and_round_ticket",
@@ -367,7 +367,7 @@ window.projectData = [
     ],
     "hue": 211.875,
     "mtime": 1755164900.724,
-    "private": true
+
   },
   {
     "id": "ventilator_elite_poster",
@@ -385,7 +385,7 @@ window.projectData = [
     ],
     "hue": 146.66666666666657,
     "mtime": 1755164894.57,
-    "private": true
+
   },
   {
     "id": "ok_line_menu",
@@ -402,7 +402,7 @@ window.projectData = [
     ],
     "hue": 3.9999999999999925,
     "mtime": 1707296698.326,
-    "private": true
+
   },
   {
     "id": "round_and_round_line_menu",
