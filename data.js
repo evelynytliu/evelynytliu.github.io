@@ -143,11 +143,30 @@ window.projectData = [
     "tags": [
       "Manuals"
     ],
-    "image": "design_works/作品  醫療器材說明書、簡卡 輔聽器英文說明書.pdf",
+    "image": "design_works/作品  醫療器材說明書、簡卡 輔聽器英文說明書_頁面_01.jpg",
     "description": "Project: 醫療器材說明書、簡卡 輔聽器英文說明書",
     "link": "",
     "images": [
-      "design_works/作品  醫療器材說明書、簡卡 輔聽器英文說明書.pdf"
+      "design_works/作品  醫療器材說明書、簡卡 輔聽器英文說明書_頁面_01.jpg",
+      "design_works/作品  醫療器材說明書、簡卡 輔聽器英文說明書_頁面_02.jpg",
+      "design_works/作品  醫療器材說明書、簡卡 輔聽器英文說明書_頁面_03.jpg",
+      "design_works/作品  醫療器材說明書、簡卡 輔聽器英文說明書_頁面_04.jpg",
+      "design_works/作品  醫療器材說明書、簡卡 輔聽器英文說明書_頁面_05.jpg",
+      "design_works/作品  醫療器材說明書、簡卡 輔聽器英文說明書_頁面_06.jpg",
+      "design_works/作品  醫療器材說明書、簡卡 輔聽器英文說明書_頁面_07.jpg",
+      "design_works/作品  醫療器材說明書、簡卡 輔聽器英文說明書_頁面_08.jpg",
+      "design_works/作品  醫療器材說明書、簡卡 輔聽器英文說明書_頁面_09.jpg",
+      "design_works/作品  醫療器材說明書、簡卡 輔聽器英文說明書_頁面_10.jpg",
+      "design_works/作品  醫療器材說明書、簡卡 輔聽器英文說明書_頁面_11.jpg",
+      "design_works/作品  醫療器材說明書、簡卡 輔聽器英文說明書_頁面_12.jpg",
+      "design_works/作品  醫療器材說明書、簡卡 輔聽器英文說明書_頁面_13.jpg",
+      "design_works/作品  醫療器材說明書、簡卡 輔聽器英文說明書_頁面_14.jpg",
+      "design_works/作品  醫療器材說明書、簡卡 輔聽器英文說明書_頁面_15.jpg",
+      "design_works/作品  醫療器材說明書、簡卡 輔聽器英文說明書_頁面_16.jpg",
+      "design_works/作品  醫療器材說明書、簡卡 輔聽器英文說明書_頁面_17.jpg",
+      "design_works/作品  醫療器材說明書、簡卡 輔聽器英文說明書_頁面_18.jpg",
+      "design_works/作品  醫療器材說明書、簡卡 輔聽器英文說明書_頁面_19.jpg",
+      "design_works/作品  醫療器材說明書、簡卡 輔聽器英文說明書_頁面_20.jpg"
     ],
     "hue": 0,
     "mtime": 1755167129.358,
