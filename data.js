@@ -63,6 +63,24 @@ window.projectData = [
     "mtime": 1767078884.0
   },
   {
+    "id": "blog_miles_math",
+    "title": "【育兒實驗】Miles' Math Mission：把枯燥的加減法變成一場銀河系大冒險",
+    "category": "Traces",
+    "tags": [
+      "Blog",
+      "Parenting",
+      "Design",
+      "Code"
+    ],
+    "image": "img/blog-math-game-cover.png",
+    "description": "「媽媽，你再考我一題好不好？」當數學不再是作業，而是孩子主動索求的遊戲。這是我為家裡熱愛數學的小兒子 Miles 量身打造的練習場。這篇文章分享了我如何運用設計專業，將加減法練習轉化為富有美感與回饋感的星空冒險，並透過具象化的彩色積木與 AI 語音，回應孩子那份最純粹的熱情。",
+    "link": "blog/blog-miles-math.html",
+    "images": [
+      "img/blog-math-game-cover.png"
+    ],
+    "mtime": 1769158000.0
+  },
+  {
     "id": "blog_keep_exploring",
     "title": "【開站日記】Keep Exploring, and Leave Traces.",
     "category": "Traces",
